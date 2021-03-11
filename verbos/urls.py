@@ -20,5 +20,6 @@ from verbos import views
 
 urlpatterns = [
     path("", views.index,name='index'),
-    path('<int:verbo_id>',views.verbo,name='verbo')
+    path('<int:verbo_id>',views.verbo,name='verbo'),
+    path('verbos/',views.verbos,name='verbos')
         ]

@@ -32,7 +32,7 @@ class Tiempo(models.Model):
         return self.tiempo
 
 class Conjugacion(models.Model):
-    verbo=models.ForeignKey(Verbo,on_delete=models.CASCADE,related_name="verbo_c")
+    verbo=models.ForeignKey(Verbo,on_delete=models.CASCADE,related_name="conjugacions")
     tiempo=models.ForeignKey(Tiempo,on_delete=models.CASCADE,related_name="tiempo_c")
     pronombre=models.ForeignKey(Pronombre,on_delete=models.CASCADE,related_name="pronombre_c")
     conjugacion=models.CharField(max_length=30)

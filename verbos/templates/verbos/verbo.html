@@ -1,11 +1,27 @@
 {% extends 'verbos/layout.html' %}
 {% block body1 %} 
-<ul> 
-	<h2> verbo : {{ verbo.verbo }} </h2> 
-	</ul>
-	<li> tipo : {{ verbo.tipo }} </li> 
-	</ul> 
+{% regroup conjugacions  by tiempo as conjugacion_list %} 
 
-</ul>
+	<h2> verbo : {{ verbo.verbo }} </h2> 
+		</ul>
+			<li> tipo : {{ verbo.tipo }} </li> 
+		</ul> 
+	<h3> Conjugacion : </h3> 
+	<!--   %	<ul>--> 
+	<div id="container"> 
+	{% for conjugacion in conjugacion_list %}
+		<div>
+		  {{ conjugacion.grouper }} 
+			<ul> 
+			{% for conjugacion in conjugacion.list %}
+			<li> {{ conjugacion.pronombre }} : {{  conjugacion }} </li> 
+			{% empty %} 
+			<li> no conjugacion por este verbo </li> 
+			{% endfor %} 
+			</ul>
+		</div>
+	{% endfor %}
+	</div> 
+	<a href =" {% url 'index' %}" > cambiar de verbo </a> 
 {% endblock %}
 

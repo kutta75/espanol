@@ -1,10 +1,10 @@
 {% extends 'verbos/layout.html' %}
 {% block body1 %} 
-.colum
 
 <ul> 
-	{% for tiempo in tiempos %} 
-	<li> {{ tiempo }} </li> 
+	{% for verbo  in verbos %} 
+	<li> 
+		<a href= "{% url 'verbo' verbo.id %}" >{{ verbo  }}</a>   </li> 
 	{% endfor %} 
 </ul>
 {% endblock %}
