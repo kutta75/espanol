@@ -1,0 +1,54 @@
+{% extends 'verbos/layout.html' %}
+{% block body1 %} 
+
+<form action= "{% url 'verbos_exo_run' conjugacion_selectada.id %}"  method="post"> 
+{% csrf_token %}
+<label for="your_name"> {{ conjugacion_selectada.tiempo}}  </label>
+	<input id="your_name" type="text" name="respuesta" >
+	<input type="submit" value="Submit">    
+ 
+	{{tiempos_checked}}
+<br> 
+{{conjugacion_selectada.id}}
+{{conjugacion_selectada.tiempo}}
+{{conjugacion_selectada.verbo}}
+{{conjugacion_selectada.pronombre }}
+{{conjugacion_selectada.conjugacion}}
+{{conjugacion_selectada_count }}
+loto_winner {{loto_winner }}
+pk-winner {{pk_winner  }}
+
+
+<div id="container"> 
+	<div> 
+	{% for tiempo  in tiempos %} 
+	<input type="checkbox",id="{{tiempo.id}}" name="tiempos_selected" value="{{tiempo.id}}" {{tiempo.checked}} >
+	<label for="{{tiempo.id}}"> {{tiempo}}   </label>
+	<br>
+
+	{% endfor %} 
+	</div> 
+
+	<div> 
+	{% for pronombre  in pronombres %} 
+
+	<h4> {{pronombre}}   </h4> 
+
+	{% endfor %} 
+	</div> 
+
+	<div> 
+	{% for level  in levels %} 
+	<h4> {{level}}  </h4> 
+
+	{% endfor %} 
+	</div> 
+
+	<div> 
+	{% for verbotipo   in verbotipos  %} 
+	<h4> {{verbotipo}} </h4> 
+	{% endfor %} 
+	</div> 
+<form>
+{% endblock %}
+

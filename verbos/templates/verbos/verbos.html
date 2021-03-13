@@ -1,0 +1,16 @@
+{% extends 'verbos/layout.html' %}
+{% block body1 %} 
+<h2> Verbos </h2>
+<div id = "container"> 
+<ul>
+	<div id="container"> 
+	{% for verbo  in verbos %} 
+	<div> 
+	<li> 
+		<a href= "{% url 'verbo' verbo.id %}" >{{ verbo  }}</a>   </li> 
+	</div>
+	{% endfor %} 
+</ul> 
+	</div>
+{% endblock %}
+

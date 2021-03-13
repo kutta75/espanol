@@ -39,7 +39,7 @@ def verbos(request):
             "pronombres" : pronombres
             }
     return render(request,"verbos/verbos.html",context)
-def verbos_exo(request):
+def verbos_exo(request,conjugacion_id):
 
     if request.method=="POST":
         tiempos_selected= request.POST.getlist('tiempos_selected')
@@ -47,7 +47,7 @@ def verbos_exo(request):
         for tiempo_selected in tiempos_selected :
             tiempos_checked[tiempo_selected]="checked"
     else:
-        tiempos_checked={}
+        tiempos_checked={"start":"go"}
     verbos = Verbo.objects.all()
     tiempos = Tiempo.objects.all()
     if request.method=="POST":
@@ -61,12 +61,16 @@ def verbos_exo(request):
     verbotipos = Verbotipo.objects.all()
     if request.method=="POST":
         conjugacion_selectada_count =Conjugacion.objects.filter(tiempo__in=tiempos_selected).count()
-        conjugacion_selectada=Conjugacion.objects.filter(tiempo__in=tiempos_selected)
-        loto = []
-        for conjugacion in conjugacion_selectada:
-            loto.append(conjugacion.pk)
-        loto_winner=random.randint(0,conjugacion_selectada_count-1)
-        pk_winner=loto[loto_winner]
+        if conjugacion_selectada_count > 0:  
+            conjugacion_selectada=Conjugacion.objects.filter(tiempo__in=tiempos_selected)
+            loto = []
+            for conjugacion in conjugacion_selectada:
+                loto.append(conjugacion.pk)
+            loto_winner=random.randint(0,conjugacion_selectada_count-1)
+            pk_winner=loto[loto_winner]
+        else:
+            loto_winner=0
+            pk_winner=1
         conjugacion_selectada=Conjugacion.objects.get(pk=pk_winner)
     else:
         conjugacion_selectada=Conjugacion.objects.first()
