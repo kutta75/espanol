@@ -1,7 +1,75 @@
 {% extends 'verbos/layout.html' %}
+
+{% block jsscript %}
+
+	<script>
+		document.addEventListener('DOMContentLoaded',function() {
+
+			// ici on gere les bloc de check box pour cocher - decocher en une fois 
+			// le bloc de selection globale doit  avoir un name de "checktodos" et les sous 
+			// boite doivent avoir pour naem le data-type du la boite globale 
+			// ouf 
+			document.querySelectorAll('input[name="checktodos"]').forEach(function(checktodos) {
+			checktodos.onchange = function() {
+				type=checktodos.dataset["type"];
+				bloc= document.querySelectorAll('input[name=' + type + ']');
+				for ( var i=0; i < bloc.length ; i++ ) {
+					if (bloc[i].type=='checkbox')
+						bloc[i].checked= checktodos.checked ;
+				}
+				
+			}
+			})
+
+		});
+	</script>
+ 
+
+
+
+
+
+
+{% endblock %}
+
+
 {% block body1 %} 
 
 	<h2> id1 : {{ id1 }} </h2> 
 	<h2> id2 : {{ id2 }} </h2> 
+
+	<form action= "{% url 'palabras' id1='10' id2='20' %}"  method ="post"> 
+	{% csrf_token  %}
+	<div id="container" > 
+		<div> 
+			<input type="checkbox" data-type="tiempo" id="tiempo" name="checktodos" > 
+			<label for="tiempo"> Select all tiempo </label> 
+			<br> 
+
+			<input type="checkbox" id="tiempo1" name="tiempo" > 
+			<label for="tiempo1"> Tiempo1  </label> 
+			<br> 
+
+			<input type="checkbox" id="tiempo2" name="tiempo" > 
+			<label for="tiempo2"> Tiempo2  </label> 
+			<br> 
+		</div>
+
+		<div> 
+			<input type="checkbox" data-type="pronombre" id="pronombre" name="checktodos" > 
+			<label for="pronombre"> Select all pronombre </label> 
+			<br> 
+
+			<input type="checkbox" id="pronombre1" name="pronombre" > 
+			<label for="pronombre1"> Pronombre1  </label> 
+			<br> 
+
+			<input type="checkbox" id="pronombre2" name="pronombre" > 
+			<label for="pronombre2"> Pronombre2  </label> 
+			<br> 
+		</div>
+	</div> 
+	</form> 
+
 {% endblock %}
 
