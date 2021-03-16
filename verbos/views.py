@@ -39,9 +39,21 @@ def verbos(request):
             "pronombres" : pronombres
             }
     return render(request,"verbos/verbos.html",context)
-def verbos_exo(request,conjugacion_id):
 
+def verbos_exo(request,conjugacion_id):
+    resuelto = " sabes tus conjugaciones ? "
+    trace= " trace "
     if request.method=="POST":
+# traitement de la reponse apportée en comparant avec la question posée
+        respuesta= request.POST.getlist('respuesta')
+        conjugacion = Conjugacion.objects.get(pk=conjugacion_id)
+        trace = str(conjugacion.conjugacion)  + str(respuesta[0]) 
+        if respuesta[0] == conjugacion.conjugacion:
+            resuelto="exito"
+        else:
+            resuelto="fracasso"
+
+# preparation de la question suivante en exploit:ant les criteres de selection pour trouver une nouvelle conjugaion aleatoirement 
         tiempos_selected= request.POST.getlist('tiempos_selected')
         tiempos_checked= {}
         for tiempo_selected in tiempos_selected :
@@ -88,6 +100,19 @@ def verbos_exo(request,conjugacion_id):
             "conjugacion_selectada" : conjugacion_selectada,
             "conjugacion_selectada_count" : conjugacion_selectada_count,
             "loto_winner" : loto_winner,
-            "pk_winner" : pk_winner
+            "pk_winner" : pk_winner,
+            "resuelto" : resuelto,
+            "trace" : trace
             }
     return render(request,"verbos/verbos_exo.html",context)
+
+
+def palabras(request,id1,id2):
+    context= {
+            "id1" : id1,
+            "id2" : id2
+            }
+
+    return render(request,"verbos/palabras.html",context)
+
+

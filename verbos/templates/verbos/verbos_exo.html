@@ -1,10 +1,45 @@
 {% extends 'verbos/layout.html' %}
+
+
+{% block jsscript %}
+
+	<script> 
+		document.addEventListener('DOMContentLoaded',function()
+			{
+				const checktiempotodos = document.querySelector('#checkboxtiempo')
+				document.querySelector('#checkboxtiempo').onchange = function()
+				{
+				var ele = document.getElementsByName('tiempos_selected');
+				for(var i=0 ; i < ele.length  ; i++)
+					{
+					if(ele[i].type=='checkbox')
+						ele[i].checked =checktiempotodos.checked ;
+					} 
+
+
+			};
+			});
+	</script>
+
+
+
+
+{%  endblock %}
+
+
+
+
+
 {% block body1 %} 
 
 <form action= "{% url 'verbos_exo_run' conjugacion_selectada.id %}"  method="post"> 
 {% csrf_token %}
-<label for="your_name"> {{ conjugacion_selectada.tiempo}}  </label>
-	<input id="your_name" type="text" name="respuesta" >
+{{conjugacion_selectada.tiempo}}
+{{conjugacion_selectada.verbo}}
+{{conjugacion_selectada.pronombre }}
+<br> 
+<label for="your_name"> Cual es la conjugacion ? </label> 
+	<input autofocus id="your_name" type="text" name="respuesta" >
 	<input type="submit" value="Submit">    
  
 	{{tiempos_checked}}
@@ -17,10 +52,15 @@
 {{conjugacion_selectada_count }}
 loto_winner {{loto_winner }}
 pk-winner {{pk_winner  }}
-
+<br> Resuelto : {{ resuelto }}
+<br> trace : {{trace}} 
 
 <div id="container"> 
 	<div> 
+		
+	<input type="checkbox" id="checkboxtiempo"   name="" value="Select all"  >
+	<label for="checkbox_tiempo"> Select all   </label>
+	<br>
 	{% for tiempo  in tiempos %} 
 	<input type="checkbox",id="{{tiempo.id}}" name="tiempos_selected" value="{{tiempo.id}}" {{tiempo.checked}} >
 	<label for="{{tiempo.id}}"> {{tiempo}}   </label>
