@@ -47,34 +47,56 @@ def verbos_exo(request,conjugacion_id):
 # traitement de la reponse apportée en comparant avec la question posée
         respuesta= request.POST.getlist('respuesta')
         conjugacion = Conjugacion.objects.get(pk=conjugacion_id)
-        trace = str(conjugacion.conjugacion)  + str(respuesta[0]) 
+        trace = str(conjugacion.conjugacion)  + " "  +  str(respuesta[0]) 
         if respuesta[0] == conjugacion.conjugacion:
             resuelto="exito"
         else:
             resuelto="fracasso"
 
 # preparation de la question suivante en exploit:ant les criteres de selection pour trouver une nouvelle conjugaion aleatoirement 
-        tiempos_selected= request.POST.getlist('tiempos_selected')
+# recuperation des filtres selectionnés 
+        verbotipos_selected= request.POST.getlist('verbotipo')
+        pronombres_selected= request.POST.getlist('pronombre')
+        tiempos_selected= request.POST.getlist('tiempo')
         tiempos_checked= {}
+        pronombres_checked= {}
+        verbotipos_checked= {}
         for tiempo_selected in tiempos_selected :
             tiempos_checked[tiempo_selected]="checked"
+        for pronombre_selected in pronombres_selected :
+            pronombres_checked[pronombre_selected]="checked"
+        for verbotipo_selected in verbotipos_selected :
+            verbotipos_checked[verbotipo_selected]="checked"
     else:
         tiempos_checked={"start":"go"}
+        pronombres_checked= {}
+        verbotipos_checked= {}
     verbos = Verbo.objects.all()
     tiempos = Tiempo.objects.all()
+    pronombres = Pronombre.objects.all() 
+    verbotipos = Verbotipo.objects.all()
     if request.method=="POST":
         for tiempo in tiempos:
             if str(tiempo.id) in tiempos_selected :
                 tiempo.checked="checked"
             else:
                 tiempo.checked="unchecked"
-    pronombres = Pronombre.objects.all() 
+        for pronombre in pronombres:
+            if str(pronombre.id) in pronombres_selected :
+                pronombre.checked="checked"
+            else:
+                pronombre.checked="unchecked"
+        for verbotipo in verbotipos:
+            if str(verbotipo.id) in verbotipos_selected :
+                verbotipo.checked="checked"
+            else:
+                verbotipo.checked="unchecked"
     levels = Verbo.objects.all()
-    verbotipos = Verbotipo.objects.all()
     if request.method=="POST":
-        conjugacion_selectada_count =Conjugacion.objects.filter(tiempo__in=tiempos_selected).count()
+        
+        conjugacion_selectada_count =Conjugacion.objects.filter(tiempo__in=tiempos_selected).filter(pronombre__in=pronombres_selected).filter(verbo__in=Verbo.objects.filter(tipo__in=verbotipos_selected)).count()
         if conjugacion_selectada_count > 0:  
-            conjugacion_selectada=Conjugacion.objects.filter(tiempo__in=tiempos_selected)
+            conjugacion_selectada=Conjugacion.objects.filter(tiempo__in=tiempos_selected).filter(pronombre__in=pronombres_selected).filter(verbo__in=Verbo.objects.filter(tipo__in=verbotipos_selected))
             loto = []
             for conjugacion in conjugacion_selectada:
                 loto.append(conjugacion.pk)
@@ -97,6 +119,8 @@ def verbos_exo(request,conjugacion_id):
             "levels" : levels,
             "verbotipos" : verbotipos,
             "tiempos_checked": tiempos_checked,
+            "verbotipos_checked": verbotipos_checked,
+            "pronombres_checked": pronombres_checked,
             "conjugacion_selectada" : conjugacion_selectada,
             "conjugacion_selectada_count" : conjugacion_selectada_count,
             "loto_winner" : loto_winner,

@@ -4,21 +4,26 @@
 {% block jsscript %}
 
 	<script> 
-		document.addEventListener('DOMContentLoaded',function()
-			{
-				const checktiempotodos = document.querySelector('#checkboxtiempo')
-				document.querySelector('#checkboxtiempo').onchange = function()
-				{
-				var ele = document.getElementsByName('tiempos_selected');
-				for(var i=0 ; i < ele.length  ; i++)
-					{
-					if(ele[i].type=='checkbox')
-						ele[i].checked =checktiempotodos.checked ;
-					} 
+		document.addEventListener('DOMContentLoaded',function() {
+			// ici on selectionne tous les form input dont le name est checktodos
+			document.querySelectorAll('input[name="checktodos"]').forEach(function(checkheader) {
+				// pour chaque item touvé on applique un event lors d'un event de changement sur l'item 
+				checkheader.onchange = function() {
+					// on recupere le data-type de l'item trouvé : celui sert à identifier les sous item via leur name 
+					type=checkheader.dataset["type"];
+					// on selectione tous les item dont le name  vaut la valeur de type 
+					bloc=document.querySelectorAll('input[name=' + type + ']');
+					// on boucle sur tous les items trouvés pour assigner le status check a celui du header 
+					for ( var i=0 ; i < bloc.length ; i++ ) {
+						// on teste que le sous item est bien une checkbox 
+						if ( bloc[i].type = "checkbox") 
+							// on assigne la valeur du header 
+							bloc[i].checked = checkheader.checked 
+					}
+				}
+			})
+		});
 
-
-			};
-			});
 	</script>
 
 
@@ -57,36 +62,46 @@ pk-winner {{pk_winner  }}
 
 <div id="container"> 
 	<div> 
-		
-	<input type="checkbox" id="checkboxtiempo"   name="" value="Select all"  >
+	<input type="checkbox" id="checkbox_tiempo"   name="checktodos"  data-type="tiempo" >
 	<label for="checkbox_tiempo"> Select all   </label>
 	<br>
 	{% for tiempo  in tiempos %} 
-	<input type="checkbox",id="{{tiempo.id}}" name="tiempos_selected" value="{{tiempo.id}}" {{tiempo.checked}} >
-	<label for="{{tiempo.id}}"> {{tiempo}}   </label>
+	<input type="checkbox",id="{{tiempo.id}}" name="tiempo" value="{{tiempo.id}}"   {{tiempo.checked}} >
+	<label for="{{tiempo.id}}"> {{tiempo}}    </label>
 	<br>
-
 	{% endfor %} 
 	</div> 
+
 
 	<div> 
-	{% for pronombre  in pronombres %} 
-
-	<h4> {{pronombre}}   </h4> 
-
+		<input type="checkbox" id="checkbox_pronombre"   name="checktodos"   data-type="pronombre" >
+	<label for="checkbox_pronombre"> Select all  </label>
+	<br>
+	{% for pronombre   in pronombres %} 
+	<input type="checkbox",id="{{pronombre.id}}" name="pronombre" value="{{pronombre.id }}" {{pronombre.checked}} >
+	<label for="{{pronombre.id}}"> {{pronombre}}   </label>
+	<br>
 	{% endfor %} 
 	</div> 
+
+
+  	<div> 
+		<input type="checkbox" id="checkbox_verbotipo"   name="checktodos"   data-type="verbotipo" >
+	<label for="checkbox_verbotipo"> Select all  </label>
+	<br>
+	{% for verbotipo   in verbotipos %} 
+	<input type="checkbox",id="{{verbotipo.id}}" name="verbotipo" value="{{verbotipo.id }}"  {{verbotipo.checked}} >
+	<label for="{{verbotipo.id}}"> {{verbotipo}}   </label>
+	<br>
+	{% endfor %} 
+	</div> 
+   
+
 
 	<div> 
 	{% for level  in levels %} 
 	<h4> {{level}}  </h4> 
 
-	{% endfor %} 
-	</div> 
-
-	<div> 
-	{% for verbotipo   in verbotipos  %} 
-	<h4> {{verbotipo}} </h4> 
 	{% endfor %} 
 	</div> 
 <form>
