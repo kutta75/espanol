@@ -1,4 +1,23 @@
 {% extends 'verbos/layout.html' %}
+{% block jsscript %}
+	<script>
+		//script pour coloriser les conjugaisos exceptionnelles 
+		// elles sont identifier par un span avec un data-level qui vaut le level de conjugacion 
+		// les conjugaciones normales ont level = 0 ; donc on filtre celle qui ont unlevel > 0 pour les affichier en rouge 
+		document.addEventListener('DOMContentLoaded',function() {
+			document.querySelectorAll('span').forEach(function(span) {
+				if (span.dataset["level"] > 0)  {
+					span.style.color='red';
+				}
+			})
+		});
+	</script>
+
+
+
+
+{% endblock %}
+
 {% block body1 %} 
 {% regroup conjugacions  by tiempo as conjugacion_list %} 
 
@@ -14,7 +33,7 @@
 		  {{ conjugacion.grouper }} 
 			<ul> 
 			{% for conjugacion in conjugacion.list %}
-			<li> {{ conjugacion.pronombre }} : {{  conjugacion }} </li> 
+			<li> {{ conjugacion.pronombre }} : <span data-level = "{{ conjugacion.level }}">  {{  conjugacion }} </span>  </li> 
 			{% empty %} 
 			<li> no conjugacion por este verbo </li> 
 			{% endfor %} 

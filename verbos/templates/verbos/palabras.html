@@ -3,15 +3,62 @@
 {% block jsscript %}
 
 	<script>
+		// gestion des data locales 
+		{% for tiempo in tiempos %}
+			myvar = 'tiempos-' + {{tiempo.id }};
+			if (!localStorage.getItem(myvar)) {
+				localStorage.setItem(myvar,"true");
+				console.log('dans init'+ myvar );
+				};
+		{% endfor %}
+		
+		
+
 		document.addEventListener('DOMContentLoaded',function() {
 
 			// ici on gere les bloc de check box pour cocher - decocher en une fois 
 			// le bloc de selection globale doit  avoir un name de "checktodos" et les sous 
 			// boite doivent avoir pour naem le data-type du la boite globale 
 			// ouf 
+			{% for tiempo  in tiempos %}
+			myvar = 'tiempos-' + {{tiempo.id }};
+
+			myvarvalue = false; 
+			if ( localStorage.getItem(myvar) == "true" ) {
+				myvarvalue=true;
+			};
+			console.log(myvar + " = " + myvarvalue);
+			myvar="#"+ myvar
+			document.querySelector(myvar).checked = myvarvalue ;
+			console.log(document.querySelector(myvar).checked)
+			{% endfor %}
+			
+			
+			//ckbtiempo1= localStorage.getItem('ckbtiempo1');
+			//toto = document.getElementById('tiempo1') ;
+			//console.log("toto.checked=" +  toto.checked);
+			//console.log("ckbtiempo1=" + ckbtiempo1);
+			//toto.checked = false;
+			//if (ckbtiempo1) 
+			//	toto.checked = true ;
+			//console.log("toto.checked =" + toto.checked);
+
+			
+			document.querySelectorAll('[data-storage]').forEach(function(checkbox) { 
+				checkbox.onchange = function() { 
+					console.log("dans la boucle") ;
+					localStorage.setItem(checkbox.id,checkbox.checked);
+					console.log(" setting checbox=" + checkbox.checked);
+
+				}
+			});
+
+			
+			
 			document.querySelectorAll('input[name="checktodos"]').forEach(function(checktodos) {
 			checktodos.onchange = function() {
 				type=checktodos.dataset["type"];
+				console.log("dans le boucle pour checktodos"); 
 				bloc= document.querySelectorAll('input[name=' + type + ']');
 				for ( var i=0; i < bloc.length ; i++ ) {
 					if (bloc[i].type=='checkbox')
@@ -45,14 +92,11 @@
 			<input type="checkbox" data-type="tiempo" id="tiempo" name="checktodos" > 
 			<label for="tiempo"> Select all tiempo </label> 
 			<br> 
-
-			<input type="checkbox" id="tiempo1" name="tiempo" > 
-			<label for="tiempo1"> Tiempo1  </label> 
+			{% for tiempo in tiempos %}
+			<input type="checkbox" id="tiempos-{{tiempo.id}}"  name="tiempo"  data-storage="true" > 
+			<label for="tiempos-{{tiempo.id}}"> {{tiempo}}   </label> 
 			<br> 
-
-			<input type="checkbox" id="tiempo2" name="tiempo" > 
-			<label for="tiempo2"> Tiempo2  </label> 
-			<br> 
+			{% endfor %} 
 		</div>
 
 		<div> 

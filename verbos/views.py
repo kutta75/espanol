@@ -132,9 +132,18 @@ def verbos_exo(request,conjugacion_id):
 
 
 def palabras(request,id1,id2):
+    
+    verbos = Verbo.objects.all()
+    tiempos = Tiempo.objects.all()
+    pronombres = Pronombre.objects.all() 
+    verbotipos = Verbotipo.objects.all()
     context= {
             "id1" : id1,
-            "id2" : id2
+            "id2" : id2,
+            "verbos" : verbos,
+            "tiempos" : tiempos , 
+            "pronombres" : pronombres,
+            "verbotipos" : verbotipos
             }
 
     return render(request,"verbos/palabras.html",context)
