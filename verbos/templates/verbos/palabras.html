@@ -2,38 +2,23 @@
 
 {% block jsscript %}
 
-	<script>
-		// gestion des data locales 
-		{% for tiempo in tiempos %}
-			myvar = 'tiempos-' + {{tiempo.id }};
-			if (!localStorage.getItem(myvar)) {
-				localStorage.setItem(myvar,"true");
-				console.log('dans init'+ myvar );
-				};
-		{% endfor %}
-		
-		
-
+	<script  >
+	// init des variables locales des checkbox 			
+		initlocal({{ jstiempos | safe }} ) ; 		
+		initlocal({{ jspronombres | safe }} ) ; 		
+		initlocal({{ jsverbotipos | safe }} ) ; 		
 		document.addEventListener('DOMContentLoaded',function() {
 
 			// ici on gere les bloc de check box pour cocher - decocher en une fois 
 			// le bloc de selection globale doit  avoir un name de "checktodos" et les sous 
-			// boite doivent avoir pour naem le data-type du la boite globale 
+			// boites doivent avoir pour name le data-type de la boite globale 
 			// ouf 
-			{% for tiempo  in tiempos %}
-			myvar = 'tiempos-' + {{tiempo.id }};
+			checklocal({{ jspronombres | safe }});
+			checklocal({{ jstiempos | safe }});
+			//checklocal({{ jsverbotipos | safe }});
+			
 
-			myvarvalue = false; 
-			if ( localStorage.getItem(myvar) == "true" ) {
-				myvarvalue=true;
-			};
-			console.log(myvar + " = " + myvarvalue);
-			myvar="#"+ myvar
-			document.querySelector(myvar).checked = myvarvalue ;
-			console.log(document.querySelector(myvar).checked)
-			{% endfor %}
-			
-			
+
 			//ckbtiempo1= localStorage.getItem('ckbtiempo1');
 			//toto = document.getElementById('tiempo1') ;
 			//console.log("toto.checked=" +  toto.checked);
@@ -90,11 +75,21 @@
 	<div id="container" > 
 		<div> 
 			<input type="checkbox" data-type="tiempo" id="tiempo" name="checktodos" > 
-			<label for="tiempo"> Select all tiempo </label> 
+			<label for="tiempo"> Select all tiempos </label> 
 			<br> 
 			{% for tiempo in tiempos %}
-			<input type="checkbox" id="tiempos-{{tiempo.id}}"  name="tiempo"  data-storage="true" > 
-			<label for="tiempos-{{tiempo.id}}"> {{tiempo}}   </label> 
+			<input type="checkbox" id="Tiempo-{{tiempo.id}}"  name="tiempo"  data-storage="true" > 
+			<label for="Tiempo-{{tiempo.id}}"> {{tiempo}}   </label> 
+			<br> 
+			{% endfor %} 
+		</div>
+		<div> 
+			<input type="checkbox" data-type="pronombre" id="pronombre" name="checktodos" > 
+			<label for="pronombre"> Select all pronombres </label> 
+			<br> 
+			{% for pronombre  in pronombres %}
+			<input type="checkbox" id="Pronombre-{{pronombre.id}}"  name="pronombre"  data-storage="true" > 
+			<label for="Pronombre-{{pronombre.id}}"> {{pronombre}}   </label> 
 			<br> 
 			{% endfor %} 
 		</div>

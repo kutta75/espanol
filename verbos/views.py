@@ -1,6 +1,15 @@
 from django.shortcuts import render
-import random 
+import random,json  
+from django.forms.models import model_to_dict 
 from verbos.models import Verbo,Tiempo,Conjugacion,Pronombre,Verbotipo
+
+
+def jslist(myqueryset):
+    jstname=myqueryset.model.__name__
+    jstlst=[]
+    for item in myqueryset:
+        jstlst.append([jstname,item.id])
+    return jstlst
 
 # Create your views here.
 def index(request):
@@ -111,7 +120,12 @@ def verbos_exo(request,conjugacion_id):
         conjugacion_selectada_count =Conjugacion.objects.all().count()
         pk_winner=0
         loto_winner=0
-       
+    # myset set à porter la liste des objets qui servent à faire des  filtres pour les exo 
+    myset=("tiempos","pronombres","verbotipos")
+
+    jstiempos=jslist(tiempos)
+    jspronombres=jslist(pronombres)
+    jsverbotipos=jslist(verbotipos)
     context= { 
             "verbos" : verbos,
             "tiempos" : tiempos , 
@@ -126,7 +140,11 @@ def verbos_exo(request,conjugacion_id):
             "loto_winner" : loto_winner,
             "pk_winner" : pk_winner,
             "resuelto" : resuelto,
-            "trace" : trace
+            "trace" : trace,
+            "myset" : myset,
+            "jstiempos" : jstiempos,
+            "jsverbotipos" : jsverbotipos,
+            "jspronombres" : jspronombres
             }
     return render(request,"verbos/verbos_exo.html",context)
 
@@ -137,13 +155,22 @@ def palabras(request,id1,id2):
     tiempos = Tiempo.objects.all()
     pronombres = Pronombre.objects.all() 
     verbotipos = Verbotipo.objects.all()
+    # myset set à porter la liste des objets qui servent à faire des  filtres pour les exo 
+    myset=(tiempos,pronombres,verbotipos)
+    jstiempos=jslist(tiempos)
+    jspronombres=jslist(pronombres)
+    jsverbotipos=jslist(verbotipos)
     context= {
             "id1" : id1,
             "id2" : id2,
             "verbos" : verbos,
             "tiempos" : tiempos , 
             "pronombres" : pronombres,
-            "verbotipos" : verbotipos
+            "verbotipos" : verbotipos,
+            "myset" : myset,
+            "jstiempos" : jstiempos,
+            "jsverbotipos" : jsverbotipos,
+            "jspronombres" : jspronombres
             }
 
     return render(request,"verbos/palabras.html",context)
