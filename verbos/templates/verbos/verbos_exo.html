@@ -3,8 +3,21 @@
 
 {% block jsscript %}
 
-	<script> 
+	<script>
+		initlocal({{ jstiempos | safe }} ); 
+		initlocal({{ jspronombres  | safe }} ); 
+		initlocal({{ jsverbotipos | safe }} ); 
+
+
+
 		document.addEventListener('DOMContentLoaded',function() {
+			// load des status checks precedement chargés dans le stockage local 
+			checklocal( {{ jstiempos | safe }} );
+			checklocal ( {{ jspronombres | safe }} );
+			checklocal ( {{ jsverbotipos | safe }} );
+
+			// gestions des events 
+			//1) event sur la mise a jour de slect All 
 			// ici on selectionne tous les form input dont le name est checktodos
 			document.querySelectorAll('input[name="checktodos"]').forEach(function(checkheader) {
 				// pour chaque item touvé on applique un event lors d'un event de changement sur l'item 
@@ -16,12 +29,21 @@
 					// on boucle sur tous les items trouvés pour assigner le status check a celui du header 
 					for ( var i=0 ; i < bloc.length ; i++ ) {
 						// on teste que le sous item est bien une checkbox 
-						if ( bloc[i].type = "checkbox") 
+						if ( bloc[i].type = "checkbox") { 
 							// on assigne la valeur du header 
-							bloc[i].checked = checkheader.checked 
+							bloc[i].checked = checkheader.checked;
+							localStorage.setItem(bloc[i].id,checkheader.checked);
+						} 
 					}
 				}
-			})
+			});
+			//2) ici  on clique sur une des checkbox : on met à jour la variable locale 
+			document.querySelectorAll('[data-storage]').forEach(function(checkbox) {
+				checkbox.onchange = function() {
+					console.log(" checkbox cliquée " + checkbox.id );
+					localStorage.setItem(checkbox.id,checkbox.checked);
+				}
+			});
 		});
 
 	</script>
@@ -66,8 +88,8 @@ pk-winner {{pk_winner  }}
 	<label for="checkbox_tiempo"> Select all   </label>
 	<br>
 	{% for tiempo  in tiempos %} 
-	<input type="checkbox",id="{{tiempo.id}}" name="tiempo" value="{{tiempo.id}}"   {{tiempo.checked}} >
-	<label for="{{tiempo.id}}"> {{tiempo}}    </label>
+	<input type="checkbox" id="Tiempo-{{tiempo.id}}" name="tiempo" data-storage="true" value="{{tiempo.id}}"  {{ tiempo.checked }} >
+	<label for="Tiempo-{{tiempo.id}}"> {{tiempo}}    </label>
 	<br>
 	{% endfor %} 
 	</div> 
@@ -78,8 +100,8 @@ pk-winner {{pk_winner  }}
 	<label for="checkbox_pronombre"> Select all  </label>
 	<br>
 	{% for pronombre   in pronombres %} 
-	<input type="checkbox",id="{{pronombre.id}}" name="pronombre" value="{{pronombre.id }}" {{pronombre.checked}} >
-	<label for="{{pronombre.id}}"> {{pronombre}}   </label>
+	<input type="checkbox" id="Pronombre-{{pronombre.id}}" name="pronombre" data-storage="true" value="{{pronombre.id }}" {{pronombre.checked}} >
+	<label for="Pronombre-{{pronombre.id}}"> {{pronombre}}   </label>
 	<br>
 	{% endfor %} 
 	</div> 
@@ -90,8 +112,8 @@ pk-winner {{pk_winner  }}
 	<label for="checkbox_verbotipo"> Select all  </label>
 	<br>
 	{% for verbotipo   in verbotipos %} 
-	<input type="checkbox",id="{{verbotipo.id}}" name="verbotipo" value="{{verbotipo.id }}"  {{verbotipo.checked}} >
-	<label for="{{verbotipo.id}}"> {{verbotipo}}   </label>
+	<input type="checkbox" id="Verbotipo-{{verbotipo.id}}" name="verbotipo" data-storage="true" value="{{verbotipo.id }}"  {{verbotipo.checked}} >
+	<label for="Verbotipo-{{verbotipo.id}}"> {{verbotipo}}   </label>
 	<br>
 	{% endfor %} 
 	</div> 
