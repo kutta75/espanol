@@ -31,12 +31,19 @@ class Tiempo(models.Model):
     def __str__(self):
         return self.tiempo
 
+class Level(models.Model):
+    level=models.CharField(max_length=5)
+
+    def __str__(self):
+        return self.level 
+
+
 class Conjugacion(models.Model):
     verbo=models.ForeignKey(Verbo,on_delete=models.CASCADE,related_name="conjugacions")
     tiempo=models.ForeignKey(Tiempo,on_delete=models.CASCADE,related_name="tiempo_c")
     pronombre=models.ForeignKey(Pronombre,on_delete=models.CASCADE,related_name="pronombre_c")
     conjugacion=models.CharField(max_length=30)
-    level=models.IntegerField(default=0)
+    level=models.ForeignKey(Level,on_delete=models.CASCADE,related_name="conjugacion")
     
     def __str__(self):
 #        conj  = self.conjugacion + " : " + self.verbo + " - " + self.tiempo + " - " + self.pronombre 

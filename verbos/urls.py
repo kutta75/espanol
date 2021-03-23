@@ -22,7 +22,7 @@ urlpatterns = [
     path("", views.index,name='index'),
     path('<int:verbo_id>',views.verbo,name='verbo'),
     path('verbos/',views.verbos,name='verbos'),
-    path('verbos_exo/<int:conjugacion_id>',views.verbos_exo,name='verbos_exo_run'),
+    path('verbos_exo/<int:mode_id>/<int:conjugacion_id>',views.verbos_exo,name='verbos_exo_run'),
     path('verbos_exo/',views.verbos_exo,name='verbos_exo'),
     path('palabras/<int:id1>/<int:id2>',views.palabras,name='palabras')
         ]

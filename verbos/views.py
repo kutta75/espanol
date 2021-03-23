@@ -1,7 +1,7 @@
 from django.shortcuts import render
 import random,json  
 from django.forms.models import model_to_dict 
-from verbos.models import Verbo,Tiempo,Conjugacion,Pronombre,Verbotipo
+from verbos.models import Verbo,Tiempo,Conjugacion,Pronombre,Verbotipo,Level
 
 
 def jslist(myqueryset):
@@ -49,41 +49,54 @@ def verbos(request):
             }
     return render(request,"verbos/verbos.html",context)
 
-def verbos_exo(request,conjugacion_id):
+
+
+
+
+
+def verbos_exo(request,mode_id,conjugacion_id):
     resuelto = " sabes tus conjugaciones ? "
     trace= " trace "
     if request.method=="POST":
+        if mode_id==1:
 # traitement de la reponse apportée en comparant avec la question posée
-        respuesta= request.POST.getlist('respuesta')
-        conjugacion = Conjugacion.objects.get(pk=conjugacion_id)
-        trace = str(conjugacion.conjugacion)  + " "  +  str(respuesta[0]) 
-        if respuesta[0] == conjugacion.conjugacion:
-            resuelto="exito"
-        else:
-            resuelto="fracasso"
+            respuesta= request.POST.getlist('respuesta')
+            conjugacion = Conjugacion.objects.get(pk=conjugacion_id)
+            trace = str(conjugacion.conjugacion)  + " "  +  str(respuesta[0]) 
+            if respuesta[0] == conjugacion.conjugacion:
+                resuelto="exito"
+            else:
+                resuelto="fracasso"
 
 # preparation de la question suivante en exploit:ant les criteres de selection pour trouver une nouvelle conjugaion aleatoirement 
 # recuperation des filtres selectionnés 
         verbotipos_selected= request.POST.getlist('verbotipo')
         pronombres_selected= request.POST.getlist('pronombre')
         tiempos_selected= request.POST.getlist('tiempo')
+        levels_selected= request.POST.getlist('level')
         tiempos_checked= {}
         pronombres_checked= {}
         verbotipos_checked= {}
+        levels_checked= {}
         for tiempo_selected in tiempos_selected :
             tiempos_checked[tiempo_selected]="checked"
         for pronombre_selected in pronombres_selected :
             pronombres_checked[pronombre_selected]="checked"
         for verbotipo_selected in verbotipos_selected :
             verbotipos_checked[verbotipo_selected]="checked"
+        for level_selected in levels_selected :
+            levels_checked[level_selected]="checked"
     else:
         tiempos_checked={"start":"go"}
         pronombres_checked= {}
         verbotipos_checked= {}
+        levels_checked= {}
     verbos = Verbo.objects.all()
     tiempos = Tiempo.objects.all()
     pronombres = Pronombre.objects.all() 
     verbotipos = Verbotipo.objects.all()
+    levels = Level.objects.all()
+
     if request.method=="POST":
         for tiempo in tiempos:
             if str(tiempo.id) in tiempos_selected :
@@ -100,12 +113,17 @@ def verbos_exo(request,conjugacion_id):
                 verbotipo.checked="checked"
             else:
                 verbotipo.checked="unchecked"
-    levels = Verbo.objects.all()
+        for level in levels:
+            if str(level.id) in levels_selected :
+                level.checked="checked"
+            else:
+                level.checked="unchecked"
+
     if request.method=="POST":
         
-        conjugacion_selectada_count =Conjugacion.objects.filter(tiempo__in=tiempos_selected).filter(pronombre__in=pronombres_selected).filter(verbo__in=Verbo.objects.filter(tipo__in=verbotipos_selected)).count()
+        conjugacion_selectada_count =Conjugacion.objects.filter(tiempo__in=tiempos_selected).filter(pronombre__in=pronombres_selected).filter(verbo__in=Verbo.objects.filter(tipo__in=verbotipos_selected)).filter(level__in=levels_selected).count()
         if conjugacion_selectada_count > 0:  
-            conjugacion_selectada=Conjugacion.objects.filter(tiempo__in=tiempos_selected).filter(pronombre__in=pronombres_selected).filter(verbo__in=Verbo.objects.filter(tipo__in=verbotipos_selected))
+            conjugacion_selectada=Conjugacion.objects.filter(tiempo__in=tiempos_selected).filter(pronombre__in=pronombres_selected).filter(verbo__in=Verbo.objects.filter(tipo__in=verbotipos_selected)).filter(level__in=levels_selected)
             loto = []
             for conjugacion in conjugacion_selectada:
                 loto.append(conjugacion.pk)
@@ -126,6 +144,7 @@ def verbos_exo(request,conjugacion_id):
     jstiempos=jslist(tiempos)
     jspronombres=jslist(pronombres)
     jsverbotipos=jslist(verbotipos)
+    jslevels=jslist(levels)
     context= { 
             "verbos" : verbos,
             "tiempos" : tiempos , 
@@ -144,6 +163,7 @@ def verbos_exo(request,conjugacion_id):
             "myset" : myset,
             "jstiempos" : jstiempos,
             "jsverbotipos" : jsverbotipos,
+            "jslevels": jslevels,
             "jspronombres" : jspronombres
             }
     return render(request,"verbos/verbos_exo.html",context)

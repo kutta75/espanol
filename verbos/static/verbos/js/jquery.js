@@ -4,13 +4,13 @@
 		// si non , on le crée et on l'initiale avec la valeur texte a "true" ( qui n'est pas un booleen !!)
 		function initlocal(mylist) {
 			mytype= typeof mylist;
-			console.log("initlocal");
+	//		console.log("initlocal");
 			for (var i=0 ; i < mylist.length; i++ ) {
-				console.log("initlocal " + mylist[i]);
+	//			console.log("initlocal " + mylist[i]);
 				myvar = mylist[i][0] + "-" + mylist[i][1];
 				if (!localStorage.getItem(myvar)) {
 					localStorage.setItem(myvar,"true");
-					console.log("initlocal" + myvar );
+	//				console.log("initlocal" + myvar );
 				};
 			}
 		}
@@ -20,7 +20,7 @@
 			// le bloc de selection globale doit  avoir un name de "checktodos" et les sous 
 			// boite doivent avoir pour naem le data-type du la boite globale 
 			// ouf 
-			console.log("checklocal"); 
+	//		console.log("checklocal"); 
 
 			for (var i=0 ; i < mylist.length; i++ ) {
 				myvar = mylist[i][0] + "-" + mylist[i][1];
@@ -28,10 +28,10 @@
 				if ( localStorage.getItem(myvar) == "true" ) {
 					myvarvalue=true;
 					};
-				console.log("checklocal :" + myvar + " = " + myvarvalue);
+	//			console.log("checklocal :" + myvar + " = " + myvarvalue);
 				myvar="#"+ myvar
 				
-				console.log("checklocal"+ myvar + myvarvalue); 
+	//			console.log("checklocal"+ myvar + myvarvalue); 
 				document.querySelector(myvar).checked = myvarvalue ;
 				}	
 		}	

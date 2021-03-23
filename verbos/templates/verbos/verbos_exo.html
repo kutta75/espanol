@@ -4,9 +4,17 @@
 {% block jsscript %}
 
 	<script>
+		function addletter(letter) {
+			document.getElementById('myrespuesta').value = document.getElementById('myrespuesta').value + letter;
+		}
+
+		
+		
+		
 		initlocal({{ jstiempos | safe }} ); 
 		initlocal({{ jspronombres  | safe }} ); 
 		initlocal({{ jsverbotipos | safe }} ); 
+		initlocal({{ jslevels | safe }} ); 
 
 
 
@@ -15,6 +23,7 @@
 			checklocal( {{ jstiempos | safe }} );
 			checklocal ( {{ jspronombres | safe }} );
 			checklocal ( {{ jsverbotipos | safe }} );
+			checklocal ( {{ jslevels     | safe }} );
 
 			// gestions des events 
 			//1) event sur la mise a jour de slect All 
@@ -40,10 +49,20 @@
 			//2) ici  on clique sur une des checkbox : on met à jour la variable locale 
 			document.querySelectorAll('[data-storage]').forEach(function(checkbox) {
 				checkbox.onchange = function() {
-					console.log(" checkbox cliquée " + checkbox.id );
+			//		console.log(" checkbox cliquée " + checkbox.id );
 					localStorage.setItem(checkbox.id,checkbox.checked);
 				}
 			});
+			//3) ici on gere le clique sur un bouton lettre pour ajouter cette lettre à la réponse 
+			document.querySelectorAll('[data-letter]').forEach(function(letter) { 
+				letter.onclick = function() { 
+					console.log("letter cliqué" + letter.id ) ; 
+					document.getElementById('myrespuesta').value = document.getElementById('myrespuesta').value + letter.dataset["letter"];
+					console.log("nouvelle value" + document.getElementById('myrespuesta').value ) ; 
+
+				}
+			});
+
 		});
 
 	</script>
@@ -59,18 +78,22 @@
 
 {% block body1 %} 
 
-<form action= "{% url 'verbos_exo_run' conjugacion_selectada.id %}"  method="post"> 
+<form action= "{% url 'verbos_exo_run'  1 conjugacion_selectada.id %}"  method="post"> 
 {% csrf_token %}
 {{conjugacion_selectada.tiempo}}
 {{conjugacion_selectada.verbo}}
 {{conjugacion_selectada.pronombre }}
 <br> 
 <label for="your_name"> Cual es la conjugacion ? </label> 
-	<input autofocus id="your_name" type="text" name="respuesta" >
+	<input autofocus id="myrespuesta" type="text" name="respuesta" >
 	<input type="submit" value="Submit">    
- 
+	</input> 
 	{{tiempos_checked}}
-<br> 
+<br>
+<span type="text" id="lettre-a" onclick="addletter('A')" value="A" > A </span>    
+<span type="text" id="lettre-i" onclick="addletter('I')" value="I" > I </span>    
+<span type="text" id="lettre-o" onclick="addletter('O')" value="O" > O </span>    
+{{conjugacion_selectada.id}}
 {{conjugacion_selectada.id}}
 {{conjugacion_selectada.tiempo}}
 {{conjugacion_selectada.verbo}}
@@ -120,11 +143,16 @@ pk-winner {{pk_winner  }}
    
 
 
-	<div> 
-	{% for level  in levels %} 
-	<h4> {{level}}  </h4> 
-
+  	<div> 
+		<input type="checkbox" id="checkbox_level"   name="checktodos"   data-type="level" >
+	<label for="checkbox_verbotipo"> Select all  </label>
+	<br>
+	{% for level   in levels %} 
+	<input type="checkbox" id="Level-{{level.id}}" name="level" data-storage="true" value="{{level.id }}"  {{level.checked}} >
+	<label for="Level-{{level.id}}"> {{level}}   </label>
+	<br>
 	{% endfor %} 
+	</div> 
 	</div> 
 <form>
 {% endblock %}
