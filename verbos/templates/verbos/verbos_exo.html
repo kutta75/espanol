@@ -4,12 +4,22 @@
 {% block jsscript %}
 
 	<script>
+		// ajoute une lettre a la fin de respuesta 
 		function addletter(letter) {
 			document.getElementById('myrespuesta').value = document.getElementById('myrespuesta').value + letter;
-		}
+		};
+		function initvarlocal1(myvar) {
+			console.log("initvarlocal1 " + myvar );
+			if (! localStorage.getItem(myvar)) {
+				localStorage.setItem(myvar,"0");
+			};
+		};
+
+
 
 		
-		
+		initvarlocal1("itotal"); 
+		initvarlocal1("iexito"); 
 		
 		initlocal({{ jstiempos | safe }} ); 
 		initlocal({{ jspronombres  | safe }} ); 
@@ -26,7 +36,7 @@
 			checklocal ( {{ jslevels     | safe }} );
 
 			// gestions des events 
-			//1) event sur la mise a jour de slect All 
+			//1) event sur la mise a jour de select All 
 			// ici on selectionne tous les form input dont le name est checktodos
 			document.querySelectorAll('input[name="checktodos"]').forEach(function(checkheader) {
 				// pour chaque item touvé on applique un event lors d'un event de changement sur l'item 
@@ -62,6 +72,49 @@
 
 				}
 			});
+			//4) mise en forme du resultat du test précedent
+			cexito=localStorage.getItem("iexito");
+			ctotal=localStorage.getItem("itotal");
+			iexito=parseInt(cexito);
+			itotal=parseInt(ctotal); 
+
+			resuelto= document.getElementById('resuelto').innerText;
+			console.log(" resuelto = " + resuelto );
+			if (resuelto == "1" ){
+				console.log("resulto =1") ;
+				document.getElementById('resuelto').innerText="EXITO !! ";
+		 		document.getElementById('resuelto').style.backgroundColor="lightgreen";
+				itotal=itotal+1;
+				iexito=iexito+1;
+				console.log("total="+itotal + " exito=" + iexito);
+			}
+				else {
+				if (resuelto=="0" ) {
+					document.getElementById('resuelto').innerText="FRACASSO !! ";
+					console.log("resulto = 0") ;
+		 			document.getElementById('resuelto').style.backgroundColor="tomato";
+					itotal=itotal+1;
+					console.log("total="+itotal+ " exito=" + iexito);
+					document.getElementById('tracerep').innerText=" {{tracerep}}";
+					document.getElementById('tracerep').style.color="tomato";
+					document.getElementById('tracerep').style.textDecoration="line-through";
+				
+				} 
+					else {
+						document.getElementById('resuelto').innerText=" Play  !! ";
+						console.log("resulto = else ") ;
+		 				document.getElementById('resuelto').style.backgroundColor="white";
+						iexito=0;
+						itotal=0; 
+						console.log("total="+itotal+ " exito=" + iexito);
+					}
+				}
+				localStorage.setItem("itotal",itotal);
+				localStorage.setItem("iexito",iexito);
+				document.getElementById('exito').innerText=iexito.toString();
+		 		document.getElementById('total').innerText=itotal.toString();
+			//5) affichage du resulta précédent
+
 
 		});
 
@@ -77,22 +130,47 @@
 
 
 {% block body1 %} 
+<table> 
+	<tr> 
+		<td> 
+			<span id="resuelto">{{resuelto}}</span> 
+			<span id="exito" > 0 </span>
+			<span id="slash"> / </span>
+			<span id="total" > 0 </span> 
+		</td>
+		<td> 
+			{{conjugacion_selectada.tiempo}}
+			{{conjugacion_selectada.verbo}}
+			{{conjugacion_selectada.pronombre }}
+		</td>
+	</tr>
+	<tr>
+		<td>
+			<span> Cual es la conjugacion ? </span> 
+		</td> 
+		<td> 
+			<form action= "{% url 'verbos_exo_run'  1 conjugacion_selectada.id %}"  method="post"> 
+			{% csrf_token %}
+			<label for="your_name">  </label> 
+			<input autofocus id="myrespuesta" type="text" name="respuesta" >
+			<input type="submit" value="Submit">    
+			</input>
+		</td>
+	</tr>
+	<tr>
+		<td>
+<span type="text" class="lettre" id="lettre-a" onclick="addletter('á')" value="á" > á </span>    
+<span type="text" class="lettre" id="lettre-i" onclick="addletter('í')" value="í" > í </span>    
+<span type="text" class="lettre" id="lettre-o" onclick="addletter('ó')" value="ó" > ó </span>    
 
-<form action= "{% url 'verbos_exo_run'  1 conjugacion_selectada.id %}"  method="post"> 
-{% csrf_token %}
-{{conjugacion_selectada.tiempo}}
-{{conjugacion_selectada.verbo}}
-{{conjugacion_selectada.pronombre }}
-<br> 
-<label for="your_name"> Cual es la conjugacion ? </label> 
-	<input autofocus id="myrespuesta" type="text" name="respuesta" >
-	<input type="submit" value="Submit">    
-	</input> 
-	{{tiempos_checked}}
+		</td>
+		<td>
+			<span id="trace">{{trace}}</span>
+			<span id="tracerep"></span>
+		</td>
+	</tr>
+</table>
 <br>
-<span type="text" id="lettre-a" onclick="addletter('á')" value="á" > á </span>    
-<span type="text" id="lettre-i" onclick="addletter('í')" value="í" > í </span>    
-<span type="text" id="lettre-o" onclick="addletter('ó')" value="ó" > ó </span>    
 {{conjugacion_selectada.id}}
 {{conjugacion_selectada.id}}
 {{conjugacion_selectada.tiempo}}
@@ -102,9 +180,7 @@
 {{conjugacion_selectada_count }}
 loto_winner {{loto_winner }}
 pk-winner {{pk_winner  }}
-<br> Resuelto : {{ resuelto }}
 <br> trace : {{trace}} 
-
 <div id="container"> 
 	<div> 
 	<input type="checkbox" id="checkbox_tiempo"   name="checktodos"  data-type="tiempo" >

@@ -56,17 +56,19 @@ def verbos(request):
 
 def verbos_exo(request,mode_id,conjugacion_id):
     resuelto = " sabes tus conjugaciones ? "
-    trace= " trace "
+    trace= "<= puedes utilizar estas lettras"
+    tracerep= "  "
     if request.method=="POST":
         if mode_id==1:
 # traitement de la reponse apportée en comparant avec la question posée
             respuesta= request.POST.getlist('respuesta')
             conjugacion = Conjugacion.objects.get(pk=conjugacion_id)
-            trace = str(conjugacion.conjugacion)  + " "  +  str(respuesta[0]) 
-            if respuesta[0] == conjugacion.conjugacion:
-                resuelto="exito"
+            trace = str(conjugacion.tiempo) + " " + str(conjugacion.verbo) + " " + str(conjugacion.pronombre) +" " + str(conjugacion.conjugacion)   
+            tracerep =  str(respuesta[0]) 
+            if respuesta[0].replace(" ","") == conjugacion.conjugacion.replace(" ",""):
+                resuelto="1"
             else:
-                resuelto="fracasso"
+                resuelto="0"
 
 # preparation de la question suivante en exploit:ant les criteres de selection pour trouver une nouvelle conjugaion aleatoirement 
 # recuperation des filtres selectionnés 
@@ -160,6 +162,7 @@ def verbos_exo(request,mode_id,conjugacion_id):
             "pk_winner" : pk_winner,
             "resuelto" : resuelto,
             "trace" : trace,
+            "tracerep" : tracerep,
             "myset" : myset,
             "jstiempos" : jstiempos,
             "jsverbotipos" : jsverbotipos,

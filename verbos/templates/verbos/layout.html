@@ -1,10 +1,19 @@
 {% load static %}
-<!DOCTYPEAA html >
+<!DOCTYPE html >
 <html>
 <head lang=fr charset="UTF-8" >
 	<Title> Verbos </Title>
 	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
 	<style>
+	.lettre { 
+		color : black;
+		align:center;
+		width: 40;
+		padding: 10px;
+		border: 15px ;
+		background-color: lightgrey ; 
+
+	}
 	#container { 
 		display: flex ;
 		flex-wrap:wrap;
@@ -22,12 +31,12 @@
 		flex-wrap: wrap;
 	}
 	.nav > div  { 
-		background-color: grey ;
+		background-color: beige ;
 		align:center;
 		font-size: 20px;
 		margin: 10px;
-		padding: 20px;
-		width: 130px;
+		padding: 15px;
+		width: 120px;
 	}
 	</style>
 	<script  src = "{% static 'verbos/js/jquery.js' %} " > 
@@ -41,10 +50,10 @@
 
 <body>
 	<div class="nav"> 
-			<div>		 <a href= "{% url 'index' %}"> Home </a>  </div>
-			<div>		 <a href= "{% url 'verbos' %}"> Verbos </a>  </div>
-			<div>		 <a href= "{% url 'verbos_exo'%}0/1"> Exo  </a>  </div>
-			<div>		 <a href= "{% url 'palabras' id1='1' id2='222' %} ">  Palabras   </a>  </div>
+			<div>		 <a href= "{% url 'index' %}">Home</a>  </div>
+			<div>		 <a href= "{% url 'verbos' %}">Verbos</a>  </div>
+			<div>		 <a href= "{% url 'verbos_exo'%}0/1">Exo</a>  </div>
+			<div>		 <a href= "{% url 'palabras' id1='1' id2='222' %} ">Palabras</a>  </div>
 			
 		
 	</div> 

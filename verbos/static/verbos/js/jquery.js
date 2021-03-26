@@ -1,4 +1,11 @@
 		// gestion des data locales
+		function initvarlocal(myvar) {
+				console.log("inivartocal  "+ myvar);
+				if (!localStorage.getItem(myvar)) {
+					localStorage.setItem(myvar,"0");
+				};
+			};
+		
 		// ici on recoit une liste composéee de couple "nom du modele" , idi di modele 
 		// on teste si le champ nomdumodel-id exite en local storage 
 		// si non , on le crée et on l'initiale avec la valeur texte a "true" ( qui n'est pas un booleen !!)
@@ -13,7 +20,7 @@
 	//				console.log("initlocal" + myvar );
 				};
 			}
-		}
+		};
 
 		function checklocal(mylist) {
 			// ici on gere les bloc de check box pour cocher - decocher en une fois 
@@ -34,7 +41,7 @@
 	//			console.log("checklocal"+ myvar + myvarvalue); 
 				document.querySelector(myvar).checked = myvarvalue ;
 				}	
-		}	
+		};	
 	
 
 
