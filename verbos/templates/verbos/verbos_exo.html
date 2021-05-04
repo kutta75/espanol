@@ -18,6 +18,7 @@
 
 
 		
+		initvarlocal1("faltas"); 
 		initvarlocal1("itotal"); 
 		initvarlocal1("iexito"); 
 		
@@ -98,6 +99,8 @@
 					document.getElementById('tracerep').innerText=" {{tracerep}}";
 					document.getElementById('tracerep').style.color="tomato";
 					document.getElementById('tracerep').style.textDecoration="line-through";
+					// on memorise l'erreur avec le numero de conjugacion 
+					localStorage.setItem("faltas",localStorage.getItem("faltas")+","+"{{trace_id}}");
 				
 				} 
 					else {

@@ -1,0 +1,48 @@
+{% extends 'verbos/layout.html' %}
+
+{% block jsscript %}
+
+	<script  >
+	// init des variables locales des checkbox 			
+	</script>
+ 
+
+
+
+
+
+
+{% endblock %}
+
+
+{% block body1 %} 
+
+
+	<form action= "{% url 'palabras' id1='10' id2='20' %}"  method ="post"> 
+	{% csrf_token  %}
+	<div id="container" > 
+		<div> 
+			<input type="checkbox" data-type="familia" id="familia" name="checktodos" > 
+			<label for="familia"> Selectiar todas familias </label> 
+			<br> 
+			{% for familia in familias %}
+			<input type="checkbox" id="Familia-{{familia.id}}"  name="familia"  data-storage="true" > 
+			<label for="Familia-{{familia.id}}"> {{familia}}   </label> 
+			<br> 
+			{% endfor %} 
+		</div>
+		<div> 
+			<input type="checkbox" data-type="fecha" id="fechas" name="checktodos" > 
+			<label for="fecha"> Selectiar todas fechas </label> 
+			<br> 
+			{% for fecha in fechas %}
+			<input type="checkbox" id="Fecha-{{fecha.id}}"  name="fecha"  data-storage="true" > 
+			<label for="Fecha-{{fecha.id}}"> {{fecha}}   </label> 
+			<br> 
+			{% endfor %} 
+		</div>
+	</div> 
+	</form> 
+
+{% endblock %}
+

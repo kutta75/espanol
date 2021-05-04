@@ -1,7 +1,7 @@
 from django.shortcuts import render
 import random,json  
 from django.forms.models import model_to_dict 
-from verbos.models import Verbo,Tiempo,Conjugacion,Pronombre,Verbotipo,Level
+from verbos.models import Verbo,Tiempo,Conjugacion,Pronombre,Verbotipo,Level,Palabra,Palabratipo,Palabragenero,Palabranivel,Palabrafamilia,Palabrafecha
 
 
 def jslist(myqueryset):
@@ -58,6 +58,7 @@ def verbos_exo(request,mode_id,conjugacion_id):
     resuelto = " sabes tus conjugaciones ? "
     trace= "<= puedes utilizar estas lettras"
     tracerep= "  "
+    trace_id= "  "
     if request.method=="POST":
         if mode_id==1:
 # traitement de la reponse apportée en comparant avec la question posée
@@ -65,12 +66,13 @@ def verbos_exo(request,mode_id,conjugacion_id):
             conjugacion = Conjugacion.objects.get(pk=conjugacion_id)
             trace = str(conjugacion.tiempo) + " " + str(conjugacion.verbo) + " " + str(conjugacion.pronombre) +" " + str(conjugacion.conjugacion)   
             tracerep =  str(respuesta[0]) 
+            trace_id =  str(conjugacion.id) 
             if respuesta[0].replace(" ","") == conjugacion.conjugacion.replace(" ",""):
                 resuelto="1"
             else:
                 resuelto="0"
 
-# preparation de la question suivante en exploit:ant les criteres de selection pour trouver une nouvelle conjugaion aleatoirement 
+# preparation de la question suivante en exploitant les criteres de selection pour trouver une nouvelle conjugaion aleatoirement 
 # recuperation des filtres selectionnés 
         verbotipos_selected= request.POST.getlist('verbotipo')
         pronombres_selected= request.POST.getlist('pronombre')
@@ -162,6 +164,7 @@ def verbos_exo(request,mode_id,conjugacion_id):
             "pk_winner" : pk_winner,
             "resuelto" : resuelto,
             "trace" : trace,
+            "trace_id" : trace_id,
             "tracerep" : tracerep,
             "myset" : myset,
             "jstiempos" : jstiempos,
@@ -171,9 +174,27 @@ def verbos_exo(request,mode_id,conjugacion_id):
             }
     return render(request,"verbos/verbos_exo.html",context)
 
+def palabra(request):
+    familias  = Palabrafamilia.objects.all()
+    tipos =     Palabratipo.objects.all()
+    generos =   Palabragenero.objects.all()
+    nivels =    Palabranivel.objects.all() 
+    fechas =    Palabrafecha.objects.all()
+    # myset set à porter la liste des objets qui servent à faire des  filtres pour les exo 
+    jsfamilias=jslist(familias)
+    jsgeneros=jslist(generos)
+    jsnivels=jslist(nivels)
+    context= {
+            "familias" : familias,
+            "tipos" : tipos,
+            "generos" : generos,
+            "nivels" : nivels , 
+            "fechas" : fechas,
+        }
+    return render(request,"verbos/palabra.html",context) 
+
 
 def palabras(request,id1,id2):
-    
     verbos = Verbo.objects.all()
     tiempos = Tiempo.objects.all()
     pronombres = Pronombre.objects.all() 
