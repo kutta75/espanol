@@ -7,6 +7,8 @@
 		// ajoute une lettre a la fin de respuesta 
 		function addletter(letter) {
 			document.getElementById('myrespuesta').value = document.getElementById('myrespuesta').value + letter;
+			// et on retourne placer le curseur sur le champ d'input du formulaire
+			document.getElementById('myrespuesta').focus(); 
 		};
 		function initvarlocal1(myvar) {
 			console.log("initvarlocal1 " + myvar );
@@ -155,7 +157,7 @@
 			<form action= "{% url 'verbos_exo_run'  1 conjugacion_selectada.id %}"  method="post"> 
 			{% csrf_token %}
 			<label for="your_name">  </label> 
-			<input autofocus id="myrespuesta" type="text" name="respuesta" >
+			<input autofocus id="myrespuesta" type="text" name="respuesta"  autocapitalize=off >
 			<input type="submit" value="Submit">    
 			</input>
 		</td>

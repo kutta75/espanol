@@ -27,7 +27,7 @@ def verbo(request,verbo_id):
     verbo= Verbo.objects.get(pk=verbo_id)
     context = { 
             "verbo" : verbo ,
-            "conjugacions" : verbo.conjugacions.all().order_by('tiempo')
+            "conjugacions" : verbo.conjugacions.all().order_by('tiempo__tiemposeq')
             }
     return render(request,"verbos/verbo.html",context)
 
@@ -61,12 +61,14 @@ def verbos_exo(request,mode_id,conjugacion_id):
     trace_id= "  "
     if request.method=="POST":
         if mode_id==1:
-# traitement de la reponse apportée en comparant avec la question posée
+# traitement de la reponse apportée i a la question rang n-1 en comparant avec la question posée rand n-1 dont on connait l'idi du verbe qui a servi à la question 
             respuesta= request.POST.getlist('respuesta')
             conjugacion = Conjugacion.objects.get(pk=conjugacion_id)
+            # preparation du texte à afficher pour présenter la bonne reponse 
             trace = str(conjugacion.tiempo) + " " + str(conjugacion.verbo) + " " + str(conjugacion.pronombre) +" " + str(conjugacion.conjugacion)   
             tracerep =  str(respuesta[0]) 
             trace_id =  str(conjugacion.id) 
+            # nettoyage des espaces qui pourraient etre dans les 2 chaines 
             if respuesta[0].replace(" ","") == conjugacion.conjugacion.replace(" ",""):
                 resuelto="1"
             else:
@@ -96,8 +98,8 @@ def verbos_exo(request,mode_id,conjugacion_id):
         verbotipos_checked= {}
         levels_checked= {}
     verbos = Verbo.objects.all()
-    tiempos = Tiempo.objects.all()
-    pronombres = Pronombre.objects.all() 
+    tiempos = Tiempo.objects.all().order_by('tiemposeq')
+    pronombres = Pronombre.objects.all().order_by('pronombreseq') 
     verbotipos = Verbotipo.objects.all()
     levels = Level.objects.all()
 
@@ -179,7 +181,7 @@ def palabra(request):
     tipos =     Palabratipo.objects.all()
     generos =   Palabragenero.objects.all()
     nivels =    Palabranivel.objects.all() 
-    fechas =    Palabrafecha.objects.all()
+    fechas =    Palabrafecha.objects.all().order_by('palabrafecha') 
     # myset set à porter la liste des objets qui servent à faire des  filtres pour les exo 
     jsfamilias=jslist(familias)
     jsgeneros=jslist(generos)

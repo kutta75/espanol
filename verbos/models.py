@@ -61,9 +61,9 @@ class Palabratipo(models.Model):
         return self.palabratipo
 
 class Palabrafecha(models.Model):
-    palabrafecha = models.DateField(null=True,default=date.today)
+    palabrafecha = models.DateTimeField(null=True,default=date.today)
     def __str__(self):
-        return self.palabrafecha
+        return str(self.palabrafecha)
 
 class Palabragenero(models.Model):
     palabragenero = models.CharField(max_length=2,null=True)

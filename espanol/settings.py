@@ -25,7 +25,7 @@ SECRET_KEY = 'roclq3%2sv&tgvn=mbavm3^ne5=#t6ls93=(iy(9&gnwf5bofk'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['192.168.1.46','localhost']
+ALLOWED_HOSTS = ['192.168.1.46','localhost','www.eva1.fr']
 
 
 # Application definition
@@ -112,7 +112,7 @@ USE_I18N = True
 
 USE_L10N = True
 
-USE_TZ = True
+USE_TZ = False
 
 
 # Static files (CSS, JavaScript, Images)
