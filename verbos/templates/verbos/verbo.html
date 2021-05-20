@@ -1,9 +1,10 @@
 {% extends 'verbos/layout.html' %}
+//cette page affiche toutes les conjugaisons d'un verbe donné  
 {% block jsscript %}
 	<script>
 		//script pour coloriser les conjugaisos exceptionnelles 
-		// elles sont identifier par un span avec un data-level qui vaut le level de conjugacion 
-		// les conjugaciones normales ont level = 0 ; donc on filtre celle qui ont unlevel > 0 pour les affichier en rouge 
+		// elles sont identifiés par un span avec un data-level qui vaut le level de conjugacion 
+		// les conjugaciones normales ont level = 0 ; donc on filtre celle qui ont unlevel > 0 pour les afficher en rouge 
 		document.addEventListener('DOMContentLoaded',function() {
 			document.querySelectorAll('span').forEach(function(span) {
 				if (span.dataset["level"] > 0)  {

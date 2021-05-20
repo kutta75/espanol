@@ -16,7 +16,9 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path,include
+from django.views.generic.base import RedirectView 
 from verbos import views
+from django.contrib.staticfiles.storage import staticfiles_storage 
 
 urlpatterns = [
     path("", views.index,name='index'),
@@ -25,5 +27,6 @@ urlpatterns = [
     path('verbos_exo/<int:mode_id>/<int:conjugacion_id>',views.verbos_exo,name='verbos_exo_run'),
     path('verbos_exo/',views.verbos_exo,name='verbos_exo'),
     path('palabras/<int:id1>/<int:id2>',views.palabras,name='palabras'),
-    path('palabra/',views.palabra,name='palabra')
+    path('palabra/',views.palabra,name='palabra'),
+    path('favico.ico',RedirectView.as_view(url=staticfiles_storage.url('img/favico.ico')))
         ]
