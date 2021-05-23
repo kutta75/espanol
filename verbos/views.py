@@ -177,6 +177,7 @@ def verbos_exo(request,mode_id,conjugacion_id):
     return render(request,"verbos/verbos_exo.html",context)
 
 def palabra(request):
+    # fonction pour exervice sur les palabras 
     familias  = Palabrafamilia.objects.all()
     tipos =     Palabratipo.objects.all()
     generos =   Palabragenero.objects.all()
@@ -197,6 +198,7 @@ def palabra(request):
 
 
 def palabras(request,id1,id2):
+# fonction pour tester 
     verbos = Verbo.objects.all()
     tiempos = Tiempo.objects.all()
     pronombres = Pronombre.objects.all() 
