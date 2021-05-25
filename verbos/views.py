@@ -223,4 +223,24 @@ def palabras(request,id1,id2):
 
     return render(request,"verbos/palabras.html",context)
 
+def vocabulario(request):
+    # fonction d'affichages de domaines / type  / niveau / date des palabra 
+    familias  = Palabrafamilia.objects.all()
+    tipos =     Palabratipo.objects.all()
+    generos =   Palabragenero.objects.all()
+    nivels =    Palabranivel.objects.all() 
+    fechas =    Palabrafecha.objects.all().order_by('palabrafecha') 
+    # myset set à porter la liste des objets qui servent à faire des  filtres pour les exo 
+    jsfamilias=jslist(familias)
+    jsgeneros=jslist(generos)
+    jsnivels=jslist(nivels)
+    context= {
+            "familias" : familias,
+            "tipos" : tipos,
+            "generos" : generos,
+            "nivels" : nivels , 
+            "fechas" : fechas,
+        }
+
+    return render(request,"verbos/vocabulario.html",context)
 

@@ -28,5 +28,6 @@ urlpatterns = [
     path('verbos_exo/',views.verbos_exo,name='verbos_exo'),
     path('palabras/<int:id1>/<int:id2>',views.palabras,name='palabras'),
     path('palabra/',views.palabra,name='palabra'),
+    path('vocabulario/',views.vocabulario,name='vocabulario'),
     path('favico.ico',RedirectView.as_view(url=staticfiles_storage.url('img/favico.ico')))
         ]
