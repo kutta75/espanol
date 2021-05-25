@@ -69,7 +69,7 @@ def verbos_exo(request,mode_id,conjugacion_id):
             tracerep =  str(respuesta[0]) 
             trace_id =  str(conjugacion.id) 
             # nettoyage des espaces qui pourraient etre dans les 2 chaines 
-            if respuesta[0].replace(" ","") == conjugacion.conjugacion.replace(" ",""):
+            if respuesta[0].replace(" ","").lower() == conjugacion.conjugacion.replace(" ",""):
                 resuelto="1"
             else:
                 resuelto="0"
