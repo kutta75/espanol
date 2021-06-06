@@ -1,6 +1,6 @@
 		// gestion des data locales
 		function initvarlocal(myvar) {
-				console.log("inivartocal  "+ myvar);
+//				console.log("inivartocal  "+ myvar);
 				if (!localStorage.getItem(myvar)) {
 					localStorage.setItem(myvar,"0");
 				};
@@ -27,7 +27,7 @@
 			// le bloc de selection globale doit  avoir un name de "checktodos" et les sous 
 			// boite doivent avoir pour naem le data-type du la boite globale 
 			// ouf 
-	//		console.log("checklocal"); 
+			//console.log("checklocal"); 
 
 			for (var i=0 ; i < mylist.length; i++ ) {
 				myvar = mylist[i][0] + "-" + mylist[i][1];
@@ -35,10 +35,10 @@
 				if ( localStorage.getItem(myvar) == "true" ) {
 					myvarvalue=true;
 					};
-	//			console.log("checklocal :" + myvar + " = " + myvarvalue);
+				//console.log("checklocal :" + myvar + " = " + myvarvalue);
 				myvar="#"+ myvar
 				
-	//			console.log("checklocal"+ myvar + myvarvalue); 
+				//console.log("checklocal"+ myvar + myvarvalue); 
 				document.querySelector(myvar).checked = myvarvalue ;
 				}	
 		};	

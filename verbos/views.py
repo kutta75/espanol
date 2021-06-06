@@ -223,23 +223,72 @@ def palabras(request,id1,id2):
 
     return render(request,"verbos/palabras.html",context)
 
-def vocabulario(request):
-    # fonction d'affichages de domaines / type  / niveau / date des palabra 
+def vocabulario(request,mode_id,palabra_id):
+    # fonction d'affichages de domaines / type  / niveau / date des palabra
+    # instanciation initiale de la liste familia_checked qui supportera la selection des cases à cocher des termes selectionnés par l'utilisateur 
+    familias_selected=[]
+    familias_txt=[]
+    Palabra_winner=Palabra.objects.first()
+    Palabra_winner_prev = Palabra.objects.first()
+    Palabra_selectada_count= 0
+    print("type  du first element")
+        
+
+
     familias  = Palabrafamilia.objects.all()
-    tipos =     Palabratipo.objects.all()
+    tipos  = Palabratipo.objects.all()
     generos =   Palabragenero.objects.all()
     nivels =    Palabranivel.objects.all() 
     fechas =    Palabrafecha.objects.all().order_by('palabrafecha') 
+    
+    # request post 
+    if request.method=="POST":
+        # recuperation du test precedent pour afficher la reponse 
+        if mode_id==1:
+            Palabra_winner_prev = Palabra.objects.get(pk=palabra_id)
+        # recuperation de la liste familia_post qui contient les "value" des box qui ont été selectionées
+        familias_selected = request.POST.getlist('familia')
+        tipos_selected = request.POST.getlist('tipo')
+        fechas_selected = request.POST.getlist('fecha')
+        nivels_selected = request.POST.getlist('nivel')
+        # construction du queryset basé sur la selections des checkbox 
+        Palabra_selectadas =Palabra.objects.filter(palabrafamilia__in=familias_selected).filter(palabratipo__in=tipos_selected).filter(palabrafecha__in=fechas_selected).filter(palabranivel__in=nivels_selected)
+        # contage du nombre d'element du queryset  
+        Palabra_selectada_count =Palabra_selectadas.count()
+        #    familias_txt = familias_txt + str(familias_selected[i]) 
+        if Palabra_selectada_count > 0 :
+            loto_winner=random.randint(0,Palabra_selectada_count-1)
+            print("loto winner = " + str(loto_winner))
+            Palabra_selectada_list=Palabra_selectadas.values_list('pk',flat=True)
+            Palabra_winner_pk=Palabra_selectada_list[loto_winner]
+            print("Palabra selecta pk =" + str(Palabra_winner_pk))
+            Palabra_winner=Palabra.objects.get(pk=Palabra_winner_pk)
+                    
+    print("palabra_winner.id"  ) 
+    
+
     # myset set à porter la liste des objets qui servent à faire des  filtres pour les exo 
     jsfamilias=jslist(familias)
+    jstipos =jslist(tipos)
     jsgeneros=jslist(generos)
     jsnivels=jslist(nivels)
+    jsfechas=jslist(fechas)
     context= {
             "familias" : familias,
+            "jsfamilias" : jsfamilias,
+            "familias_selected" : familias_selected,
+            "familias_txt" : familias_txt, 
             "tipos" : tipos,
+            "jstipos" : jstipos , 
             "generos" : generos,
+            "jsgeneros" : jsgeneros , 
             "nivels" : nivels , 
+            "jsnivels" : jsnivels ,
             "fechas" : fechas,
+            "jsfechas" : jsfechas ,
+            "Palabra_winner" : Palabra_winner,
+            "Palabra_winner_prev" : Palabra_winner_prev,
+            "Palabra_selectada_count" : Palabra_selectada_count , 
         }
 
     return render(request,"verbos/vocabulario.html",context)
