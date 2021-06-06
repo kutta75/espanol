@@ -1,0 +1,202 @@
+{% extends 'verbos/layout.html' %}
+//cette page affiche toutes les criteres de selection d un palabra   
+{% block jsscript %}
+	<script>
+		// fonction qui bascule un objet de visible a invisible et reciproquement 
+		function togglefunction(anId1,anId2) {
+			node1=document.getElementById(anId1);
+			node2=document.getElementById(anId2);
+			if (anId1=="radioL1")
+			{
+					localStorage.setItem("radiobuttonstatus","0");
+					}
+			else
+			{
+					localStorage.setItem("radiobuttonstatus","1");
+			}
+
+			if (node1.style.visibility=="hidden") 
+				{ 
+					node1.style.visibility="visible" ; 
+					node2.style.visibility="hidden" ; 
+				}
+				else 
+				{
+					node1.style.visibility="hidden";
+					node2.style.visibility="visible";
+					
+				}
+		}
+
+	
+		// creation & initialisation des variables locales basées sur la liste jsfamilias dans le cas ou les variable n'existent pas 
+		initlocal({{ jsfamilias | safe }} ); 
+		initlocal({{ jstipos | safe }} ); 
+		initlocal({{ jsnivels | safe }} ); 
+		initlocal({{ jsfechas | safe }} ); 
+		initvarlocal('radiobuttonstatus'); 
+
+
+		document.addEventListener('DOMContentLoaded',function() {
+			//chargement des status precedents des checkbox checkées / pas checkées et mise a jour du formulaire correspondant associé vie l'id des checkbox  
+			checklocal( {{jsfamilias | safe }} ) ; 
+			checklocal( {{jstipos | safe }} ) ; 
+			checklocal( {{jsnivels | safe }} ) ; 
+			checklocal( {{jsfechas | safe }} ) ; 
+
+			if (localStorage.getItem("radiobuttonstatus")=="0")
+			{ togglefunction("radioL1","radioL2");
+				document.getElementById("FRES").checked=true;
+
+				console.log("dans exploit radio button cas1 ");
+			}
+			else
+			{
+				togglefunction("radioL2","radioL1");
+				document.getElementById("ESFR").checked=true;
+				console.log("dans exploit radio button cas2 ");
+			}
+
+			document.querySelectorAll('span').forEach(function(span) {
+				if (span.dataset["level"] > 0)  {
+					span.style.color='red';
+				}
+			});
+			// clique sur select all 
+			document.querySelectorAll('input[name="checktodos"]').forEach(function(checkheader) {
+				checkheader.onchange = function()  { 
+					// recuperation data type de l'item select all cliqué 
+					type=checkheader.dataset["type"]
+					// identificiation des checkbox on le name est la valeur de type 
+					bloc=document.querySelectorAll('input[name=' + type + ']');
+					for ( var i=0 ; i < bloc.length ; i++ ) {
+						if ( bloc[i].type = "checkbox") { 
+							// on assigne la valeur du header 
+							bloc[i].checked = checkheader.checked ;
+							localStorage.setItem(bloc[i].id,checkheader.checked) ;
+						}
+				}
+			}
+		});
+			// lors d'une selection de checkbox on met à jour la variable locale associée à la checkbox 
+			document.querySelectorAll('[data-storage]').forEach(function(checkbox) {
+				checkbox.onchange = function() { 
+					localStorage.setItem(checkbox.id,checkbox.checked) ; 
+				}
+			});
+
+		});
+			// lors du clique sur le radio button mode  on appelle la fonction qui inverses les champs 	
+	</script>
+
+
+
+
+{% endblock %}
+
+{% block body1 %}
+
+<form action= "{% url 'vocabulario_run'  1 Palabra_winner.id %}" method="post">
+
+<input type="radio" name="mode" id="FRES" value="FRES" onchange="togglefunction('radioL1','radioL2')"  >
+<label for ="FRES"> SP-> FR ?</label> 
+
+<input type="radio" name="mode" id="ESFR" value="ESSP" onchange="togglefunction('radioL2','radioL1')" >
+<label for ="ESFR"> FR->SP ?</label> 
+<table> 
+	<tr> 
+		<td> 
+			<span>  </span> 
+			<span> </span> 
+			<span> </span> 
+		</td> 
+	</tr> 
+	<tr>
+		<td> 		
+			<span id="radioL1" > {{ Palabra_winner.traduccion }} </span> 
+		</td> 
+		<td> 
+			<span id="radioL2" > {{ Palabra_winner.palabra }} </span> 
+		</td> 
+		<td> 
+			<span> ( {{ Palabra_winner.palabrafamilia }} )  </span> 
+		</td> 
+		<td> 
+			<span>  </span> 
+		</td> 
+		<td> 
+			<span> </span> 
+		</td> 
+
+	</tr>
+	<tr>
+		<td> 		
+			<span> {{ Palabra_winner_prev.traduccion }} </span> 
+		</td> 
+		<td> 
+			<span> {{ Palabra_winner_prev.palabra }} </span> 
+		</td> 
+		<td> 
+			<span> {{ Palabra_winner_prev.palabratipo }} </span> 
+		</td> 
+		<td> 
+			<span> {{ Palabra_winner_prev.palabragenero}} </span> 
+		</td> 
+		<td> 
+			<span> {{ Palabra_winner_prev.palabranivel }} </span> 
+		</td> 
+
+</table> 
+
+			{% csrf_token %}
+		<input type="submit" value = "Submit"> </input>
+
+			<span> Estas trabajando sobre </span> 
+			<span> {{ Palabra_selectada_count }}</span> 
+			<span> palabras </span> 
+<div id="container"> 
+		<div>
+		<input type="checkbox" id="checkbox_familia" name="checktodos" data-type="familia"> 
+		<label for="checkbox_familia" > Select all </label>
+		<br> 
+		{% for familia in familias %} 
+		<input type="checkbox" id="Palabrafamilia-{{familia.id}}" name="familia" value="{{familia.id}}"  data-storage="true"  > 
+		 <label  for="Palabrafamilia-{{familia.id}}" > {{familia}} </label>  
+		 <br>
+		{% endfor %} 
+	</div> 
+	<div>
+		<input type="checkbox" id="checkbox_tipo" name="checktodos" data-type="tipo"> 
+		<label for="checkbox_tipo" > Select all </label>
+		<br>
+		{% for tipo  in tipos %} 
+		<input type="checkbox" id="Palabratipo-{{tipo.id}}" name="tipo" value="{{tipo.id}}"  data-storage="true"  > 
+		 <label  for="Palabratipo-{{tipo.id}}" > {{tipo}} </label>  
+		 <br>
+		{% endfor %} 
+
+	</div>
+	<div>
+		<input type="checkbox" id="checkbox_nivel" name="checktodos" data-type="nivel"> 
+		<label for="checkbox_nivel" > Select all </label>
+		<br>
+		{% for nivel  in nivels %} 
+		<input type="checkbox" id="Palabranivel-{{nivel.id}}" name="nivel" value="{{nivel.id}}"  data-storage="true"  > 
+		 <label  for="Palabranivel-{{nivel.id}}" > {{nivel}} </label>  
+		 <br>
+		{% endfor %} 
+	</div>
+		<div>	
+		<input type="checkbox" id="checkbox_fecha" name="checktodos" data-type="fecha"> 
+		<label for="checkbox_fecha" > Select all </label>
+		</br>
+		{% for fecha in fechas  %} 
+		<input type="checkbox" id="Palabrafecha-{{fecha.id}}" name="fecha" value="{{fecha.id}}"  data-storage="true"  > 
+		 <label  for="Palabrafecha-{{fecha.id}}" > {{fecha}} </label>  
+		 <br>
+		{% endfor %} 
+	</div>
+</div>
+	</form > 
+{% endblock %}
+
