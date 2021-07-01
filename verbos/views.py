@@ -297,9 +297,11 @@ def anuncios_clasificados(request):
     titre="Conversaciones francés - español"
     texto="Francés aprendiendo español propone conversaciones mitad en francés / mitad en español a alguno/a que tiene español como lengua materna (para mejorar el nivel de los dos alumnos…). Propongo hacerlo una vez cada semana, durante hasta una hora ( Vivo en Paris 19ieme y soy un hombre adulto ). " 
     mail = "kutta75@gmail.com" 
+    fecha = "01/07/2021"
     context= { 
             "titre" : titre ,
-            "texto" : texto , 
+            "texto" : texto ,
+            "fecha" : fecha, 
             "mail" : mail ,
             }
 
