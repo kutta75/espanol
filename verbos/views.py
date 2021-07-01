@@ -294,9 +294,9 @@ def vocabulario(request,mode_id,palabra_id):
     return render(request,"verbos/vocabulario.html",context)
 
 def anuncios_clasificados(request):
-    titre="mon titre"
-    texto="mon texte" 
-    mail = "mon mail" 
+    titre="Conversaciones francés - español"
+    texto="Francés aprendiendo español propone conversaciones mitad en francés / mitad en español a alguno/a que tiene español como lengua materna (para mejorar el nivel de los dos alumnos…). Propongo hacerlo una vez cada semana, durante hora o menos. ( Vivo en Paris 19ieme y soy un hombre adulto ) . " 
+    mail = "kutta75@gmail.com" 
     context= { 
             "titre" : titre ,
             "texto" : texto , 
