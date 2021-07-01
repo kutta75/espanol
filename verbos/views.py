@@ -293,3 +293,15 @@ def vocabulario(request,mode_id,palabra_id):
 
     return render(request,"verbos/vocabulario.html",context)
 
+def anuncios_clasificados(request):
+    titre="mon titre"
+    texto="mon texte" 
+    mail = "mon mail" 
+    context= { 
+            "titre" : titre ,
+            "texto" : texto , 
+            "mail" : mail ,
+            }
+
+    return render(request,"verbos/anuncios_clasificados.html",context)
+
