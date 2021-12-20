@@ -31,6 +31,13 @@ def verbo(request,verbo_id):
             }
     return render(request,"verbos/verbo.html",context)
 
+def gramatica(request):
+    title="Gramatica" 
+    context = { 
+            "title" : title ,
+            }
+    return render(request,"verbos/gramatica.html",context)
+
 def conjugacion(request): 
     conjugacion=Conjugacion.objects.filter(verbo_id='5')
     context = { 
