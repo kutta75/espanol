@@ -1,4 +1,31 @@
 {% extends 'verbos/layout.html' %}
+
+{% block jsscript %} 
+
+
+function ToggleAll() { 
+	normas=document.getElementsByName("norma") ; 
+	normas.forEach( function ( currentValue , currentIndex , listObj ) { 
+			   console.log(currentValue.id + ', ' + currentIndex + ', ' + this);
+			   ShowHide(currentValue.id) ; 
+			},
+	'myThisArg'
+		);
+	}
+document.addEventListener('DOMContentLoaded', (event) => {
+		console.log('DOM fully loaded and parsed');
+		normas=document.getElementsByName("norma") ; 
+		normas.forEach( function ( currentValue , currentIndex , listObj ) { 
+			   console.log(currentValue.id + ', ' + currentIndex + ', ' + this);
+  },
+  'myThisArg'
+);
+			
+});
+
+
+{% endblock %}
+
 {% block body1 %} 
 
 <h1> Gramatica </h1> 
