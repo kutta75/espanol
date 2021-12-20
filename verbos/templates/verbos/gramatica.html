@@ -2,16 +2,23 @@
 
 {% block jsscript %} 
 
-
+<script>
 function ToggleAll() { 
 	normas=document.getElementsByName("norma") ; 
 	normas.forEach( function ( currentValue , currentIndex , listObj ) { 
-			   console.log(currentValue.id + ', ' + currentIndex + ', ' + this);
 			   ShowHide(currentValue.id) ; 
 			},
 	'myThisArg'
 		);
 	}
+function ShowHide(id) { 
+	var e = document.getElementById(id) ; 
+	if (e.style.display =='block') 
+		e.style.display='none'
+	else 
+		e.style.display='block'
+}
+
 document.addEventListener('DOMContentLoaded', (event) => {
 		console.log('DOM fully loaded and parsed');
 		normas=document.getElementsByName("norma") ; 
@@ -23,7 +30,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
 			
 });
 
-
+</script> 
 {% endblock %}
 
 {% block body1 %} 
