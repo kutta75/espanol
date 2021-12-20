@@ -1,19 +1,286 @@
 {% extends 'verbos/layout.html' %}
 {% block body1 %} 
 
-<h1> RRRRRRRRRRR! </h1> 
+<h1> Gramatica </h1> 
 <br> 
-<div id = container > 
-	<div> <span> Este sitio ha ido construido para ayudar aprendrer vocabularios y conjagaciones en español , los que aprendimos (mas o menos )durante los cursos de español para majores en 2020/2021 ,cada mercioles, en la escuela Ferdinand Flocon en Paris. No esta perfecto y totalmente corrigido, lo siento por los errores. 
-</span>
-	<br> 
-	<Span> Muchas gracias a nuestra professora , A.A , por sus multiples cualidades, aprendimos mucho sobre varias temas ... 
-	</span>
-	</div> 
-	<div> La parte "Verbos" trata de las conjugaciones de los verbos y "Verbos exo" es un exercio para aprenderlas. Tu escoges los tiempos , los tipos de verbos, los pronombres y los niveles ( 0 regular , 1 irregular ) con cuales tu quieres entreñarte. El programa te propone una combinacion aleatoria de uno tiempo/pronombre/verbo et te pregunta de escribrir su conjugacion. Si tu la sabes , tienes un punto mas en tu puntaje. 
-	</div> 
-	<div> 
-		La parte "Vocabulario te propone de recordarte de las palabras que vimos durante los cursos , sin puntaje . Las palabras estan classificadas con temas  / fecha del curso et un nivel ( 0 facil, 1 mas dificil .. ). Puedes trabajar de frances hasta espñol o de español hasta frances.
-	</div> 
+
+<button onclick="ToggleAll()" > mostrar todas normas / escogerlas </button> 
+
+
+<div style="width:300px;height:40px;border:1px solid #000; text-align:left; " onclick="ShowHide('zoneAafficher000')" > 
+<span style="margin-left:3%;" name="normatitulo"> 
+ SER y ESTAR   </span> 
+</div>
+<div id='zoneAafficher000' style="text-align: justify; margin-left: 40px;display:none" name="norma" >
+<table>
+    <thead>
+        <tr>
+            <th colspan="2">SER Y ESTAR</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>SER</td>
+            <td>ESTAR </td>
+        </tr>
+		  <tr>
+            <td>Descripción física ( ser joven , ser niño )</td>
+            <td>Localización </td>
+        </tr>
+		<tr>
+            <td> Identidad ( genero .. ) </td>
+            <td> Estados ( muertos / cansados / tristes .. )  </td>
+        </tr>
+			<tr>
+            <td> Nacionalidad </td>
+            <td> Estar prohibido / permitido  </td>
+        </tr>
+			<tr>
+            <td> Profesión </td>
+            <td> Estar + gerundio ( estoy comiendo)  </td>
+        </tr>
+			<tr>
+            <td> Religión </td>
+            <td> Estar soltero casado </td>
+        </tr>
+			<tr>
+            <td> Definición </td>
+            <td>  </td>
+        </tr>
+			<tr>
+            <td> Ser bueno / malo </td>
+            <td> Estar bien / mal</td>
+        </tr>
+			<tr>
+            <td> Ser + las horas   son las once   es miércoles </td>
+            <td> Estar malo etre malade  </td>
+        </tr>
+		<tr>
+            <td> Ser + fecha del evento </td>
+            <td>  </td>
+        </tr>
+		<tr>
+            <td> Ser verdad / falso </td>
+            <td>  </td>
+        </tr>
+		<tr>
+            <td> Ser rico / probre </td>
+            <td>  </td>
+        </tr>		
+    </tbody>
+</table>   
+</div> 
+
+
+<div style="width:300px;height:40px;border:1px solid #000; text-align:left; " onclick="ShowHide('zoneAafficher001')" > 
+<span style="margin-left:3%;" name="normatitulo"> 
+ Comparativos    </span> 
+</div>
+<div id='zoneAafficher001' style="text-align: justify; margin-left: 40px;display:none" name="norma" >
+<table>
+   
+    <tbody>
+        <tr>
+            <td> </td> 
+			<td>adjectif</td>
+            <td>nom </td>
+			  <td>verbe  </td>
+        </tr>
+		  <tr>
+            <td> Supériorité </td>
+            <td> Más (grande )  que  </td>
+			<td> Más (parque) que.. </td> 
+			<td> (Salir) Más  que </td> 
+        </tr>
+		<tr>
+            <td> Infériorité </td>
+            <td> Menos ( luminosa ) que </td>
+			<td> Menos ( parque ) que </td> 
+			<td> Salir menos.. que   </td> 
+		</tr> 
+       	<tr>
+            <td> Igualidad </td>
+            <td> Tan caro como  </td>
+			<td> Tanta luz como <br> Tanto espacio como  </td> 
+			<td> Salir tanto como  </td> 
+        </tr>
+		
+    </tbody>
+</table>   
+</div> 
+
+<div style="width:300px;height:40px;border:1px solid #000; text-align:left; " onclick="ShowHide('zoneAafficher002')" > 
+<span style="margin-left:3%;" name="normatitulo"> 
+ GERUNDIO    </span> 
+</div>
+<div id='zoneAafficher002' style="text-align: justify; margin-left: 40px;display:none" name="norma" >
+<ol> 
+<li> Verbe en ar => ando   : cantando </li>
+<li> Verbe en er => iendo : comiendo </li>
+<li> Verbe en ir => iendo : viviendo </li>
+<li> Introduit avec ESTAR LLEVAR SEGUIR </li>
+</ol> 
+
+</div> 
+
+<div style="width:300px;height:40px;border:1px solid #000; text-align:left; " onclick="ShowHide('zoneAafficher1')" > 
+<span style="margin-left:3%;" name="normatitulo"> 
+ Accord temps conditionnel  Si + sss  </span> 
+</div>
+<div id='zoneAafficher1' style="text-align: justify; margin-left: 40px;display:none" name="norma" >
+ Les choix du temps sont fonction de la probabilité  : 
+ <ol> 
+ <li> la condition est réalisable  </li> 
+ <li> la condition n'est pas realisable  </li> 
+ </ol>    
+</div> 
+
+
+<div style="width:300px;height:40px;border:1px solid #000;" onclick="ShowHide('zoneAafficher3' )" > 
+oxyton paroxiton / accent tonique 
+</div> 
+<div id='zoneAafficher3' style="text-align: justify; margin-left: 40px;display:none" name="norma" >
+	<table>
+  
+    <tbody>
+        <tr>
+            <td> écrit -> lire </td>
+            <td>Pour les mots qui se terminent en <span style="font-weight:bold;color:blue">voyelle, n ou s </span> </td>
+			<td>Pour les autres</td>
+        </tr>
+		<tr>
+            <td>Si pas d’accent <br>  dans le mot </td>
+            <td>C’est l’avant dernière syllabe qui est tonique 
+			<br> Ma<span style="font-weight:bold;color:red">ce</span>ta, 
+			<br> per<span style="font-weight:bold;color:red">ua</span>no, 
+			</td>
+		
+			<td>C’est la dernière syllabe qui est accentuée 
+			<br> Digni<span style="font-weight:bold;color:red">dad </span> 
+			<br> inici<span style="font-weight:bold;color:red">al </span> 
+			</td>
+        </tr>
+		<tr>
+            <td>Si un accent</td>
+            <td colspan="2">Accent tonique là où est l’accent 
+			<br> So<span style="font-weight:bold;color:red">fá </span> 
+			<br> Bon<span style="font-weight:bold;color:red">bón </span> 
+			<br> esco<span style="font-weight:bold;color:red">cés </span> 
+			</td>
+			
+        </tr>
+    </tbody>
+</table>
+facon beaucoup plus moins claire 
+<table>
+  
+    <tbody>
+        <tr>
+            <td> entendre -> ecrire  ? </td>
+            <td>Lleva tilde  </td>
+			<td>No lleva tilde</td>
+        </tr>
+		<tr>
+            <td>Agudas (oxyton <br> sobre ultima )  </td>
+            <td>Si se terminan con <span style="font-weight:bold;color:blue"> « n » « s » o una vocal  </span> 
+			<br> So<span style="font-weight:bold;color:red">fá </span> 
+			<br> Bon<span style="font-weight:bold;color:red">bón </span> 
+			<br> esco<span style="font-weight:bold;color:red">cés </span> 
+			</td>
+			<td>Otras palabras 
+			<br> Digni<span style="font-weight:bold;color:red">dad </span> 
+			<br> inici<span style="font-weight:bold;color:red">al </span> 
+			</td>
+        </tr>
+		<tr>
+            <td>Llanas ( paroxyton) <br> Sobre penultima 
+			</td>
+            <td> <span style="font-weight:bold;color:red">Cés</span>ped  
+			</td>
+			<td>Si se terminan con <span style="font-weight:bold;color:blue">« n » « s » o una vocal  </span> 
+			<br> Ma<span style="font-weight:bold;color:red">ce</span>ta, 
+			<br> per<span style="font-weight:bold;color:red">ua</span>no, 
+			</td>
+		</tr>
+		<tr>
+            <td>Esdrujulas (sobre <br> antepenultima ) <br> y sobreesdrujulas 
+			</td>
+            <td colspan="2">Siempre llevan tilde sobre la sílaba
+			<br> 
+			Elec<span style="font-weight:bold;color:red" >tró</span>nica <br> 
+			A<span style="font-weight:bold;color:red" >prén</span>detelo
+			</td>
+		</tr>
+    </tbody>
+</table>
+</div>
+
+
+<div style="width:300px;height:40px;border:1px solid #000;" onclick="ShowHide('zoneAafficher4' )" > 
+Subjonctif dans la subordonnée  
+</div> 
+<div id='zoneAafficher4' style="text-align: justify; margin-left: 40px;display:none" name="norma" >
+La subordonnée est au subjontif si  
+ <ol> 
+ <li> On exprime un opinion sur une forme négative : no creo que venga </li> 
+ <li> avec des verbes exprimant le regret souhait , le doute , : deseo que los chicos se divertan </li> 
+ <li> apres une expression qui marque le but, l'obligation : es necessario que vengas </li> 
+ <li> apres aunque dans il est suivi d'un fait éventuel : aunque me lo repetieras , no te lo creeria </li> 
+ <li> apres cuando pour parler d'un fait non accompli  : cuando llegues , iremos a buscarte </li> 
+ </ol> 
+ 
+</div>
+
+<div style="width:300px;height:40px;border:1px solid #000;" onclick="ShowHide('zoneAafficher005' )" > 
+Ningun o ninguno ?   
+</div> 
+<div id='zoneAafficher005' style="text-align: justify; margin-left: 40px;display:none" name="norma" >
+ <ol> 
+	<li> Ninguno si pas de nom après </li> 
+	<li> ningun si il y a un nom masculin  / mais ninguna si feminin </li>
+	<li> ex   ningun pico   mais no hay ninguno , hay ninguna tienda , no hay ninguna  </li>
+ </ol> 
+</div>
+
+
+<div style="width:300px;height:40px;border:1px solid #000;" onclick="ShowHide('zoneAafficher007' )" > 
+Duracion    
+</div> 
+<div id='zoneAafficher007' style="text-align: justify; margin-left: 40px;display:none" name="norma" >
+ <ol> 
+	<li> Hace + cantidad de tiempo + que + verbo   hace mas que tres anos que vivo en espana </li> 
+	<li> Desde hace + cantidad de tiempo   no veo Carlos desde hace un ano </li> 
+	<li> Desde + fecha  no veo Carlos desde enero </li>
+	<li> Desde que + verbo    esta en grenada desde que esmpezo el curso </li>
+ </ol> 
+</div>
+
+<div style="width:300px;height:40px;border:1px solid #000;" onclick="ShowHide('zoneAafficher008' )" > 
+Preterito Perfecto ( passé composé )       <br> haber + participio    ( ido / ado ) 
+</div> 
+<div id='zoneAafficher008' style="text-align: justify; margin-left: 40px;display:none" name="norma" >
+Les termes suivant introduisent un preterito perfecto 
+ <ol> 
+<li>  Les termes suivant introduisent un preterito perfecto <span style="font-weight:bold"> Este xxx ( este año .. ) hoy, ya , todavia no,  ultimamente, por fin ( il était temps ), nunca , alguna vez , varias veces , hoy, este año , este mes , este fin de semana </span> </li> 
+<li> On ne précise pas le moment exact dans le passé </li> 
+<li> L’évènement du passé dont on parle a un lien avec le présent , cad qu’il produit un effet maintenant encore ou il est situé dans une même unité de temps ( hoy , este mes . ) 
+<span style="font-weight:bold">  Este fin de semana , he comido demasiado ( misma semana ) </span> </li> 
+ </ol> 
+</div>
+
+
+<div style="width:300px;height:40px;border:1px solid #000;" onclick="ShowHide('zoneAafficher009' )" > 
+Preterito indefinido  ( passé simple  )  <br>  ( é / aste / ó , amos, áis, aron .. ) 
+</div> 
+<div id='zoneAafficher009' style="text-align: justify; margin-left: 40px;display:none" name="norma" >
+Les termes suivant introduisent un preterito perfecto 
+ <ol> 
+ <li> On précise le moment du passé ( <span style="font-weight:bold"> ayer, el año pasado , el otro dia, la semana pasada .. </span> ) </li> 
+ <li> Cette action n’a plus de lien avec le présent ou ne fait pas partie de la même unité de temps : <span style="font-weight:bold"> el otro dia fui a la catedral   (otro dia que hoy ) </span>  </li> 
+ </ol> 
+</div>
+	
+	
+	
 {% endblock %}
 
