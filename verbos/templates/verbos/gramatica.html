@@ -1,5 +1,26 @@
 {% extends 'verbos/layout.html' %}
 
+{% block style %}
+
+table, th,td,tr {
+	border: 0.5px solid ; 
+	border-color: grey ;
+	padding : 5px ;
+	margin : 5px ;
+	} 
+.entete { 
+	width : 400px ; 
+	margin:auto ; 
+	padding : 10px ; 
+	border: 2px solid #000 ;
+	border-radius: 8px ;
+	background-color : lightgrey ; 
+	text-align : center ; 
+	}
+
+
+{% endblock %} 
+
 {% block jsscript %} 
 
 <script>
@@ -41,7 +62,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
 <button onclick="ToggleAll()" > mostrar todas normas / escogerlas </button> 
 
 
-<div style="width:300px;height:40px;border:1px solid #000; text-align:left; " onclick="ShowHide('zoneAafficher000')" > 
+<div  class="entete"  onclick="ShowHide('zoneAafficher000')" > 
 <span style="margin-left:3%;" name="normatitulo"> 
  SER y ESTAR   </span> 
 </div>
@@ -106,7 +127,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
 </div> 
 
 
-<div style="width:300px;height:40px;border:1px solid #000; text-align:left; " onclick="ShowHide('zoneAafficher001')" > 
+<div class="entete"  onclick="ShowHide('zoneAafficher001')" > 
 <span style="margin-left:3%;" name="normatitulo"> 
  Comparativos    </span> 
 </div>
@@ -143,7 +164,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
 </table>   
 </div> 
 
-<div style="width:300px;height:40px;border:1px solid #000; text-align:left; " onclick="ShowHide('zoneAafficher002')" > 
+<div class="entete" onclick="ShowHide('zoneAafficher002')" > 
 <span style="margin-left:3%;" name="normatitulo"> 
  GERUNDIO    </span> 
 </div>
@@ -157,7 +178,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
 
 </div> 
 
-<div style="width:300px;height:40px;border:1px solid #000; text-align:left; " onclick="ShowHide('zoneAafficher1')" > 
+<div class="entete" onclick="ShowHide('zoneAafficher1')" > 
 <span style="margin-left:3%;" name="normatitulo"> 
  Accord temps conditionnel  Si + sss  </span> 
 </div>
@@ -170,7 +191,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
 </div> 
 
 
-<div style="width:300px;height:40px;border:1px solid #000;" onclick="ShowHide('zoneAafficher3' )" > 
+<div class="entete"  onclick="ShowHide('zoneAafficher3' )" > 
 oxyton paroxiton / accent tonique 
 </div> 
 <div id='zoneAafficher3' style="text-align: justify; margin-left: 40px;display:none" name="norma" >
@@ -250,7 +271,7 @@ facon beaucoup plus moins claire
 </div>
 
 
-<div style="width:300px;height:40px;border:1px solid #000;" onclick="ShowHide('zoneAafficher4' )" > 
+<div class="entete" onclick="ShowHide('zoneAafficher4' )" > 
 Subjonctif dans la subordonnée  
 </div> 
 <div id='zoneAafficher4' style="text-align: justify; margin-left: 40px;display:none" name="norma" >
@@ -265,7 +286,7 @@ La subordonnée est au subjontif si
  
 </div>
 
-<div style="width:300px;height:40px;border:1px solid #000;" onclick="ShowHide('zoneAafficher005' )" > 
+<div class="entete" onclick="ShowHide('zoneAafficher005' )" > 
 Ningun o ninguno ?   
 </div> 
 <div id='zoneAafficher005' style="text-align: justify; margin-left: 40px;display:none" name="norma" >
@@ -277,7 +298,7 @@ Ningun o ninguno ?
 </div>
 
 
-<div style="width:300px;height:40px;border:1px solid #000;" onclick="ShowHide('zoneAafficher007' )" > 
+<div class="entete" onclick="ShowHide('zoneAafficher007' )" > 
 Duracion    
 </div> 
 <div id='zoneAafficher007' style="text-align: justify; margin-left: 40px;display:none" name="norma" >
@@ -289,7 +310,7 @@ Duracion
  </ol> 
 </div>
 
-<div style="width:300px;height:40px;border:1px solid #000;" onclick="ShowHide('zoneAafficher008' )" > 
+<div class="entete" onclick="ShowHide('zoneAafficher008' )" > 
 Preterito Perfecto ( passé composé )       <br> haber + participio    ( ido / ado ) 
 </div> 
 <div id='zoneAafficher008' style="text-align: justify; margin-left: 40px;display:none" name="norma" >
@@ -303,7 +324,7 @@ Les termes suivant introduisent un preterito perfecto
 </div>
 
 
-<div style="width:300px;height:40px;border:1px solid #000;" onclick="ShowHide('zoneAafficher009' )" > 
+<div class="entete" onclick="ShowHide('zoneAafficher009' )" > 
 Preterito indefinido  ( passé simple  )  <br>  ( é / aste / ó , amos, áis, aron .. ) 
 </div> 
 <div id='zoneAafficher009' style="text-align: justify; margin-left: 40px;display:none" name="norma" >
