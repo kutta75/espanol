@@ -159,6 +159,7 @@ def verbos_exo(request,mode_id,conjugacion_id):
     jsverbotipos=jslist(verbotipos)
     jslevels=jslist(levels)
     context= { 
+            "title" : "Verbos" , 
             "verbos" : verbos,
             "tiempos" : tiempos , 
             "pronombres" : pronombres,
@@ -281,6 +282,7 @@ def vocabulario(request,mode_id,palabra_id):
     jsnivels=jslist(nivels)
     jsfechas=jslist(fechas)
     context= {
+            "title" : "Vocabulario" , 
             "familias" : familias,
             "jsfamilias" : jsfamilias,
             "familias_selected" : familias_selected,
