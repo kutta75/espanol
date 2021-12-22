@@ -1,5 +1,5 @@
 from django.shortcuts import render
-import random,json  
+import random,json,subprocess  
 from django.forms.models import model_to_dict 
 from verbos.models import Verbo,Tiempo,Conjugacion,Pronombre,Verbotipo,Level,Palabra,Palabratipo,Palabragenero,Palabranivel,Palabrafamilia,Palabrafecha
 
@@ -13,10 +13,14 @@ def jslist(myqueryset):
 
 # Create your views here.
 def index(request):
+    title="Home" 
+    cputemp = subprocess.getoutput("vcgencmd measure_temp")
     verbos = Verbo.objects.all()
     tiempos = Tiempo.objects.all()
     pronombres = Pronombre.objects.all()
     context= { 
+            "title" : title,
+            "cputemp": cputemp, 
             "verbos" : verbos,
             "tiempos" : tiempos , 
             "pronombres" : pronombres
