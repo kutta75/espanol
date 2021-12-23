@@ -14,7 +14,9 @@ def jslist(myqueryset):
 # Create your views here.
 def index(request):
     title="Home" 
-    cputemp = subprocess.getoutput("vcgencmd measure_temp")
+    cputemp1= "Server" 
+    cputemp2= subprocess.getoutput("vcgencmd measure_temp")
+    cputemp = cputemp1 + cputemp2 
     verbos = Verbo.objects.all()
     tiempos = Tiempo.objects.all()
     pronombres = Pronombre.objects.all()
