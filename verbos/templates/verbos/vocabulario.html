@@ -36,13 +36,49 @@
 		initlocal({{ jsfechas | safe }} ); 
 		initvarlocal('radiobuttonstatus'); 
 
+		var compteurexo = 0 ; 
+
 
 		document.addEventListener('DOMContentLoaded',function() {
 			//chargement des status precedents des checkbox checkées / pas checkées et mise a jour du formulaire correspondant associé vie l'id des checkbox  
 			checklocal( {{jsfamilias | safe }} ) ; 
 			checklocal( {{jstipos | safe }} ) ; 
 			checklocal( {{jsnivels | safe }} ) ; 
-			checklocal( {{jsfechas | safe }} ) ; 
+			checklocal( {{jsfechas | safe }} ) ;  
+			// ici on checke si le compteurexo existe en soclage local / si non on le crée   / si oui on le recupere 
+			if (localStorage.getItem("compteurexo")== null )
+			{       localStorage.setItem("compteurexo","0");
+				compteurexo=0; 
+				console.log("localstorage compteur exo initialité à 0") ;
+			}
+			else
+			{
+				compteurexostr=localStorage.getItem("compteurexo");
+				compteurexo=parseInt(compteurexostr); 
+				console.log("conversion compteur exo ", compteurexostr , compteurexo );
+			} ; 
+			
+			//affichage ou extinction de la table  du premier passage dans la passage ( url en /0/1 ) 
+			elt=document.getElementById("worktable") ; 
+			{% if  mode  == "start" %}  
+				elt.style.opacity=0;
+			        compteurexo=0 ; 
+			{% endif %}
+			{% if  mode  == "run" %}
+				elt.style.opacity=1;
+				compteurexo++ ; 
+			{%endif %}
+			localStorage.setItem("compteurexo",compteurexo);
+
+			// ici affichage de la derniere ligne du tableau  
+			elt=document.getElementById("tableau_r3") ; 
+			if ( compteurexo == 1 ) { 
+				elt.style.opacity=0 ;
+				console.log("compteur exo = ",compteurexo); 
+			} else {
+				elt.style.opacity=1 ;
+				console.log("compteur exo = ",compteurexo); 
+				}
 
 			if (localStorage.getItem("radiobuttonstatus")=="0")
 			{ togglefunction("radioL1","radioL2");
@@ -57,6 +93,8 @@
 				console.log("dans exploit radio button cas2 ");
 			}
 
+
+			// mise en evidence en rouge de quelque chose 
 			document.querySelectorAll('span').forEach(function(span) {
 				if (span.dataset["level"] > 0)  {
 					span.style.color='red';
@@ -103,10 +141,10 @@
 
 <input type="radio" name="mode" id="ESFR" value="ESSP" onchange="togglefunction('radioL2','radioL1')" >
 <label for ="ESFR"> FR->SP ?</label> 
-<table> 
+<table id="worktable" > 
 	<tr> 
 		<td> 
-			<span>  </span>
+			<span> {{mode }}  </span>
 		</td> 
 		<td>
 			<span> Como se dice ..? <span> 
@@ -133,8 +171,8 @@
 		</td> 
 
 	</tr>
-	<tr>
-		<td> 		
+	<tr id="tableau_r3">
+		<td>
 			<span> {{ Palabra_winner_prev.traduccion }} </span> 
 		</td>
 		<td>

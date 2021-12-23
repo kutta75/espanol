@@ -2,7 +2,7 @@
 <!DOCTYPE html >
 <html>
 <head lang=fr charset="UTF-8" >
-	<Title> Espanol {{ title }} </Title>
+	<Title> Español {{ title }} </Title>
 	<!-- Global site tag (gtag.js) - Google Analytics -->
 	<script async src=https://www.googletagmanager.com/gtag/js?id=G-GG9PB30M72></script>
 	<script>
@@ -21,7 +21,9 @@
 		align : center ;
 		width : 40 ; 
 		padding : 10px ; 
-		border : 15px ; 
+		border : 15px ;
+		font-weight : bold ; 
+		border-radius : 5px ; 
 		background-color : lightgrey ; 
 	}
 	#container { 
@@ -30,10 +32,11 @@
 		flex-direction:row;
 	}
 	#container > div  { 
-		background-color: springgreen ;
+		background-color: palegreen ;
 		font-size: 20px;
 		margin: 10px;
 		padding: 20px;
+		border-radius : 8px ; 
 		min-width: 200px;
 	}
 	.nav {
@@ -77,6 +80,6 @@
 	{% endblock %}
 <div id="wcb" class="carbonbadge"> </div> 
 <script src="https://unpkg.com/website-carbon-badges@1.1.3/b.min.js" defer></script>
-<h5> {{cputemp }}</h5> 
+<h6> server {{cputemp }}</h6> 
 </body> 
 </html> 

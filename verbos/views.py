@@ -243,16 +243,23 @@ def vocabulario(request,mode_id,palabra_id):
     Palabra_winner=Palabra.objects.first()
     Palabra_winner_prev = Palabra.objects.first()
     Palabra_selectada_count= 0
-    print("type  du first element")
+    print("type du first element")
         
 
 
     familias  = Palabrafamilia.objects.all()
-    tipos  = Palabratipo.objects.all()
+    tipos  =    Palabratipo.objects.all()
     generos =   Palabragenero.objects.all()
     nivels =    Palabranivel.objects.all() 
     fechas =    Palabrafecha.objects.all().order_by('palabrafecha') 
     
+    # cas de l'arrivée initiale dans l'ecran 
+    if mode_id ==0 : 
+        mode = "start"
+
+    if mode_id ==1 : 
+        mode = "run"
+
     # request post 
     if request.method=="POST":
         # recuperation du test precedent pour afficher la reponse 
@@ -287,6 +294,7 @@ def vocabulario(request,mode_id,palabra_id):
     jsfechas=jslist(fechas)
     context= {
             "title" : "Vocabulario" , 
+            "mode" : mode , 
             "familias" : familias,
             "jsfamilias" : jsfamilias,
             "familias_selected" : familias_selected,
