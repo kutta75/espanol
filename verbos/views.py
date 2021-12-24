@@ -1,5 +1,5 @@
 from django.shortcuts import render
-import random,json,subprocess  
+import random,json,subprocess,datetime   
 from django.forms.models import model_to_dict 
 from verbos.models import Verbo,Tiempo,Conjugacion,Pronombre,Verbotipo,Level,Palabra,Palabratipo,Palabragenero,Palabranivel,Palabrafamilia,Palabrafecha
 
@@ -33,6 +33,7 @@ def verbo(request,verbo_id):
     verbo= Verbo.objects.get(pk=verbo_id)
     context = { 
             "verbo" : verbo ,
+            "title" : "Verbo" , 
             "conjugacions" : verbo.conjugacions.all().order_by('tiempo__tiemposeq')
             }
     return render(request,"verbos/verbo.html",context)
@@ -57,12 +58,11 @@ def verbos(request):
     pronombres = Pronombre.objects.all()
     context= { 
             "verbos" : verbos,
+            "title" : "verbos liste" , 
             "tiempos" : tiempos , 
             "pronombres" : pronombres
             }
     return render(request,"verbos/verbos.html",context)
-
-
 
 
 
@@ -72,13 +72,25 @@ def verbos_exo(request,mode_id,conjugacion_id):
     trace= "<= puedes utilizar estas lettras"
     tracerep= "  "
     trace_id= "  "
+    # cas du premier appel à cette page ; initialisation des paramatres et proposition d'une conjugaison aléatoirement parmi 
+    # toutes celles disponibles 
+    if request.method=="GET":
+        Conjugacion_selectadas_count = Conjugacion.objects.count() 
+        loto_winner=random.randint(0,Conjugacion_selectadas_count-1)
+        # ici on cherche à retrouver l'index du verbe gagnant dans le queryset  Verbos complet 
+        Conjugacion_selectadas_list=Conjugacion.objects.values_list('pk',flat=True)
+        Conjugacion_winner_pk=Conjugacion_selectadas_list[loto_winner]
+        print("loto winner = " + str(loto_winner))
+        Conjugacion_winner=Conjugacion.objects.get(pk=Conjugacion_winner_pk)
+        
     if request.method=="POST":
         if mode_id==1:
-# traitement de la reponse apportée i a la question rang n-1 en comparant avec la question posée rand n-1 dont on connait l'idi du verbe qui a servi à la question 
+    # traitement de la reponse apportée i a la question rang n-1 en comparant avec la question posée 
+    # rang n-1 dont on connait l'idi du verbe qui a servi à la question 
             respuesta= request.POST.getlist('respuesta')
             conjugacion = Conjugacion.objects.get(pk=conjugacion_id)
             # preparation du texte à afficher pour présenter la bonne reponse 
-            trace = str(conjugacion.tiempo) + " " + str(conjugacion.verbo) + " " + str(conjugacion.pronombre) +" " + str(conjugacion.conjugacion)   
+            trace = str(conjugacion.verbo) + " " + str(conjugacion.tiempo) + " " + str(conjugacion.pronombre) +" => " + str(conjugacion.conjugacion)   
             tracerep =  str(respuesta[0]) 
             trace_id =  str(conjugacion.id) 
             # nettoyage des espaces qui pourraient etre dans les 2 chaines 
@@ -93,6 +105,32 @@ def verbos_exo(request,mode_id,conjugacion_id):
         pronombres_selected= request.POST.getlist('pronombre')
         tiempos_selected= request.POST.getlist('tiempo')
         levels_selected= request.POST.getlist('level')
+        # construction du queryset basé sur la selections des checkbox 
+        
+        Conjugacion_selectadas=Conjugacion.objects.filter(tiempo__in=tiempos_selected).filter(pronombre__in=pronombres_selected).filter(verbo__in=Verbo.objects.filter(tipo__in=verbotipos_selected)).filter(level__in=levels_selected)
+        # comptage du nombre d'objets selectionnés  
+        Conjugacion_selectadas_count =Conjugacion_selectadas.count()
+        # si le nombre est supérieur 1 alors on choix d'un objet aléatoirement dans cette liste       
+        if Conjugacion_selectadas_count  > 0 :
+            loto_winner=random.randint(0,Conjugacion_selectadas_count-1)
+            print("loto winner = " + str(loto_winner))
+            # ici on cherche à retrouver l'index du verbe gagnant dans le queryset  Verbos complet 
+            Conjugacion_selectadas_list=Conjugacion_selectadas.values_list('pk',flat=True)
+            Conjugacion_winner_pk=Conjugacion_selectadas_list[loto_winner]
+            print("Conjugacion  selectada  pk =" + str(Conjugacion_winner_pk))
+            Conjugacion_winner=Conjugacion.objects.get(pk=Conjugacion_winner_pk) 
+        else:
+            # cas  ou le filtre apporte 0 reccord : on en prend 1 aleatoirement 
+            Conjugacion_selectadas_count = Conjugacion.objects.count() 
+            loto_winner=random.randint(0,Conjugacion_selectadas_count-1)
+            # ici on cherche à retrouver l'index du verbe gagnant dans le queryset  Verbos complet 
+            Conjugacion_selectadas_list=Conjugacion.objects.values_list('pk',flat=True)
+            Conjugacion_winner_pk=Conjugacion_selectadas_list[loto_winner]
+            print("loto winner = " + str(loto_winner))
+            Conjugacion_winner=Conjugacion.objects.get(pk=Conjugacion_winner_pk)
+            Conjugacion_selectadas_count = 0 # pour transmettre dans le template 
+            
+        
         tiempos_checked= {}
         pronombres_checked= {}
         verbotipos_checked= {}
@@ -138,25 +176,6 @@ def verbos_exo(request,mode_id,conjugacion_id):
             else:
                 level.checked="unchecked"
 
-    if request.method=="POST":
-        
-        conjugacion_selectada_count =Conjugacion.objects.filter(tiempo__in=tiempos_selected).filter(pronombre__in=pronombres_selected).filter(verbo__in=Verbo.objects.filter(tipo__in=verbotipos_selected)).filter(level__in=levels_selected).count()
-        if conjugacion_selectada_count > 0:  
-            conjugacion_selectada=Conjugacion.objects.filter(tiempo__in=tiempos_selected).filter(pronombre__in=pronombres_selected).filter(verbo__in=Verbo.objects.filter(tipo__in=verbotipos_selected)).filter(level__in=levels_selected)
-            loto = []
-            for conjugacion in conjugacion_selectada:
-                loto.append(conjugacion.pk)
-            loto_winner=random.randint(0,conjugacion_selectada_count-1)
-            pk_winner=loto[loto_winner]
-        else:
-            loto_winner=0
-            pk_winner=1
-        conjugacion_selectada=Conjugacion.objects.get(pk=pk_winner)
-    else:
-        conjugacion_selectada=Conjugacion.objects.first()
-        conjugacion_selectada_count =Conjugacion.objects.all().count()
-        pk_winner=0
-        loto_winner=0
     # myset set à porter la liste des objets qui servent à faire des  filtres pour les exo 
     myset=("tiempos","pronombres","verbotipos")
 
@@ -165,7 +184,7 @@ def verbos_exo(request,mode_id,conjugacion_id):
     jsverbotipos=jslist(verbotipos)
     jslevels=jslist(levels)
     context= { 
-            "title" : "Verbos" , 
+            "title" : "Verbos exo", 
             "verbos" : verbos,
             "tiempos" : tiempos , 
             "pronombres" : pronombres,
@@ -174,10 +193,10 @@ def verbos_exo(request,mode_id,conjugacion_id):
             "tiempos_checked": tiempos_checked,
             "verbotipos_checked": verbotipos_checked,
             "pronombres_checked": pronombres_checked,
-            "conjugacion_selectada" : conjugacion_selectada,
-            "conjugacion_selectada_count" : conjugacion_selectada_count,
+            "conjugacion_selectada" : Conjugacion_winner,
+            "conjugacion_selectada_count" : Conjugacion_selectadas_count,
             "loto_winner" : loto_winner,
-            "pk_winner" : pk_winner,
+            "pk_winner" : Conjugacion_winner_pk,
             "resuelto" : resuelto,
             "trace" : trace,
             "trace_id" : trace_id,
@@ -238,16 +257,16 @@ def palabras(request,id1,id2):
     return render(request,"verbos/palabras.html",context)
 
 def vocabulario(request,mode_id,palabra_id):
+    # exercice de vocabulaire : proposition d'un mot à traduire  : le mot est sélectionné en de listes de choix à cliquer préalablement 
     # fonction d'affichages de domaines / type  / niveau / date des palabra
-    # instanciation initiale de la liste familia_checked qui supportera la selection des cases à cocher des termes selectionnés par l'utilisateur 
+    # instanciation initiale de la liste familia_checked qui supportera la selection des cases à cocher des termes
+    # selectionnés par l'utilisateur 
     familias_selected=[]
     familias_txt=[]
     Palabra_winner=Palabra.objects.first()
     Palabra_winner_prev = Palabra.objects.first()
     Palabra_selectada_count= 0
     print("type du first element")
-        
-
 
     familias  = Palabrafamilia.objects.all()
     tipos  =    Palabratipo.objects.all()
@@ -263,6 +282,8 @@ def vocabulario(request,mode_id,palabra_id):
         mode = "run"
 
     # request post 
+    # ici c'est un retour depuis un test deja soumis : la tache ici est de recuperer la réponse correspondant à l'idi palabra_id
+    # pour afficher tous les champs de réponse  
     if request.method=="POST":
         # recuperation du test precedent pour afficher la reponse 
         if mode_id==1:
@@ -288,7 +309,7 @@ def vocabulario(request,mode_id,palabra_id):
     print("palabra_winner.id"  ) 
     
 
-    # myset set à porter la liste des objets qui servent à faire des  filtres pour les exo 
+    # myset sert à porter la liste des objets qui servent à faire des  filtres pour les exo 
     jsfamilias=jslist(familias)
     jstipos =jslist(tipos)
     jsgeneros=jslist(generos)
