@@ -120,14 +120,19 @@ def verbos_exo(request,mode_id,conjugacion_id):
             print("Conjugacion  selectada  pk =" + str(Conjugacion_winner_pk))
             Conjugacion_winner=Conjugacion.objects.get(pk=Conjugacion_winner_pk) 
         else:
-            # cas  ou le filtre apporte 0 reccord : on en prend 1 aleatoirement 
-            Conjugacion_selectadas_count = Conjugacion.objects.count() 
-            loto_winner=random.randint(0,Conjugacion_selectadas_count-1)
+            # cas  ou le filtre apporte 0 reccord :  on blucle sur le précédent item ..  
+            #respuesta= request.POST.getlist('respuesta')
+        #conjugacion = Conjugacion.objects.get(pk=conjugacion_id)
+         #   Conjugacion_selectadas_count = Conjugacion.objects.count() 
+        #    loto_winner=random.randint(0,Conjugacion_selectadas_count-1)
             # ici on cherche à retrouver l'index du verbe gagnant dans le queryset  Verbos complet 
-            Conjugacion_selectadas_list=Conjugacion.objects.values_list('pk',flat=True)
-            Conjugacion_winner_pk=Conjugacion_selectadas_list[loto_winner]
-            print("loto winner = " + str(loto_winner))
-            Conjugacion_winner=Conjugacion.objects.get(pk=Conjugacion_winner_pk)
+         #   Conjugacion_selectadas_list=Conjugacion.objects.values_list('pk',flat=True)
+          #  Conjugacion_winner_pk=Conjugacion_selectadas_list[loto_winner]
+          #  print("loto winner = " + str(loto_winner))
+            pk_winner=conjugacion_id
+            Conjugacion_winner_pk=conjugacion_id
+            loto_winner=-1  
+            Conjugacion_winner=Conjugacion.objects.get(pk=conjugacion_id)
             Conjugacion_selectadas_count = 0 # pour transmettre dans le template 
             
         

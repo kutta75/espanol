@@ -59,6 +59,14 @@
 					}
 				}
 			});
+			console.log("loto_winner",{{ loto_winner }} ) 
+			// mise en couleur du compteur de mots selectionnés si celui ci vaut 0 ( loto_winner = -1  
+			{% if  loto_winner   == -1 %}   
+				compteur_selectados = document.getElementById("compteur_selectados")  
+				console.log("loto_winneri inthe loop",{{ loto_winner }} ) 
+				compteur_selectados.style.backgroundColor="red" 
+			{% endif %} 
+
 			//2) ici  on clique sur une des checkbox : on met à jour la variable locale 
 			document.querySelectorAll('[data-storage]').forEach(function(checkbox) {
 				checkbox.onchange = function() {
@@ -178,7 +186,7 @@
 	</tr>
 </table>
 <br> 
-estas trabanjando sobre {{ conjugacion_selectada_count }} conjugaciones 
+<span id="compteur_selectados"> Estas trabajando sobre {{ conjugacion_selectada_count }} conjugaciones </span>  
 <br>
 <br> 
 <div id="container"> 
