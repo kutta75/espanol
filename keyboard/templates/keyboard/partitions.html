@@ -1,0 +1,22 @@
+{% extends 'keyboard/layout.html' %}
+{% block mybody %} 
+
+<h3> Please select a partition  </h3> 
+<br> 
+
+	<form action="{% url 'index' %}" method="post"> 
+		{% csrf_token %}
+	<button id="selectpartbtn" > Select  </button>
+	<label for="selectpartbtn"> Select </label>
+<div id ="container" > 
+	<div> 
+		{% for partition  in partitions  %} 
+		<input type="radio" id="partition-{{partition.id}}" name="partition" value="{{partition.id}}"> 
+		<label for="partition-{{partition.id}}"> {{ partition.name }} </label>
+		<br>
+		{% endfor %}
+		</form> 
+	</div> 
+</div>
+{% endblock %}
+

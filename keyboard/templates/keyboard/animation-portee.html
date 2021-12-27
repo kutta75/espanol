@@ -1,0 +1,169 @@
+<!DOCTYPE html> 
+<html>
+<head lang=fr charset="UTF-8"> 
+	<Title> CSS animation </Title>
+	<style> 
+
+	@keyframes appear {
+	0% { opacity : 100% ; }
+	50% { opacity: 0% ; } 
+	100% { opacity: 100% ;} 
+	} 
+	@keyframes disappear {
+	0% { opacity : 0% ; }
+	50% { opacity: 100% ; } 
+	100% { opacity: 0% ;} 
+	} 
+	
+	h1 {  	animation-name : appear ; 
+			animation-duration : 10s;
+			animation-fill-mode : forwards ; 
+			animation-iteration-count : infinite ;
+			}
+	h2 {  	animation-name : disappear ; 
+			animation-duration : 10s;
+			animation-fill-mode : forwards ; 
+			animation-iteration-count : infinite ;
+			}
+	#monellipse { animation-name : disappear ; 
+			animation-duration : 1s;
+			animation-fill-mode : forwards ; 
+			animation-iteration-count : infinite ;
+			}
+	.verti { display : flex ;
+			flex-direction : column ;
+			}
+	.hori { display : flex ;
+			flex-direction : row ;
+			}
+	.grid-container { 
+		display : grid ; 
+		grid-template-columns: auto  auto ;
+		grid-template-rows: auto auto  ;
+	
+				}
+	.item1 { 
+	grid-row : 1 ;
+	grid-column : 1 ; 
+	background-color : #EBEBEB ;
+	}
+	.item2 { 
+	grid-row : 2 ;
+	grid-column : 1 ;
+	background-color :#ABBAEA;
+	}
+	.item3 { 
+	grid-row : 1 / span 2 ;
+	background-color : #FBD603 ;
+	}
+	
+	</style> 
+	<script>
+	function playnote(myid) {
+	console.log("playnote 1 myid" + myid ); 
+	note = document.getElementById(myid)
+	ny=parseInt(note.getAttribute("cy"));
+					ny=(ny+5) % 240;
+					note.setAttribute("cy",ny.toString());
+					
+	}
+	function drawnote(myid,mynote) {
+	console.log("playnote 1 myid" + myid ); 
+	note = document.getElementById(myid)
+	ny=parseInt(note.getAttribute("cy"));
+	mesure = (mesure+1) %partition_length;
+	mynote=partition[mesure];	
+	switch (mynote) 
+	{ 	case 100 	:	ny="90"; break; 
+		case 99 	: 	ny="85" ;break;
+		case 98	: 	ny="80" ;break;
+		case 97 	: 	ny="75" ; break;
+		case 96 	: 	ny="70" ; break;
+		case 95 	: 	ny="65" ; break;
+		case 94 	: 	ny="60" ; break;
+		case 93 	: 	ny="55" ; break;
+		case 92 	: 	ny="50" ; break;
+		case 91 	: 	ny="45" ; break;
+		case 90 	: 	ny="40" ; break;
+	}
+console.log("drawnote  myid" + myid + " mynote = " + mynote + " ny = +  " + ny + " mesure="+mesure); 	
+	note.setAttribute("cy",ny.toString());
+					
+	}
+	
+			cadence=1000;
+			mesure=0; 
+			partition=[100,99,98,97,90,91,92,93,94,95,96];
+			partition_length=partition.length;
+            document.addEventListener('DOMContentLoaded', () => {
+                const h1 = document.querySelector('h1');
+                const h2 = document.querySelector('h2');
+				const note = document.getElementById("monellipse")
+                // Stop animation initially
+                h1.style.animationPlayState  = "paused";
+                h2.style.animationPlayState  = "paused";
+				note.style.animationPlayState  = "paused";
+                // Toggle animation on click
+                document.querySelector('button').onclick = () => {
+									
+                    if (h1.style.animationPlayState  === "paused")
+					{
+						console.log("button cased paused"); 
+						// myVar = setInterval(playnote,cadence,"monellipse");
+						myVar = setInterval(drawnote,cadence,"monellipse","100");
+						console.log("button cased paused myvar",myVar); 
+                        h1.style.animationPlayState = "running";
+                        h2.style.animationPlayState = "running";
+						note.style.animationPlayState = "running";
+						 
+                    } 
+					else
+                    {	console.log("button case else paused");    
+						clearInterval(myVar);
+						h1.style.animationPlayState  = "paused";
+                        h2.style.animationPlayState  = "paused";
+						note.style.animationPlayState = "paused";
+                }};
+            });
+        </script>
+
+</head>
+<body>
+  <button>Click Here! </button>
+        <h1>Welcome!</h1>
+        <h2>Goodbye!</h2>
+ 
+<div class="grid-container" style="grid-auto-flow :column;"> 
+ 
+<div  class="item1">
+
+<svg  viewBox="0 0 300 180" xmlns="http://www.w3.org/2000/svg" version="1.1">
+     <image x="0" y="0" height="180" witdh="300"  xlink:href="portee300x180.svg" /> 
+      <ellipse  id="monellipse" cx="90" cy="40" rx="10" ry="5" fill="black"  /> 
+	 
+ </svg>
+ </div> 
+ </div>
+<div class="item2">
+
+</div>  
+ 
+<div>  
+  <svg viewBox="0 0 500 500" xmlns="http://www.w3.org/2000/svg" version="1.1">
+	<style="ellipse"> 
+	  <![CDATA[
+      #smallellipse {
+        stroke: #000066;
+        fill: "black";
+		cx : "10";
+		cy :"50";
+		rx : "50";
+		ry :"25" ;
+      }
+    ]]>
+ </svg>      
+</div>
+ 
+</body>
+</html> 	
+	

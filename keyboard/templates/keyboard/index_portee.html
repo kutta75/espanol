@@ -1,0 +1,325 @@
+{% extends 'keyboard/layout.html' %} 
+{% load static %}
+{% load keyboard_extras %}
+
+{% block mystyle %}
+@keyframes appear 
+		{
+		0% { opacity : 100% ; }
+		50% { opacity: 0% ; } 
+		100% { opacity: 100% ;} 
+		} 
+@keyframes disappear {
+	0% { opacity : 0% ; }
+	50% { opacity: 100% ; } 
+	100% { opacity: 0% ;} 
+	} 
+
+#noirehd { animation-name : disappear ; 
+	animation-duration : {{ cadence }}ms;
+	animation-fill-mode : forwards ; 
+	animation-iteration-count : infinite ;
+	}
+
+#monellipse2 { 
+	opacity : 50%;
+	transition-property : opacity ;
+	transition-duration : 1s ; 
+	}
+
+.key:hover  {
+	opacity : 50% ;
+	} 
+
+.verti { display : flex ;
+	flex-direction : column ;
+			}
+.hori { display : flex ;
+	flex-direction : row ;
+	}
+.grid-container { 
+	display : grid ; 
+	grid-template-columns: 1fr 2fr  ;
+	grid-template-rows: auto auto  ;
+	}
+.item1 { 
+	grid-row : 1 ;
+	grid-column : 1 ; 
+	background-color : #EBEBEB ;
+	}
+.item2 { 
+	grid-row : 1 ;
+	grid-column : 2 ;
+	background-color :#ABBAEA;
+	}
+.item3 { 
+	grid-row : 2 ;
+	grid-column : 1  / span 2 ;
+	background-color : #FBD603 ;
+	}
+{% endblock mystyle %} 
+
+{% block myscript %}  
+	<script> 
+function playnote(myid) {
+	console.log("playnote 1 myid" + myid ); 
+	note = document.getElementById(myid);
+	ny=parseInt(note.getAttribute("cy"));
+	ny=(ny+5) % 240;
+	note.setAttribute("cy",ny.toString());
+	}
+// function de gestion du click sur une touche du clavier virtuel  : rend actif ou inactif cette touche 
+function keyonclick(key) { 
+	console.log("keyonclick" + key );
+	keyvar="keystate-"+key.toString();
+	keyid="key-"+key.toString();
+	if ( localStorage.getItem(keyvar)== "0" ) {
+		localStorage.setItem(keyvar,"1") ;
+		// on met à jour le tableau des touches actives 
+		keyactive.push(key); 
+		// on colorise la touche en blanc 
+		document.getElementById(keyid).setAttribute('fill',"white") ;} 
+	else { 
+		localStorage.setItem(keyvar,"0"); 
+		document.getElementById(keyid).setAttribute('fill',"lightgrey");
+		// suppression de la key des keyactives 
+		poskey= keyactive.indexOf(key); 
+		keyactive.splice(poskey,1);
+		;} 
+}
+function radioonclick(mymode) { 
+	console.log("radioonclick"+ mymode);
+	radiobutton=mymode ;
+//	if (mymode=="partition" ) {
+//		window.open('partitions','select_partition');} 
+}
+// fonction pour gerer l'affichage ou pas des note  do re mi etc  .. 
+function keyshow() { 
+	console.log("keyshow");
+	if (document.getElementById("keyshow").checked ) { 
+		document.getElementById("keytext").setAttribute('opacity',"1");
+		console.log("keyshow test checked ");}
+	else {
+		console.log("keyshow test nochecked ");
+		document.getElementById("keytext").setAttribute('opacity',"0");}
+
+}
+// function basée sur un listener de fin d'iteration de l'animation des notes pour mettre l'animation en pause 
+function noteiterationlistener() { 
+	console.log("noteriterationlistener");
+	iterationcount++;
+	note = document.getElementById("noirehd");
+	if (playmode=="stopped") {
+		note.style.animationPlayState = "paused";
+		// reactivation du bouton startstop jusqu'a l'arret du prochain cycle d'iteration
+		document.getElementById("startstop").disabled=false ; 
+		// reactivation de b zone de saisie de la tempos 
+		document.getElementById("cadencems").disabled=false ; 
+		console.log("noteriterationlisterner pause synchrone ");
+		
+	}
+	drawnote("noirehd","100");
+}
+
+// function cadencechenge qui sert à enregistrer en localStorage la nvlle valeur de candencems 
+function cadencechange() { 
+	cadencems=document.getElementById("cadencems").value;
+	localStorage.setItem("cadencems",cadencems);
+	// note.style.animationDuration=cadencems.toString()+"ms" ;
+}
+
+function drawnote(myid,mynote) {
+	// fonction d'affichage des note ( ellipse ) et de la ouche associée sur le clacvier ( key) 
+	console.log("playnote 1 myid" + myid ); 
+	note = document.getElementById(myid);
+	ny=parseInt(note.getAttribute("y"));
+	if (keylaunch == "1" ) { 
+		keylaunch="0";
+		}
+		else {
+			if ( localStorage.getItem("keystate-"+key_last.toString() ) =="1") { 
+				document.getElementById(key_id_last).setAttribute('fill',"white"); }
+			else {
+				document.getElementById(key_id_last).setAttribute('fill',"lightgrey"); }
+				
+		}
+	switch (radiobutton) { 
+		case 'gamme' : {
+			reste=mesure%keyactive.length;
+			key=keyactive[reste];  // nouvelle note du clavier 
+			ny=5*mynote-410;
+			mynote=111-mynote
+			key_id="key-"+key.toString();
+			mesure=mesure+1; 
+			console.log("drawnote gamme   myid" + myid + " mynote = " + mynote + " ny = +  " + ny + " mesure="+mesure); 	
+			break ; 
+		}
+		case 'random' :
+		{
+			key=keyactive[Math.floor(Math.random()* keyactive.length)];  // nouvelle note du clavier 
+			mynote=111-key; 
+			key_id="key-"+key.toString();
+			ny=145-5*key;
+			console.log("drawnote random  key_id " + key_id + " key=" + key + " ny=" + ny); 	
+			break;
+			}
+		case 'partition' : 
+		{
+			reste=mesure%partition_length;
+			key={{partition.notes}}[reste]; 
+			mynote=111-key; 
+			key_id="key-"+key.toString();
+			ny=145-5*key;
+			mesure=mesure+1 
+		}
+	}
+			
+	mynote=111-key; 
+	key_id="key-"+key.toString();
+	ny=100-5*key;
+	// recherche du nom de la note  do-> 100 , re -> 99 
+	notenom=(mynote+4)%7 ; 
+	document.getElementById("randomkey").innerHTML= iterationcount  ; 
+	document.getElementById("keytext").innerHTML= portee[notenom]  ; 
+
+	console.log("drawnote note nom  " + notenom + " nom " + portee[notenom] ); 	
+	document.getElementById(key_id).setAttribute('fill',"yellow") ;
+	key_last=key;
+	key_id_last=key_id;
+	note.setAttribute("y",ny.toString());
+// 	note.style.animationPlayState  = "running";
+		// cas du do entre les deux clés : li ahouter une petite portée ..
+	if (key==11) { 
+		document.getElementById("do").setAttribute('opacity',"100"); }
+		else {
+		document.getElementById("do").setAttribute('opacity',"0"); }
+
+	}
+					
+	
+// initialisation variable locale cadencems et setting initiale si absence 
+	if (! localStorage.getItem("cadencems")) {
+		localStorage.setItem("cadencems","{{cadence}}");
+		}
+cadence={{ cadence }};
+	portee=["si","la","sol","fa","mi","ré","do"]
+	mesure=0; 
+	iterationcount=0;	
+	radiobutton="random"
+	randomkey=Math.floor(Math.random()*100) ; 
+	key_id_last="key-11";
+	// keyactive = list des keys actives 
+	keyactive=[] ;
+	partition=[] ;
+	// initialisation des variables locales qui contiennent le statuts active / inactif des key  
+	for ( key =0; key < {{keytotal}}; key++ ) { 
+		keyvar="keystate-" + key.toString(); 
+		if (! localStorage.getItem(keyvar)) {
+			if ((key > 10) &&  (key < 18)) {
+				localStorage.setItem(keyvar,"1");
+			}
+			else { 
+				localStorage.setItem(keyvar,"0");
+			}
+		}}
+	document.addEventListener('DOMContentLoaded', () => {
+		const note = document.getElementById("noirehd");
+		note.addEventListener('animationiteration',noteiterationlistener);
+//		note.addEventListener('animationriteration',()=> { 
+//			iterationcount++ ; 
+//			console.log("animation count" + iterationcounnt ); 
+//		}); 
+		playmode="stopped"; 
+                cadencems=localStorage.getItem("cadencems");
+		document.getElementById("cadencems").setAttribute('value',cadencems);
+		note.style.animationDuration=cadencems.toString()+"ms" ;
+		partition_length={{partition.notes}}.length;
+
+		// ici on colorise en gris les key inactives 
+		for ( key =0; key < {{keytotal}}; key++ ) { 
+			keyvar="keystate-"+key.toString();
+			keyid="key-"+key.toString();
+			if ( localStorage.getItem(keyvar)== "1" ) {
+				document.getElementById(keyid).setAttribute('fill',"white");
+				keyactive.push(key);} 
+			else { 
+				document.getElementById(keyid).setAttribute('fill',"lightgrey") ;}
+		}
+                // Stop animation initially
+		note.style.animationPlayState  = "paused";
+                // Toggle animation on click
+                document.querySelector('button').onclick = () => {
+									
+                    if (playmode=="stopped")
+			{
+			console.log("button cased stopped=> activation");
+			keylaunch="1";
+			// myVar = setInterval(playnote,cadence,"monellipse");
+			//myVar = setInterval(drawnote,cadencems,"monellipse","100");
+			console.log("button cased paused myvar"); 
+			note.style.animationDuration=cadencems.toString()+"ms" ;
+			note.style.animationPlayState = "running";
+			playmode="running";
+			// desactivation de b zone de saisie de la tempos 
+			document.getElementById("cadencems").disabled=true ; 
+			} 
+			else
+                    	{	
+			playmode="stopped";
+			console.log("button case else paused=> desactivation");    
+			//clearInterval(myVar);
+			// desactivation du bouton startstop jusqu'a l'arret du prochain cycle d'iteration
+			document.getElementById("startstop").disabled=true ; 
+			//note.style.animationPlayState = "paused";
+			}
+		};
+
+		});
+		</script> 		
+{% endblock myscript  %}
+
+{% block mybody %} 
+<div class="grid-container" style="grid-auto-flow :column;"> 
+<div  class="item1">
+	<button id="startstop"> Start/Stop </button>
+	<label for="cadencems"> set up beat in ms </label> 
+	<input type="number" id="cadencems" name="cadencems" min="100" max="5000" step="100" onchange="cadencechange()" >
+	<br> 
+	<input type="radio" id="mymode-random" name="mode" value="random" checked onclick="radioonclick('random');" >
+	<label for="mymode-random"> random </label>
+	<br> 
+	<input type="radio" id="mymode-gamme" name="mode" value="gamme" onclick="radioonclick('gamme');">  
+	<label for="mymode-gamme"> gamme </label>  
+	<br> 
+	<input type="radio" id="mymode-partition" name="mode" value="partition" onclick="radioonclick('partition');">  
+	<label for="mymode-partition"> partition: {{partition.name }} </label>  
+	<br> 
+	<input type="checkbox" id="keyshow" name="keyshow" value="show note" onclick="keyshow();" checked>  
+	<label for="keyshow"> show key  </label>  
+	<span id="randomkey"> </span> 
+</div> 
+<div  class="item2">
+	<svg  viewBox="0 0 600 180" xmlns="http://www.w3.org/2000/svg" version="1.1">
+		<image x="0" y="0" height="180" witdh="600"  xlink:href="{% static 'keyboard/img/portee600x180.svg' %}" /> 
+		<image id="noirehd" x="0" y="0" height="180" witdh="600"  xlink:href="{% static 'keyboard/img/noirehd600x180.svg' %}" /> 
+      		<ellipse  id="monellipse" cx="90" cy="100" rx="10" ry="5" fill="black"  /> 
+      		<line  id="monellipse_queue" x1="100" y1="100" x2="100" y2="130" stroke="black" opacity="0" stroke-witdh="0.1"  /> 
+      		<line  id="do" x1="75" y1="90" x2="105" y2="90" stroke="grey" opacity="0" stroke-witdh="0.1"  /> 
+		<text id="keytext" x="250"  y="95" /> 
+	
+	</svg>
+	</div> 
+
+<div class="item3">
+	<svg viewBox="0 0 115 20" xmls="https://www.w3.org/2000/svg" version="1.1" > 
+		
+	{% for i in keysize  %} 
+	<rect class="key" id="key-{{ i }}"  x="{{ i|to5c }}" y="0" width="5" height="20" rx="1" ry="1" fill="white" stroke-width="0.2" stroke="black" onclick="keyonclick({{i}});" /> 
+	{% endfor %}
+	{% for i in blackkey  %} 
+	<rect id="blackkey-{{ i }}"  x="{{ i }}" y="0" width="3" height="14" rx="0.5"  fill="black" stroke-width="0.2" stroke="black"/> 
+	{% endfor %}
+	</svg> 
+</div> 
+<div> 
+{% endblock mybody %}
