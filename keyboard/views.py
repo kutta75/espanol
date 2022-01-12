@@ -6,7 +6,8 @@ from keyboard.models import Partition
 
 
 def index(request): 
-    cadence = 2000
+    cadencems = 2000
+    musicnote=1 
     partition=Partition.objects.first()
     portee_x = 300 
     portee_y = 180
@@ -21,7 +22,8 @@ def index(request):
     partition_notes=partition.notes
 
     context = { 
-            "cadence" : cadence ,
+            "cadencems" : cadencems ,
+            "musicnote" : musicnote , 
             "portee_x" : portee_x ,
             "portee_y" : portee_y ,
             "keytotal" : keysize ,

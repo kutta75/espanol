@@ -11,14 +11,23 @@
 		} 
 @keyframes disappear {
 	0% { opacity : 0% ; }
-	50% { opacity: 100% ; } 
+	25% { opacity: 100% ; } 
+	75% { opacity : 100% }
 	100% { opacity: 0% ;} 
 	} 
 
-#noirehd { animation-name : disappear ; 
-	animation-duration : {{ cadence }}ms;
+
+.noirehd { animation-name : disappear ; 
+	animation-duration : {{ cadencems }}ms;
 	animation-fill-mode : forwards ; 
 	animation-iteration-count : infinite ;
+	opacity:0; 
+	}
+#noirehd { animation-name : disappear ; 
+	animation-duration : {{ cadencems }}ms;
+	animation-fill-mode : forwards ; 
+	animation-iteration-count : infinite ;
+	opacity:0; 
 	}
 
 #monellipse2 { 
@@ -85,7 +94,7 @@ function keyonclick(key) {
 		// suppression de la key des keyactives 
 		poskey= keyactive.indexOf(key); 
 		keyactive.splice(poskey,1);
-		;} 
+		}; 
 }
 function radioonclick(mymode) { 
 	console.log("radioonclick"+ mymode);
@@ -117,20 +126,26 @@ function noteiterationlistener() {
 		document.getElementById("cadencems").disabled=false ; 
 		console.log("noteriterationlisterner pause synchrone ");
 		
-	}
+	};
 	drawnote("noirehd","100");
 }
 
-// function cadencechenge qui sert à enregistrer en localStorage la nvlle valeur de candencems 
+// function cadencechange qui sert à enregistrer en localStorage la nvlle valeur de candencems 
 function cadencechange() { 
 	cadencems=document.getElementById("cadencems").value;
 	localStorage.setItem("cadencems",cadencems);
 	// note.style.animationDuration=cadencems.toString()+"ms" ;
 }
+// function musicnotechange qui sert à enregistrer en localStorage la nvlle valeur de candencems 
+function musicnotechange() { 
+	musicnote=document.getElementById("musicnote").value;
+	localStorage.setItem("musicnote",musicnote);
+	// note.style.animationDuration=cadencems.toString()+"ms" ;
+}
 
 function drawnote(myid,mynote) {
-	// fonction d'affichage des note ( ellipse ) et de la ouche associée sur le clacvier ( key) 
-	console.log("playnote 1 myid" + myid ); 
+	// fonction d'affichage des notes ( img norirhd ) et de la touche associée sur le clacvier ( key) 
+	console.log("playnote 1 myid" + myid + " mynote" + mynote ); 
 	note = document.getElementById(myid);
 	ny=parseInt(note.getAttribute("y"));
 	if (keylaunch == "1" ) { 
@@ -142,7 +157,7 @@ function drawnote(myid,mynote) {
 			else {
 				document.getElementById(key_id_last).setAttribute('fill',"lightgrey"); }
 				
-		}
+		};
 	switch (radiobutton) { 
 		case 'gamme' : {
 			reste=mesure%keyactive.length;
@@ -172,8 +187,7 @@ function drawnote(myid,mynote) {
 			ny=145-5*key;
 			mesure=mesure+1 
 		}
-	}
-			
+		};
 	mynote=111-key; 
 	key_id="key-"+key.toString();
 	ny=100-5*key;
@@ -192,17 +206,12 @@ function drawnote(myid,mynote) {
 	if (key==11) { 
 		document.getElementById("do").setAttribute('opacity',"100"); }
 		else {
-		document.getElementById("do").setAttribute('opacity',"0"); }
-
+		document.getElementById("do").setAttribute('opacity',"0"); };
 	}
 					
 	
-// initialisation variable locale cadencems et setting initiale si absence 
-	if (! localStorage.getItem("cadencems")) {
-		localStorage.setItem("cadencems","{{cadence}}");
-		}
-cadence={{ cadence }};
-	portee=["si","la","sol","fa","mi","ré","do"]
+	
+portee=["si","la","sol","fa","mi","ré","do"]
 	mesure=0; 
 	iterationcount=0;	
 	radiobutton="random"
@@ -211,18 +220,38 @@ cadence={{ cadence }};
 	// keyactive = list des keys actives 
 	keyactive=[] ;
 	partition=[] ;
+	
+document.addEventListener('DOMContentLoaded', () => {
 	// initialisation des variables locales qui contiennent le statuts active / inactif des key  
-	for ( key =0; key < {{keytotal}}; key++ ) { 
-		keyvar="keystate-" + key.toString(); 
-		if (! localStorage.getItem(keyvar)) {
-			if ((key > 10) &&  (key < 18)) {
-				localStorage.setItem(keyvar,"1");
-			}
+		for ( key =0; key < {{keytotal}}; key++ ) { 
+			keyvar="keystate-" + key.toString(); 
+			if (! localStorage.getItem(keyvar)) {
+				if ((key > 10) &&  (key < 18)) {
+					localStorage.setItem(keyvar,"1");
+				}
 			else { 
 				localStorage.setItem(keyvar,"0");
 			}
-		}}
-	document.addEventListener('DOMContentLoaded', () => {
+		}};
+	// initialisation variable locale cadencems et setting initiale si absence 
+		if (! localStorage.getItem("cadencems")) {
+			localStorage.setItem("cadencems","{{cadencems}}");
+			cadencems={{ cadencems }};
+			}
+		else {  
+			cadencems = parseInt(localStorage.getItem("cadencems"),10)  	; 
+			document.getElementById("cadencems").setAttribute('value',cadencems); 
+			} ;
+
+		if (! localStorage.getItem("musicnote")) {
+			localStorage.setItem("musicnote","{{musicnote}}");
+			musicnote= {{ musicnote }} ;
+			console.log(" musicnote setitem = ", musicnote)  ;
+			}
+		else {
+			musicnote= parseInt(localStorage.getItem("musicnote"),10) ;
+       			document.getElementById("musicnote").value=musicnote ; 
+			} ; 
 		const note = document.getElementById("noirehd");
 		note.addEventListener('animationiteration',noteiterationlistener);
 //		note.addEventListener('animationriteration',()=> { 
@@ -230,8 +259,8 @@ cadence={{ cadence }};
 //			console.log("animation count" + iterationcounnt ); 
 //		}); 
 		playmode="stopped"; 
-                cadencems=localStorage.getItem("cadencems");
-		document.getElementById("cadencems").setAttribute('value',cadencems);
+//              cadencems=localStorage.getItem("cadencems");
+//		document.getElementById("cadencems").setAttribute('value',cadencems);
 		note.style.animationDuration=cadencems.toString()+"ms" ;
 		partition_length={{partition.notes}}.length;
 
@@ -285,6 +314,9 @@ cadence={{ cadence }};
 	<label for="cadencems"> set up beat in ms </label> 
 	<input type="number" id="cadencems" name="cadencems" min="100" max="5000" step="100" onchange="cadencechange()" >
 	<br> 
+	<label for="musicnote"> how many music note ? </label> 
+	<input type="number" id="musicnote" name="musicnote" min="1" max="20" step="1" onchange="musicnotechange()" >
+	<br> 
 	<input type="radio" id="mymode-random" name="mode" value="random" checked onclick="radioonclick('random');" >
 	<label for="mymode-random"> random </label>
 	<br> 
@@ -300,10 +332,10 @@ cadence={{ cadence }};
 </div> 
 <div  class="item2">
 	<svg  viewBox="0 0 600 180" xmlns="http://www.w3.org/2000/svg" version="1.1">
-		<image x="0" y="0" height="180" witdh="600"  xlink:href="{% static 'keyboard/img/portee600x180.svg' %}" /> 
-		<image id="noirehd" x="0" y="0" height="180" witdh="600"  xlink:href="{% static 'keyboard/img/noirehd600x180.svg' %}" /> 
-      		<ellipse  id="monellipse" cx="90" cy="100" rx="10" ry="5" fill="black"  /> 
+		<image x="0" y="0" height="180" witdh="600"  xlink:href="{% static 'keyboard/img/portee600x180-vierge.svg' %}" /> 
+		<image id="noirehd" x="0" y="0" height="180" witdh="600" style="opacity:0"  xlink:href="{% static 'keyboard/img/noirehd600x180.svg' %}"   /> 
       		<line  id="monellipse_queue" x1="100" y1="100" x2="100" y2="130" stroke="black" opacity="0" stroke-witdh="0.1"  /> 
+		<image id="noirehd1" class="noirehd" x="0" y="29" height="180" witdh="600" style="opacity:0"  xlink:href="{% static 'keyboard/img/noirehd600x180.svg' %}"  /> 
       		<line  id="do" x1="75" y1="90" x2="105" y2="90" stroke="grey" opacity="0" stroke-witdh="0.1"  /> 
 		<text id="keytext" x="250"  y="95" /> 
 	
