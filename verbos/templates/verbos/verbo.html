@@ -7,7 +7,7 @@
 		// les conjugaciones normales ont level = 0 ; donc on filtre celle qui ont unlevel > 0 pour les afficher en rouge 
 		document.addEventListener('DOMContentLoaded',function() {
 			document.querySelectorAll('span').forEach(function(span) {
-				if (span.dataset["level"] > 0)  {
+				if (span.dataset["level"] =="irreg")  {
 					span.style.color='red';
 				}
 			})
@@ -42,6 +42,5 @@
 		</div>
 	{% endfor %}
 	</div> 
-	<a href =" {% url 'index' %}" > cambiar de verbo </a> 
 {% endblock %}
 
