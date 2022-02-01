@@ -18,5 +18,6 @@ from django.urls import path,include
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('verbos/',include('verbos.urls'))
+    path('keyboard/',include('keyboard.urls')),
+    path('verbos/',include('verbos.urls')),
         ]

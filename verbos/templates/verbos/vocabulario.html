@@ -2,6 +2,14 @@
 //cette page affiche toutes les criteres de selection d un palabra   
 {% block jsscript %}
 	<script>
+		function ShowHide(id) { 
+			var e = document.getElementById(id);
+			if (e.style.display=='block')
+				e.style.display='none'
+			else
+				e.style.display='block'
+		}
+
 		// fonction qui bascule un objet de visible a invisible et reciproquement 
 		function togglefunction(anId1,anId2) {
 			node1=document.getElementById(anId1);
@@ -196,10 +204,18 @@
 
 			{% csrf_token %}
 		<input type="submit" value = "Submit"> </input>
+	
 
-			<span> Estas trabajando sobre </span> 
-			<span> {{ Palabra_selectada_count }}</span> 
-			<span> palabras </span> 
+			<span id="mostrar_vocabulario" onclick="ShowHide('palabras_selectadas')" style="font-weight:bold" > Estas trabajando sobre  
+			 {{ Palabra_selectada_count }} 
+			 palabras </span>
+		<div id="palabras_selectadas" style="display:none"> 	
+			<ul> 
+			{% for palabra in Palabra_selectadas %} 
+			<li>  {{palabra.palabra }} {{  palabra.traduccion }} 
+			{% endfor %}
+			</ul>
+		</div> 
 <div id="container"> 
 		<div>
 		<input type="checkbox" id="checkbox_familia" name="checktodos" data-type="familia"> 

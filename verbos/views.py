@@ -72,7 +72,7 @@ def verbos_exo(request,mode_id,conjugacion_id):
     trace= "<= puedes utilizar estas lettras"
     tracerep= "  "
     trace_id= "  "
-    # cas du premier appel à cette page ; initialisation des paramatres et proposition d'une conjugaison aléatoirement parmi 
+    # cas du premier appel à cette page ; initialisation des parametres et proposition d'une conjugaison aléatoirement parmi 
     # toutes celles disponibles 
     if request.method=="GET":
         Conjugacion_selectadas_count = Conjugacion.objects.count() 
@@ -272,6 +272,7 @@ def vocabulario(request,mode_id,palabra_id):
     Palabra_winner_prev = Palabra.objects.first()
     Palabra_selectada_count= 0
     print("type du first element")
+    Palabra_selectadas=Palabra.objects.all() 
 
     familias  = Palabrafamilia.objects.all()
     tipos  =    Palabratipo.objects.all()
@@ -285,7 +286,8 @@ def vocabulario(request,mode_id,palabra_id):
 
     if mode_id ==1 : 
         mode = "run"
-
+    if request.method=="GET":
+        Palabra_selectadas=Palabra.objects.all() 
     # request post 
     # ici c'est un retour depuis un test deja soumis : la tache ici est de recuperer la réponse correspondant à l'idi palabra_id
     # pour afficher tous les champs de réponse  
@@ -338,6 +340,7 @@ def vocabulario(request,mode_id,palabra_id):
             "Palabra_winner" : Palabra_winner,
             "Palabra_winner_prev" : Palabra_winner_prev,
             "Palabra_selectada_count" : Palabra_selectada_count , 
+            "Palabra_selectadas" : Palabra_selectadas , 
         }
 
     return render(request,"verbos/vocabulario.html",context)

@@ -20,7 +20,7 @@ class Verbo(models.Model):
         return self.verbo
 
 class Pronombre(models.Model):
-    pronombre=models.CharField(max_length=8)
+    pronombre=models.CharField(max_length=13)
     pronombreseq=models.IntegerField(null=True)
 
     def __str__(self):
