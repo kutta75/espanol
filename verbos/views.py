@@ -288,6 +288,7 @@ def vocabulario(request,mode_id,palabra_id):
         mode = "run"
     if request.method=="GET":
         Palabra_selectadas=Palabra.objects.all() 
+        Palabra_selectada_count= Palabra_selectadas.count() 
     # request post 
     # ici c'est un retour depuis un test deja soumis : la tache ici est de recuperer la réponse correspondant à l'idi palabra_id
     # pour afficher tous les champs de réponse  

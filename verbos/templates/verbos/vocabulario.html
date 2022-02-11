@@ -203,16 +203,16 @@
 </table> 
 
 			{% csrf_token %}
-		<input type="submit" value = "Submit"> </input>
+		<input type="submit" value = " PROBAR " style="font-weight:bold">  </input>
 	
 
-			<span id="mostrar_vocabulario" onclick="ShowHide('palabras_selectadas')" style="font-weight:bold" > Estas trabajando sobre  
+			<span  id="mostrar_vocabulario" onclick="ShowHide('palabras_selectadas')" style="font-style:italic;background-color:lightgrey;border-radius:3px;padding:5px" >   
 			 {{ Palabra_selectada_count }} 
-			 palabras </span>
+			 palabra(s)   </span>
 		<div id="palabras_selectadas" style="display:none"> 	
 			<ul> 
 			{% for palabra in Palabra_selectadas %} 
-			<li>  {{palabra.palabra }} {{  palabra.traduccion }} 
+			<li> " <span style="font-style:italic">  {{palabra.palabra }} </span> " : {{  palabra.traduccion }} 
 			{% endfor %}
 			</ul>
 		</div> 
