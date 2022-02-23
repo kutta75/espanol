@@ -16,13 +16,27 @@
 				localStorage.setItem(myvar,"0");
 			};
 		};
+		function verbos_error_list_toggle() { 
+			e=document.getElementById("verbos_error_list");
+			if (e.style.display=="block" ) { 
+				e.style.display="none";
+				localStorage.setItem("verbos_error_display","none");
+			}
+			else {
+				e.style.display="block" ; 
+				localStorage.setItem("verbos_error_display","block");
+			}
+		}
 
 
 
 		
 		initvarlocal("faltas"); 
 		initvarlocal("itotal"); 
-		initvarlocal("iexito"); 
+		initvarlocal("iexito");
+		// verbos_error_list contient toutes les conjugaisons ou l'utilisateur s'est trompé 
+		initvarlocal("verbos_error_list");
+		initvarlocal("verbos_error_display");
 		
 		initlocal({{ jstiempos | safe }} ); 
 		initlocal({{ jspronombres  | safe }} ); 
@@ -63,7 +77,7 @@
 			// mise en couleur du compteur de mots selectionnés si celui ci vaut 0 ( loto_winner = -1  
 			{% if  loto_winner   == -1 %}   
 				compteur_selectados = document.getElementById("compteur_selectados")  
-				console.log("loto_winneri inthe loop",{{ loto_winner }} ) 
+				console.log("loto_winneri in the loop",{{ loto_winner }} ) 
 				compteur_selectados.style.backgroundColor="red" 
 			{% endif %} 
 
@@ -86,8 +100,13 @@
 			//4) mise en forme du resultat du test précedent
 			cexito=localStorage.getItem("iexito");
 			ctotal=localStorage.getItem("itotal");
+			verbos_error_list=localStorage.getItem("verbos_error_list");
+
 			iexito=parseInt(cexito);
 			itotal=parseInt(ctotal); 
+			if (itotal==0) { 
+				localStorage.setItem("verbos_error_list","");
+			}
 
 			resuelto= document.getElementById('resuelto').innerText;
 			console.log(" resuelto = " + resuelto );
@@ -97,6 +116,7 @@
 		 		document.getElementById('resuelto').style.backgroundColor="lightgreen";
 				itotal=itotal+1;
 				iexito=iexito+1;
+				verbos_error_list_append=localStorage.getItem("verbos_error_list") ; 
 				console.log("total="+itotal + " exito=" + iexito);
 			}
 				else {
@@ -111,7 +131,8 @@
 					document.getElementById('tracerep').style.textDecoration="line-through";
 					// on memorise l'erreur avec le numero de conjugacion 
 					localStorage.setItem("faltas",localStorage.getItem("faltas")+","+"{{trace_id}}");
-				
+					verbos_error_list_append=localStorage.getItem("verbos_error_list") + " \n  " + " {{trace}}" + " [ falta: " + "{{ tracerep }}" + "]" ; 
+					localStorage.setItem("verbos_error_list",verbos_error_list_append );
 				} 
 					else {
 						document.getElementById('resuelto').innerText=" Play  !! ";
@@ -120,10 +141,14 @@
 						iexito=0;
 						itotal=0; 
 						console.log("total="+itotal+ " exito=" + iexito);
+						
 					}
 				}
 				localStorage.setItem("itotal",itotal);
 				localStorage.setItem("iexito",iexito);
+				localStorage.setItem("verbos_error_list",verbos_error_list_append );
+				document.getElementById('verbos_error_list').innerText=verbos_error_list_append; 
+				document.getElementById('verbos_error_list').style.display=localStorage.getItem("verbos_error_display"); 
 				document.getElementById('exito').innerText=iexito.toString();
 		 		document.getElementById('total').innerText=itotal.toString();
 			//5) affichage du resulta précédent
@@ -185,10 +210,11 @@
 		</td>
 	</tr>
 </table>
-<br> 
+<br>  
 <span id="compteur_selectados"> Estas trabajando sobre {{ conjugacion_selectada_count }} conjugaciones </span>  
-<br>
-<br> 
+<span class="lettre" id="verbos_error_list_toggle" onclick="verbos_error_list_toggle()" > ver tus faltas </span>  
+<div id="verbos_error_list"    > </div> 
+
 <div id="container"> 
 	<div> 
 	<input type="checkbox" id="checkbox_tiempo"   name="checktodos"  data-type="tiempo" >

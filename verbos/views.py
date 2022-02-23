@@ -90,7 +90,7 @@ def verbos_exo(request,mode_id,conjugacion_id):
             respuesta= request.POST.getlist('respuesta')
             conjugacion = Conjugacion.objects.get(pk=conjugacion_id)
             # preparation du texte à afficher pour présenter la bonne reponse 
-            trace = str(conjugacion.verbo) + " " + str(conjugacion.tiempo) + " " + str(conjugacion.pronombre) +" => " + str(conjugacion.conjugacion)   
+            trace = str(conjugacion.verbo) + " " + str(conjugacion.tiempo) + " " + str(conjugacion.pronombre) +" = " + str(conjugacion.conjugacion)   
             tracerep =  str(respuesta[0]) 
             trace_id =  str(conjugacion.id) 
             # nettoyage des espaces qui pourraient etre dans les 2 chaines 
