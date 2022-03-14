@@ -16,22 +16,46 @@
 				localStorage.setItem(myvar,"0");
 			};
 		};
-		function verbos_error_list_toggle() { 
+		function verbos_error_list_show() { 
 			e=document.getElementById("verbos_error_list");
 			if (e.style.display=="block" ) { 
 				e.style.display="none";
 				localStorage.setItem("verbos_error_display","none");
 			}
 			else {
-				e.style.display="block" ; 
-				localStorage.setItem("verbos_error_display","block");
+				if (localStorage.getItem("verbos_error_list").length > 2 ) {  
+					e.style.display="block" ; 
+					localStorage.setItem("verbos_error_display","block");
+				}
 			}
-		}
+			};
 
+		function play_mode_toggle() {
+			console.log("play_mode_toggle 1 : play_mode="+ play_mode) ;
+			if (play_mode=="mode_error" ) {
+				play_mode="mode_run"; 
+			}
+			else {
+				play_mode="mode_error"; }
+			localStorage.setItem("play_mode",play_mode);
+			document.getElementById("play_mode_id").value=localStorage.getItem('faltas');
+			console.log("play_mode_toggle 2 : play_mode="+ play_mode) ;
+		};
+		function error_list_flush() { 
+		// fontion effacement des la variables locale faltas qui contient la liste des erreurs - disable du bouton travailler sur les erreurs 
+			localStorage.setItem("faltas","0");
+			localStorage.setItem("verbos_error_list","");
+			document.getElementById("verbos_error_list").style.display="none";
+			localStorage.setItem("verbos_error_display","none");
+			document.getElementById("play_mode_id").disabled=true; 
+			document.getElementById("play_mode_id").checked=false; 
+			localStorage.setItem("play_mode","mode_run");
+		};
 
 
 		
 		initvarlocal("faltas"); 
+		initvarlocal("play_mode");
 		initvarlocal("itotal"); 
 		initvarlocal("iexito");
 		// verbos_error_list contient toutes les conjugaisons ou l'utilisateur s'est trompé 
@@ -51,9 +75,9 @@
 			checklocal ( {{ jspronombres | safe }} );
 			checklocal ( {{ jsverbotipos | safe }} );
 			checklocal ( {{ jslevels     | safe }} );
-
+			
 			// gestions des events 
-			//1) event sur la mise a jour de select All 
+			//1) event sur la mise a jour via la case à cocher "select All" => deploiement sur les sous cases 
 			// ici on selectionne tous les form input dont le name est checktodos
 			document.querySelectorAll('input[name="checktodos"]').forEach(function(checkheader) {
 				// pour chaque item touvé on applique un event lors d'un event de changement sur l'item 
@@ -73,11 +97,43 @@
 					}
 				}
 			});
-			console.log("loto_winner",{{ loto_winner }} ) 
+			// disable / enable de la checkbox pour tester les verbes en error en f(chaine "faltas") 
+			if( localStorage.getItem("faltas").indexOf(",") == -1 ) {
+				// la chaine faltas vaut "0" , pas de verbe ) on disable la checkebox 
+				document.getElementById("play_mode_id").disabled=true ;
+			//	console.log("disabling checkbox play_mod_id")
+			}
+			else { 
+				document.getElementById("play_mode_id").disabled=false ;
+			//	console.log("enabling checkbox play_mod_id")
+			}
+				
+
+			// recuperation du mode de fonctionnement run / error stocké 
+			//
+			document.getElementById("play_mode_id").value=localStorage.getItem("faltas");
+			{% if mode_id == 0 %} 
+				// contexte 1ier appel de la page on force un mode de jeu "mode_run"  
+				document.getElementById("play_mode_id").checked=false;
+				localStorage.setItem("play_mode","mode_run");
+				play_mode="mode_run";
+			{% else %}
+				// ici on recharge la checkbox avec son statut pris dans la variable locale play_mode 
+				// sa value vaut le contenu de la variable faltas qui est la liste des idi des conjugaison ou on a fait un faute
+				play_mode=localStorage.getItem("play_mode"); 
+			//	console.log("localStorage play_mode ="+ play_mode );
+				document.getElementById("play_mode_id").value=localStorage.getItem("faltas");
+				if ( play_mode == "mode_error") { 
+					document.getElementById("play_mode_id").checked=true ;
+			//		console.log("setting play_mode checkbox to checked") ;
+					}
+				console.log("document.getElementById(play_mode_id).value="+document.getElementById('play_mode_id').value);
+			{% endif %}
+			console.log("loto_winner",{{ loto_winner }} ) ;
 			// mise en couleur du compteur de mots selectionnés si celui ci vaut 0 ( loto_winner = -1  
 			{% if  loto_winner   == -1 %}   
 				compteur_selectados = document.getElementById("compteur_selectados")  
-				console.log("loto_winneri in the loop",{{ loto_winner }} ) 
+			//	console.log("loto_winner in the loop",{{ loto_winner }} ) 
 				compteur_selectados.style.backgroundColor="red" 
 			{% endif %} 
 
@@ -131,8 +187,8 @@
 					document.getElementById('tracerep').style.textDecoration="line-through";
 					// on memorise l'erreur avec le numero de conjugacion 
 					localStorage.setItem("faltas",localStorage.getItem("faltas")+","+"{{trace_id}}");
-					verbos_error_list_append=localStorage.getItem("verbos_error_list") + " \n  " + " {{trace}}" + " [ falta: " + "{{ tracerep }}" + "]" ; 
-					localStorage.setItem("verbos_error_list",verbos_error_list_append );
+					verbos_error_list=localStorage.getItem("verbos_error_list") + " \n  " + " {{trace}}" + " [ falta: " + "{{ tracerep }}" + "]" ; 
+					localStorage.setItem("verbos_error_list",verbos_error_list);
 				} 
 					else {
 						document.getElementById('resuelto').innerText=" Play  !! ";
@@ -146,9 +202,13 @@
 				}
 				localStorage.setItem("itotal",itotal);
 				localStorage.setItem("iexito",iexito);
-				localStorage.setItem("verbos_error_list",verbos_error_list_append );
-				document.getElementById('verbos_error_list').innerText=verbos_error_list_append; 
+				localStorage.setItem("verbos_error_list",verbos_error_list);
+				document.getElementById('verbos_error_list').innerText=verbos_error_list; 
 				document.getElementById('verbos_error_list').style.display=localStorage.getItem("verbos_error_display"); 
+				if (localStorage.getItem("verbos_error_display") == "none" ) { 
+					document.getElementById("error_list_show_id").checked=false ; }
+				else { 
+					document.getElementById("error_list_show_id").checked=true ; }
 				document.getElementById('exito').innerText=iexito.toString();
 		 		document.getElementById('total').innerText=itotal.toString();
 			//5) affichage du resulta précédent
@@ -187,12 +247,13 @@
 			<span> Cual es la conjugacion ? </span> 
 		</td> 
 		<td> 
-			<form action= "{% url 'verbos_exo_run'  1 conjugacion_selectada.id %}"  method="post"> 
+			<form action= "{% url 'verbos_exo_run'  1   conjugacion_selectada.id %}"  method="post"> 
 			{% csrf_token %}
 			<label for="your_name">  </label> 
 			<input autofocus id="myrespuesta" type="text" name="respuesta"  autocapitalize=off >
-			<input type="submit" value="Submit">    
+			<input type="submit" value="Submit"> 
 			</input>
+
 		</td>
 	</tr>
 	<tr>
@@ -211,8 +272,14 @@
 	</tr>
 </table>
 <br>  
-<span id="compteur_selectados"> Estas trabajando sobre {{ conjugacion_selectada_count }} conjugaciones </span>  
-<span class="lettre" id="verbos_error_list_toggle" onclick="verbos_error_list_toggle()" > ver tus faltas </span>  
+<span id="compteur_selectados"> Estas trabajando sobre {{ conjugacion_selectada_count }} conjugaciones </span> 
+<br> 
+ 			 <input type="checkbox" id="play_mode_id" name="play_mode_name"  onclick="play_mode_toggle()">
+   			 <label for="play_mode_id">Play error</label>
+  			 <input type="checkbox" id="error_list_flush_id" name="error_list_flush_name"  onclick="error_list_flush()">
+   			 <label for="error_list_flush_id">Flush error list</label>
+  			 <input type="checkbox" id="error_list_show_id" name="error_list_show_name"  onclick="verbos_error_list_show()">
+   			 <label for="error_list_show_id">Show error list</label>
 <div id="verbos_error_list"    > </div> 
 
 <div id="container"> 
@@ -264,6 +331,7 @@
 	{% endfor %} 
 	</div> 
 	</div> 
-<form>
+</form>
+
 {% endblock %}
 

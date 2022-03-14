@@ -18,6 +18,10 @@ table, th,td,tr {
 	text-align : center ; 
 	}
 
+.exemple { 
+	color:blue;
+	font-style:italic ;
+	}
 
 {% endblock %} 
 
@@ -119,7 +123,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
             <td>  </td>
         </tr>
 		<tr>
-            <td> Ser rico / probre </td>
+            <td> Ser rico / pobre </td>
             <td>  </td>
         </tr>		
     </tbody>
@@ -164,14 +168,14 @@ document.addEventListener('DOMContentLoaded', (event) => {
 		
     </tbody>
 </table>   
-		</div> 
-		<div> 
-			exemplos 
-			<ol> 
-				<li> 
-				<li> 
-			</ol> 
-		</div>
+	</div> 
+	<div> 
+		exemplos 
+		<ol> 
+		<li> 
+		<li> 
+		</ol> 
+	</div>
 	</div> 
 </div> 
 
@@ -188,22 +192,8 @@ document.addEventListener('DOMContentLoaded', (event) => {
 </ol> 
 
 </div> 
-
-<div class="entete" onclick="ShowHide('zoneAafficher1')" > 
-<span style="margin-left:3%;" name="normatitulo"> 
- Accord temps conditionnel  Si + sss  </span> 
-</div>
-<div id='zoneAafficher1' style="text-align: justify; margin-left: 40px;display:none" name="norma" >
- Les choix du temps sont fonction de la probabilité  : 
- <ol> 
- <li> la condition est réalisable  </li> 
- <li> la condition n'est pas realisable  </li> 
- </ol>    
-</div> 
-
-
 <div class="entete"  onclick="ShowHide('zoneAafficher3' )" > 
-oxyton paroxiton / accent tonique 
+Oxyton paroxiton / accent tonique 
 </div> 
 <div id='zoneAafficher3' style="text-align: justify; margin-left: 40px;display:none" name="norma" >
 	<table>
@@ -237,7 +227,7 @@ oxyton paroxiton / accent tonique
         </tr>
     </tbody>
 </table>
-facon beaucoup plus moins claire 
+Autre facon d'expliquer plus académique  
 <table>
   
     <tbody>
@@ -281,6 +271,66 @@ facon beaucoup plus moins claire
 </table>
 </div>
 
+<div class="entete" onclick="ShowHide('zoneAafficher1')" > 
+<span style="margin-left:3%;" name="normatitulo"> 
+ Accord temps conditionnel  Si + sss  </span> 
+</div>
+<div id='zoneAafficher1' style="text-align: justify; margin-left: 40px;display:none" name="norma" >
+ Les choix du temps sont fonction de la probabilité  : 
+ <ol> 
+ <li> la condition est réalisable  </li> 
+ <li> la condition n'est pas realisable  </li> 
+ </ol>    
+</div> 
+
+<div class="entete" onclick="ShowHide('zoneAafficher1b')" > 
+<span style="margin-left:3%;" name="normatitulo"> 
+ Concordance des temps dans la subordonnée  </span> 
+</div>
+<div id='zoneAafficher1b' style="text-align: justify; margin-left: 40px;display:none" name="norma" >
+	<div class="contentblock"> 
+<div> 
+<table>
+  <tr>
+    <th>Principale </th>
+    <th>Subordonnée </th>
+  </tr>
+  <tr> 
+	  <td> Presente  <br> <span class="exemple">  Pedro pregunta..  </td> 
+	  <td> Presente  <br> <span class="exemple"> ..que Maria viene con ellos  </td>
+</tr> 
+  <tr>
+	  <td rowspan="2">Preterito perfecto <br> <span class="exemple" > Pedro ha dicho.. </th>
+		  <td>Presente <br> <span class="exemple"> ..que Maria esta enfermada</td>
+  </tr>
+  <tr>
+	  <td>Imperfecto <br> <span class="exemple"> ..que Maria estaba enfermada </td>
+  </tr>
+  <tr> 
+	  <td> Preterito Indefinido  <br> <span class="exemple"> Los ninos pidieron..   </td> 
+	  <td> Imperfecto   <br> <span class="exemple"> ..que tu jugabas  con ellos  </td>
+</tr> 
+  <tr> 
+	  <td> Imperatif   <br> <span class="exemple">  Cuenta me..   </td> 
+	  <td> Subjonctif   <br> <span class="exemple"> ..lo que  Maria te diga!  </td>
+</tr> 
+</table>
+</div> 
+<div> 
+	Les subordonnées sont introduites par 
+	<ul> 
+		<li> decir
+		<li> contar 
+		<li> preguntar 
+		<li> pedir 
+		<li> recomandar ( + subj : voir § 
+	</ul> 
+	</div> 
+	</div> 
+</div> 
+
+
+
 
 <div class="entete" onclick="ShowHide('zoneAafficher4' )" > 
 Subjonctif dans la subordonnée  
@@ -290,27 +340,27 @@ La subordonnée est au subjontif si
  <ol> 
  <li> On exprime un opinion sur une forme négative : 
 	 <ul> 
-		 <li> no creo que venga </li>
+		 <li class="exemple" > No creo que venga </li>
 	 </ul>
  <li> avec des verbes exprimant le regret ,le souhait  , le doute , :
 	 <ul> 
-		 <li> souhait : deseo que los chicos se divertan </li>
-		 <li> désir : exigimos que el Presidente nos reciba <li>
+		 <li> souhait :<span class="exemple">  Deseo que los chicos se diviertan </li>
+		 <li> désir : <span class="exemple"> Exigimos que el Presidente nos reciba <li>
 	 </ul>
  <li> apres une expression qui marque le but, l'obligation : 
 	 <ul> 
-		 <li> es necessario que vengas </li>
-		 <li> necesitamos que construyan nuevas industrias en la zona 
+		 <li class="exemple"> Es necessario que vengas </li>
+		 <li class="exemple" > Necesitamos que construyan nuevas industrias en la zona 
 	 </ul>
- <li> apres AUNQUE quand il est suivi d'un fait éventuel : aunque me lo repetieras , no te lo creeria </li> 
+			 <li> apres AUNQUE quand il est suivi d'un fait éventuel : <span class="exemple"> Aunque me lo repetieras , no te lo creeria </li> 
  <li> apres ANTES DE QUE  </li> 
  	<ul> 
-		<li> El gobierno debe actuar antes de que sea demasiado tarde
+		<li class="exemple"> El gobierno debe actuar antes de que sea demasiado tarde
 	</ul> 
  <li> apres CUANDO pour parler d'un fait non accompli  : 
 	 <ul> 
-		 <li> cuando llegues , iremos a buscarte </li>
-		 <li> las energias altenativas se desarollaran cuando se acaben las reservas de  petroléo 
+		 <li class="exemple"> Cuando llegues , iremos a buscarte </li>
+		 <li class="exemple" > Las energias altenativas se desarollaran cuando se acaben las reservas de  petroléo 
 	 </ul>
 
  </ol> 

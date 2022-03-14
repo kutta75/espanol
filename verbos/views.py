@@ -72,6 +72,9 @@ def verbos_exo(request,mode_id,conjugacion_id):
     trace= "<= puedes utilizar estas lettras"
     tracerep= "  "
     trace_id= "  "
+    
+    # init de la liste des idi des conjugaison en erreur
+    conjugacion_error_list=[] 
     # cas du premier appel à cette page ; initialisation des parametres et proposition d'une conjugaison aléatoirement parmi 
     # toutes celles disponibles 
     if request.method=="GET":
@@ -82,6 +85,7 @@ def verbos_exo(request,mode_id,conjugacion_id):
         Conjugacion_winner_pk=Conjugacion_selectadas_list[loto_winner]
         print("loto winner = " + str(loto_winner))
         Conjugacion_winner=Conjugacion.objects.get(pk=Conjugacion_winner_pk)
+        # mode_id = 1 
         
     if request.method=="POST":
         if mode_id==1:
@@ -98,28 +102,81 @@ def verbos_exo(request,mode_id,conjugacion_id):
                 resuelto="1"
             else:
                 resuelto="0"
-
-# preparation de la question suivante en exploitant les criteres de selection pour trouver une nouvelle conjugaion aleatoirement 
-# recuperation des filtres selectionnés 
+                conjugacion_error_list.append(conjugacion_id)
+       # recuperation des filtres selectionnés 
         verbotipos_selected= request.POST.getlist('verbotipo')
         pronombres_selected= request.POST.getlist('pronombre')
         tiempos_selected= request.POST.getlist('tiempo')
         levels_selected= request.POST.getlist('level')
+        # recuperation de la variable play_mode 
+        play_mode=request.POST.getlist('play_mode_name')
+        print(" play_mode_name = "+ str(play_mode)) 
+        if not (play_mode):
+            print("mode run")
+            # ici on travaille en cherchant une nouvelle conjugaison prise au hasard en fonction des filtres posées 
+            # preparation de la question suivante en exploitant les criteres de selection pour trouver une nouvelle conjugaion aleatoirement 
+            # construction du queryset basé sur la selections des checkbox 
+        
+            Conjugacion_selectadas=Conjugacion.objects.filter(tiempo__in=tiempos_selected).filter(pronombre__in=pronombres_selected).filter(verbo__in=Verbo.objects.filter(tipo__in=verbotipos_selected)).filter(level__in=levels_selected)
+            # comptage du nombre d'objets selectionnés  
+            Conjugacion_selectadas_count =Conjugacion_selectadas.count()
+            # si le nombre est supérieur 1 alors on choix d'un objet aléatoirement dans cette liste       
+            if Conjugacion_selectadas_count  > 0 :
+                loto_winner=random.randint(0,Conjugacion_selectadas_count-1)
+                print("loto winner = " + str(loto_winner))
+                # ici on cherche à retrouver l'index du verbe gagnant dans le queryset  Verbos complet 
+                Conjugacion_selectadas_list=Conjugacion_selectadas.values_list('pk',flat=True)
+                Conjugacion_winner_pk=Conjugacion_selectadas_list[loto_winner]
+                print("Conjugacion  selectada  pk =" + str(Conjugacion_winner_pk))
+                Conjugacion_winner=Conjugacion.objects.get(pk=Conjugacion_winner_pk) 
+            else:
+                # cas  ou le filtre apporte 0 reccord :  on blucle sur le précédent item ..  
+                #respuesta= request.POST.getlist('respuesta')
+                #conjugacion = Conjugacion.objects.get(pk=conjugacion_id)
+                #   Conjugacion_selectadas_count = Conjugacion.objects.count() 
+                #    loto_winner=random.randint(0,Conjugacion_selectadas_count-1)
+                # ici on cherche à retrouver l'index du verbe gagnant dans le queryset  Verbos complet 
+                #   Conjugacion_selectadas_list=Conjugacion.objects.values_list('pk',flat=True)
+                #  Conjugacion_winner_pk=Conjugacion_selectadas_list[loto_winner]
+                #  print("loto winner = " + str(loto_winner))
+                pk_winner=conjugacion_id
+                Conjugacion_winner_pk=conjugacion_id
+                loto_winner=-1  
+                Conjugacion_winner=Conjugacion.objects.get(pk=conjugacion_id)
+                Conjugacion_selectadas_count = 0 # pour transmettre dans le template 
+        else:
+            print("mode error "+ str(play_mode))
+            conjugacion_error_list_id=play_mode[0].split(',')
+            print("conjugacion error list id = " + str(conjugacion_error_list_id ))
+            loto_winner=random.randint(1,len(conjugacion_error_list_id)-1)
+            Conjugacion_winner_pk=int(conjugacion_error_list_id[loto_winner])
+            print("mode error : loto winner =" + str(loto_winner) + " pk winner =" + str(Conjugacion_winner_pk) ) 
+            Conjugacion_winner=Conjugacion.objects.get(pk=Conjugacion_winner_pk) 
+            Conjugacion_selectadas_count =len(conjugacion_error_list_id)-1
+
+
+
+# preparation de la question suivante en exploitant les criteres de selection pour trouver une nouvelle conjugaion aleatoirement 
+# recuperation des filtres selectionnés 
+ #       verbotipos_selected= request.POST.getlist('verbotipo')
+ #       pronombres_selected= request.POST.getlist('pronombre')
+ #       tiempos_selected= request.POST.getlist('tiempo')
+ #       levels_selected= request.POST.getlist('level')
         # construction du queryset basé sur la selections des checkbox 
         
-        Conjugacion_selectadas=Conjugacion.objects.filter(tiempo__in=tiempos_selected).filter(pronombre__in=pronombres_selected).filter(verbo__in=Verbo.objects.filter(tipo__in=verbotipos_selected)).filter(level__in=levels_selected)
+ #       Conjugacion_selectadas=Conjugacion.objects.filter(tiempo__in=tiempos_selected).filter(pronombre__in=pronombres_selected).filter(verbo__in=Verbo.objects.filter(tipo__in=verbotipos_selected)).filter(level__in=levels_selected)
         # comptage du nombre d'objets selectionnés  
-        Conjugacion_selectadas_count =Conjugacion_selectadas.count()
+ #       Conjugacion_selectadas_count =Conjugacion_selectadas.count()
         # si le nombre est supérieur 1 alors on choix d'un objet aléatoirement dans cette liste       
-        if Conjugacion_selectadas_count  > 0 :
-            loto_winner=random.randint(0,Conjugacion_selectadas_count-1)
-            print("loto winner = " + str(loto_winner))
-            # ici on cherche à retrouver l'index du verbe gagnant dans le queryset  Verbos complet 
-            Conjugacion_selectadas_list=Conjugacion_selectadas.values_list('pk',flat=True)
-            Conjugacion_winner_pk=Conjugacion_selectadas_list[loto_winner]
-            print("Conjugacion  selectada  pk =" + str(Conjugacion_winner_pk))
-            Conjugacion_winner=Conjugacion.objects.get(pk=Conjugacion_winner_pk) 
-        else:
+ #       if Conjugacion_selectadas_count  > 0 :
+ #           loto_winner=random.randint(0,Conjugacion_selectadas_count-1)
+ #           print("loto winner = " + str(loto_winner))
+ #           # ici on cherche à retrouver l'index du verbe gagnant dans le queryset  Verbos complet 
+ #           Conjugacion_selectadas_list=Conjugacion_selectadas.values_list('pk',flat=True)
+ #           Conjugacion_winner_pk=Conjugacion_selectadas_list[loto_winner]
+ #           print("Conjugacion  selectada  pk =" + str(Conjugacion_winner_pk))
+ #           Conjugacion_winner=Conjugacion.objects.get(pk=Conjugacion_winner_pk) 
+ #       else:
             # cas  ou le filtre apporte 0 reccord :  on blucle sur le précédent item ..  
             #respuesta= request.POST.getlist('respuesta')
         #conjugacion = Conjugacion.objects.get(pk=conjugacion_id)
@@ -129,11 +186,11 @@ def verbos_exo(request,mode_id,conjugacion_id):
          #   Conjugacion_selectadas_list=Conjugacion.objects.values_list('pk',flat=True)
           #  Conjugacion_winner_pk=Conjugacion_selectadas_list[loto_winner]
           #  print("loto winner = " + str(loto_winner))
-            pk_winner=conjugacion_id
-            Conjugacion_winner_pk=conjugacion_id
-            loto_winner=-1  
-            Conjugacion_winner=Conjugacion.objects.get(pk=conjugacion_id)
-            Conjugacion_selectadas_count = 0 # pour transmettre dans le template 
+ #           pk_winner=conjugacion_id
+ #           Conjugacion_winner_pk=conjugacion_id
+ #           loto_winner=-1  
+ #           Conjugacion_winner=Conjugacion.objects.get(pk=conjugacion_id)
+ #           Conjugacion_selectadas_count = 0 # pour transmettre dans le template 
             
         
         tiempos_checked= {}
@@ -200,11 +257,13 @@ def verbos_exo(request,mode_id,conjugacion_id):
             "pronombres_checked": pronombres_checked,
             "conjugacion_selectada" : Conjugacion_winner,
             "conjugacion_selectada_count" : Conjugacion_selectadas_count,
+            "conjugacion_error_list" : conjugacion_error_list,
             "loto_winner" : loto_winner,
             "pk_winner" : Conjugacion_winner_pk,
             "resuelto" : resuelto,
             "trace" : trace,
             "trace_id" : trace_id,
+            "mode_id" : mode_id,
             "tracerep" : tracerep,
             "myset" : myset,
             "jstiempos" : jstiempos,
