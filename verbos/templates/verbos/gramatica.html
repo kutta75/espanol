@@ -22,6 +22,10 @@ table, th,td,tr {
 	color:blue;
 	font-style:italic ;
 	}
+.exemple_vert { 
+	color:green;
+	font-style:italic ;
+	}
 
 {% endblock %} 
 
@@ -415,6 +419,10 @@ Les termes suivant introduisent un preterito perfecto
  <li> Cette action n’a plus de lien avec le présent ou ne fait pas partie de la même unité de temps : <span style="font-weight:bold"> el otro dia fui a la catedral   (otro dia que hoy ) </span>  </li> 
  </ol> 
 </div>
+
+
+
+
 <div class="entete" onclick="ShowHide('zoneAafficher010' )" > 
 Pronoms pour COD / COI  
 </div> 
@@ -452,8 +460,8 @@ Rappel
 		</tr>
 		<tr> 
 			<td> nosotros </td> 
-			<td> os </td> 
-			<td> os  </td> 
+			<td> nos </td> 
+			<td> nos  </td> 
 		</tr>
 		<tr> 
 			<td> vosotros </td> 
@@ -471,23 +479,127 @@ Rappel
 		</div> 
 		<div > exemplos 
 			<ul> 
-				<li> Astrid lo regala ( el tiburon COD ) 
-				<li> Astrid me regala un tiburon  ( COI ) 
-				<li> Astrid le regala un tiburon a Brigitte ( on  repéte toujours le COI ...)
+				<li class="exemple"> Astrid lo regala ( el tiburon COD ) 
+				<li class="exemple"> Astrid me regala un tiburon  ( COI ) 
+				<li class="exemple"> Astrid le regala un tiburon a Brigitte ( on  repéte toujours le COI ...)
 				<li> 
-				<li> Astrid se lo regala a Brigitte 
+				<li class="exemple"> Astrid se lo regala a Brigitte 
 			</ul> 
 		</div> 
 	</div> 
  <ol> Contexte avec double pronom   COD et COI dans la même phrase  
- <li> le pronom du COI pour les troisiemes personnes devient "se" en place de "le/les" . ex : <span style="font-weight:bold"> tengo que decirselo  </span>  </li> 
+ <li> le pronom du COI pour les troisiemes personnes devient "se" en place de "le/les" . ex : <span class="exemple"> tengo que decirselo  </span>  </li> 
  <li> format en fonction des conjuguaisons  :
  <ul>
- 	<li> lorsque le verbe est conjugué : "COI + COD + verbe" . ex   <span style="font-weight:bold"> Astrid se lo regala a Brigitte .. </span>  </li> 
- 	<li> lorsque le verbe est non conjugué ( infinitif / gerondif / imperatif)  : "verbe + COI + COD (pegado)". ex : <span style="font-weight:bold"> tengo que decirtelo  </span>  </li> 
+ 	<li> lorsque le verbe est conjugué : "COI + COD + verbe" . ex   <span class="exemple"> Astrid se lo regala a Brigitte .. </span>  </li> 
+ 	<li> lorsque le verbe est non conjugué ( infinitif / gerondif / imperatif)  : "verbe + COI + COD (pegado)". ex : <span class="exemple"> tengo que decirtelo  </span>  </li> 
 </ul> 
  </ol> 
 </div>
+
+
+
+<div class="entete" onclick="ShowHide('zoneAafficher010b' )" > 
+Verbes et prépositions 
+</div> 
+<div id='zoneAafficher010b' style="text-align: justify; margin-left: 40px;display:none" name="norma" >
+	<div class="contentblock"> 
+		<div> 
+<table> 
+	<thead> 
+		<tr> 
+			<td> verbe </td> 
+			<td> alguien </td> 
+			<td> algo </td>
+			<td> exemplo </td> 
+		</tr>
+	</thead> 
+	<tbody> 
+		<tr> 
+			<td> despedirse </td> 
+			<td> de </td> 
+			<td> de  </td> 
+			<td class="exemple" > Me he despedido del tenis  </td> 
+		</tr>
+		<tr> 
+			<td> felicitar </td> 
+			<td> a </td> 
+			<td> por  </td> 
+			<td class="exemple"> Los alumnos felicitan a la maestra por su aumento    </td> 
+		</tr>
+		<tr> 
+			<td> protestar  </td> 
+			<td> a </td> 
+			<td> por  </td> 
+			<td>   </td> 
+		</tr>
+		<tr> 
+			<td> preguntar </td> 
+			<td> por <br> a </td> 
+			<td>  </td> 
+			<td class="exemple"> Pilar pregunta por Pedro <br> Pilar ha preguntado ayudad a Pedro    </td> 
+		</tr>
+		<tr> 
+			<td> dar las gracias </td> 
+			<td> a </td> 
+			<td> por  </td> 
+			<td class="exemple"> Pilar da las gracias a Pedro por su ayudad   </td> 
+		</tr>
+		<tr> 
+			<td> invitar  </td> 
+			<td> a </td> 
+			<td> a  </td> 
+			<td class="exemple"> Pilar invita a Pedro a su boda   </td> 
+		</tr>
+		<tr> 
+			<td> recomandar   </td> 
+			<td> a </td> 
+			<td>   </td> 
+			<td>   </td> 
+		</tr>
+		<tr> 
+			<td> comentar  </td> 
+			<td> a </td> 
+			<td>   </td> 
+	
+			<td>   </td> 
+		</tr>
+		<tr>
+			<td> pedir  </td> 
+			<td> a </td> 
+			<td>   </td> 
+			<td class="exemple"> Pedro ha pedido dinero a Pilar  </td> 
+		</tr> 
+		<tr>
+			<td> proponer  </td> 
+			<td> a </td> 
+			<td>   </td> 
+			<td class="exemple"> Pilar propone  dinero a Pedro  </td> 
+		</tr>
+		<tr>
+			<td> recordar  </td> 
+			<td> a </td> 
+			<td>   </td> 
+			<td class="exemple"> Pilar recordera su deuda a Pedro   </td> 
+		</tr>
+		<tr>
+			<td> sugerir   </td> 
+			<td> a </td> 
+			<td>   </td> 
+			<td class="exemple"> Este perfume sugirio un jardin a mis abuleos    </td> 
+		</tr>
+		<tr>
+			<td> saludar   </td> 
+			<td> a </td> 
+			<td>   </td> 
+			<td class="exemple"> Saludamos al rey    </td> 
+		</tr>
+</table> 
+		</div> 
+	</div> 
+</div> 
+
+
 <div class="entete" onclick="ShowHide('zoneAafficher012' )" > 
 Imperatif   
 </div> 
@@ -518,7 +630,103 @@ L'impératif se deduit très exactement du <span style="font-weight:bold;color:r
 							<ul>
 					</ol>
 			</ol> 
-	
+</div> 
+<div class="entete" onclick="ShowHide('zoneAafficher013' )" > 
+Conjugaisons irregulieres type 
+</div> 
+<div id='zoneAafficher013' style="text-align: justify; margin-left: 40px;display:none" name="norma" >
+	<span style="text-decoration:underline;color:blue">  Irrégularité  e -> ie/i  </span> 
+		<ul> 
+			<li class="exemple_vert"> au 1,2,3,6 e-> ie 
+			<li style="color:red;font-weight:bold"> au 3,6 pret indef / 4,5 subj pres  e->i
+		</ul> 
+	<div class="contentblock" > 
+		<div > 
+			<table> 
+				<thead> 
+				<tr style="color:blue;font-weight:bold">
+					<td> pronombre </td> 
+					<td> presente </td> 
+					<td> Pret ind </td> 
+					<td> sub pres </td> 
+				</tr> 
+				</thead> 
+				<tbody> 
+				<tr>
+					<td> yo </td> 
+					<td class="exemple_vert"> ie</td> 
+					<td> e </td> 
+					<td class="exemple_vert"> ie </td> 
+				</tr> 
+				<tr>
+					<td> tu </td> 
+					<td class="exemple_vert"> ie</td> 
+					<td> e </td> 
+					<td class="exemple_vert"> ie </td> 
+				</tr> 
+				<tr>
+					<td> el </td> 
+					<td class="exemple_vert"> ie</td> 
+					<td style="color:red;font-weight:bold">   i </td> 
+					<td class="exemple_vert"> ie </td>
+				</tr> 
+				<tr>
+					<td> nosostros </td> 
+					<td> e</td> 
+					<td> e </td> 
+					<td style="color:red;font-weight:bold"> i </td> 
+				</tr> 
+				<tr>
+					<td> vosotros </td> 
+					<td> e</td> 
+					<td> e </td> 
+					<td style="color:red;font-weight:bold"> i </td> 
+				</tr> 
+				<tr>
+					<td> ellos </td> 
+					<td class="exemple_vert"> ie</td> 
+					<td style="color:red;font-weight:bold"> i </td> 
+					<td class="exemple_vert" > ie </td> 
+				</tr> 
+
+
+
+
+
+
+				<tr> 
+				</tr>
+				</tbody> 
+			</table> 
+		</div> 
+		<div>
+			<ol> 
+				<li> advertir
+				<li> convertir 
+				<li> divertir 
+				<li> consentir
+				<li> digerir
+				<li> herir
+				<li> mentir
+				<li> requerir
+				<li> sentir
+				<li> sugerir
+				<li> preferir
+				<li> presentir
+				<li> ...
+			</ol>
+		</div>
+	</div>
+
+	<span> Modeles similaires
+		<ul> 
+			<li> <span class="exemple_vert">  o-> ue  </span>  /<span style="color:red">  u </span> 
+				<ul>
+					<li>  Morir ( el m<span class="exemple_vert">ue</span>re ) /  ( ellos m<span style="color:red">u</span>rieron )
+					<li>  Dormir  ( el d<span class="exemple_vert">ue</span>rme ) /  (ellos d<span style="color:red">u</span>rmieron )
+				</ul>
+		</ul> 
+</div> 
 	
 	
 {% endblock %}
