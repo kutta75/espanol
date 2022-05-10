@@ -67,7 +67,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
 <h1> Gramatica </h1> 
 <br> 
 
-<button onclick="ToggleAll()" > mostrar todas normas / escogerlas </button> 
+<button onclick="ToggleAll()" > mostrar todas normas / esconderlas </button> 
 
 
 <div  class="entete"  onclick="ShowHide('zoneAafficher000')" > 
@@ -289,55 +289,83 @@ Autre facon d'expliquer plus académique
 
 <div class="entete" onclick="ShowHide('zoneAafficher1')" > 
 <span style="margin-left:3%;" name="normatitulo"> 
- Concordance des temps entre principale et subordonnée  </span> 
+	Concordance des temps : subordonnée au subjontif  </span> 
 </div>
 <div id='zoneAafficher1' style="text-align: justify; margin-left: 40px;display:none" name="norma" >
 	Il s'agit de trouver comment appliquer la concordance des temps entre la principale et la subordonnée. <br> 
-	Les règles à appliquer vont dépendre du type de phrase. Il faut donc identifer  
+	Les règles à appliquer vont dépendre du sens de la phrase. Il faut donc identifer  
  <ol> 
  <li> la nature de la phrase principale + subordonnée  </li> 
  <li> pour aller chercher la règle adaptée   </li> 
  </ol>    
-
+ 
  <table> 
-	 <thead>
-		 <tr> 
-			 <td rowspan="2"> Expression de </td> 
-			 <td rowspan="2"> descr </td> 
-			 <td rowspan="2"> Principale </br> temps  </td> 
-			 <td colspan="2"> subordonnée </td> 
-			 <td rowspan="2"> exemple </td>
-		 </tr>
-		 <tr> 
-			 <td> temporalité </td> 
-			 <td> temps utilisé </td> 
-		 </tr>
-	 </thead>
-		 <tr> 
-			 <td> sub <br> temporelle </td>
-			 <td> cuando <br> encuanto <br> tanpronto <br>  mientras<br>  conforme..		</td> 
-			 <td> futur <br> <span class="exemple"> visitaré el museo...	</td> 
-			 <td> futur	</td> 
-			 <td> sub présent <br> <span class="exemple"> ..cuando vaya en Madrid</td> 
-			 <td class="exemple"> 	</td> 
-		 </tr> 	
-		 <tr> 
-			 <td> une certitude  <br> un fait </td>
-			 <td> cuando <br> encuanto <br> tanpronto <br>  mientras<br>  conforme..		</td> 
-			 <td> futur <br> <span class="exemple"> visitaré el museo...	</td> 
-			 <td> futur	</td> 
-			 <td> sub présent <br> <span class="exemple"> ..cuando vaya en Madrid</td> 
-			 <td class="exemple"> Madrid		</td> 
-		 </tr>	 	
-		 <tr> 
-			 <td> une hypothèsee  <br> un fait </td>
-			 <td> un voeux <br> encuanto <br> tanpronto <br>  mientras<br>  conforme..		</td> 
-			 <td> futur <br> <span class="exemple"> visitaré el museo...	</td> 
-			 <td> futur	</td> 
-			 <td> sub présent <br> <span class="exemple"> ..cuando vaya en Madrid</td> 
-			 <td class="exemple"> Madrid		</td> 
-		 </tr>	 	
- </table>
+	 <thead> 
+		 <td> Cas </td> 
+		 <td> introduit par  </td> 
+		 <td> Principale </td> 
+		 <td> exemple </td> 
+	 </thead> 
+	 <tr > 
+		 <td rowspan="2"> Subordonnée temporelle </td> 
+		 <td> cuanto <br> luego que <br> hasta que <br> en cuanto <br>  tan pronto que </td> 
+		 <td> au futur ou à <br>  l'imperatif </td> 
+		 <td class="exemple" > Te hablaré cuando tenga tiempo.  <br> Comeremos luego que lleguemos <br> Limpiaremos hasta que el suelo esté limpio <br> Te pagaré en cuanto termines tu trabajo <br> Llama me tan pronto que ella llegue  </td> 
+	</tr> 
+	<tr> 
+		<td> antes de que </td> 
+		<td> tous les cas  </td> 
+		<td class = "exemple" > Como antes de que la comida esté fria.  </td> 
+	</tr>
+	<tr> 
+		<td> Fait non réalisé <td> 
+		<td> </td> 
+		<td class="exemple"> Puedes pedir me lo que quieras. <br> Viviremos donde encontremos empleos. </td> 
+	</tr> 
+	<tr> 
+		<td> Fait inconnu ou <br>  avec une condition </td> 
+		<td> Como (comme) <br> Como (si) </td> 
+		<td> </td> 
+		<td class ="exemple" > Podr s vestirte como quieras. <br> No iré como vengas </td> 
+	</tr>
+	<tr> 
+		<td> Subordonnée concessive </td> 
+		<td> Aunque ( même si) </td> 
+		<td> </td> 
+		<td class= "exemple"> El pregunta aunque sepa todo lo que pasX </td> 
+	</tr>
+	<tr> 
+		<td> Opinion à la forme négative </td> 
+		<td> no creer <br> no pensar <br> no parecerle </td>
+		<td> forme négative </td> 
+		<td class="exemple"> No creo que venga.  <br> No pienso que tengas razon. <br> No le pareciX que estemos tarde </td>
+	</tr> 
+	<tr> 
+		<td> Demande  </td>  
+		<td> decir <br> escribir <br> pedir <br> rogar <br> supliquar  </td>
+		<td>  </td> 
+		<td class="exemple"> Nos decimos que hagamos menos ruido.  <br> Me pido que lemandemos dinero.  </td>
+	</tr> 
+	<tr> 
+		<td> Souhait  </td>  
+		<td> desear <br> querer <br> tener ganas </td>
+		<td>  </td> 
+		<td class="exemple"> Deseo que lleguemos antes de la noche.  <br> Quiero que me prestes tu coche. <br> tengo ganas que comamos antes de salir   </td>
+	</tr> 
+	<tr> 
+		<td> Conseil <br>  but <br>  obligation </td>  
+		<td> recomandar <br> aconsejar <br> mandar <br> ordenar  <br> prohibir <br> impedir  </td>
+		<td>  </td> 
+		<td class="exemple"> Te aconsejo que veas esta pelicula.  <br> La maestra nos manda que no hagamos ruido. <br> Es necessariio que vengas <br> Necessitamos que construyan nuevas industrias en la zona.  </td>
+	</tr> 
+
+
+
+				
+
+ </table> 
+
+
 </div> 
 
 <div class="entete" onclick="ShowHide('zoneAafficher1b')" > 
