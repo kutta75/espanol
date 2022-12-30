@@ -95,3 +95,24 @@ class Palabra(models.Model):
     def __str__(self):
         return self.palabra
 
+class Sub_modelo(models.Model):
+    sub_modelo= models.CharField(max_length=30,null=True)
+    sub_modelo_seq=models.IntegerField(null=True)
+    def __str__(self):
+        return self.sub_modelo
+
+class Sub_conj(models.Model):
+    sub_conj= models.CharField(max_length=30,null=True)
+    sub_conj_modelo=models.ManyToManyField(Sub_modelo)
+    def __str__(self):
+        return self.sub_conj
+
+# table des principales qui introduiront les conjonctions  + subordonnée à un temps adhoc
+# la principale pourra ete au present ou au passé et le temps à utiliser est specifié dans sub_tiempo 
+class Sub_princ(models.Model): 
+    sub_princ=models.CharField(max_length=60,null=True)
+    sub_princ_seq=models.IntegerField(null=True)
+    sub_modelo=models.ForeignKey(Sub_modelo,on_delete=models.CASCADE,related_name="sub_princ")
+    sub_tiempo_seq=models.IntegerField(null=True)
+    def __str__(self):
+        return self.sub_princ

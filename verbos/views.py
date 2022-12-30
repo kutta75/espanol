@@ -1,7 +1,7 @@
 from django.shortcuts import render
 import random,json,subprocess,datetime   
 from django.forms.models import model_to_dict 
-from verbos.models import Verbo,Tiempo,Conjugacion,Pronombre,Verbotipo,Level,Palabra,Palabratipo,Palabragenero,Palabranivel,Palabrafamilia,Palabrafecha
+from verbos.models import Verbo,Tiempo,Conjugacion,Pronombre,Verbotipo,Level,Palabra,Palabratipo,Palabragenero,Palabranivel,Palabrafamilia,Palabrafecha,Sub_modelo,Sub_princ,Sub_conj
 
 
 def jslist(myqueryset):
@@ -419,3 +419,73 @@ def anuncios_clasificados(request):
 
     return render(request,"verbos/anuncios_clasificados.html",context)
 
+def subjuntivo(request,id1,id2):
+    titre="Conversaciones francés - español"
+    texto="Francés aprendiendo español propone conversaciones mitad en francés / mitad en español a alguno/a que tiene español como lengua materna (para mejorar el nivel de los dos alumnos…). Propongo hacerlo una vez cada semana, durante hasta una hora ( Vivo en Paris 19ieme y soy un hombre adulto ). " 
+    mail = "kutta75@gmail.com" 
+    fecha = "01/07/2021"
+    # traitement d'un retour apres saisie d une selection / proposition de reponse
+    if request.method =="GET":
+        princ=Sub_princ.objects.first()
+        conjugacion=Conjugacion.objects.first()
+        conj=Sub_conj.objects.first()
+    if request.method =="POST":
+        modelos_selected=request.POST.getlist('modelo')
+        respuesta=request.POST.getlist('resel 10puesta')
+        # selection d'un modele parmi ceux selectionné dans les cases à coché
+        Princ_selectadas = Sub_princ.objects.filter(sub_modelo__in=modelos_selected)
+        # contage du nombre d'element du queryset  
+        Princ_selectadas_count =Princ_selectadas.count()
+        #    familias_txt = familias_txt + str(familias_selected[i]) 
+        if Princ_selectadas_count > 0 :
+            loto_winner=random.randint(0,Princ_selectadas_count-1)
+            print("loto winner = " + str(loto_winner))
+            Princ_selectada_list=Princ_selectadas.values_list('pk',flat=True)
+            Princ_winner_pk=Princ_selectada_list[loto_winner]
+            print("Princ selecta pk =" + str(Princ_winner_pk))
+            Princ_winner=Sub_princ.objects.get(pk=Princ_winner_pk)
+            princ=Princ_winner
+        # selection d'une conjunction associée à ce modele 
+        print(" modelo selection " + str(Princ_winner.sub_modelo))
+        Conj_selectadas = Sub_conj.objects.filter(sub_conj_modelo=Princ_winner.sub_modelo)
+        # contage du nombre d'element du queryset  
+        Conj_selectadas_count =Conj_selectadas.count()
+        #    familias_txt = familias_txt + str(familias_selected[i]) 
+        if Conj_selectadas_count > 0 :
+            loto_winner=random.randint(0,Conj_selectadas_count-1)
+            print("loto winner = " + str(loto_winner))
+            Conj_selectada_list=Conj_selectadas.values_list('pk',flat=True)
+            Conj_winner_pk=Conj_selectada_list[loto_winner]
+            print("Conj selecta pk =" + str(Conj_winner_pk))
+            Conj_winner=Sub_conj.objects.get(pk=Conj_winner_pk)
+            conj=Conj_winner
+        # selection d'une conjugaison pour la subordonnée dans un temps adapté à la principale
+        Tiempo_selected=Tiempo.objects.filter(tiemposeq=Princ_winner.sub_tiempo_seq)
+        Conjugacion_selectadas=Conjugacion.objects.filter(tiempo__in=Tiempo_selected)
+        Conjugacion_selectadas_count =Conjugacion_selectadas.count()
+        #    familias_txt = familias_txt + str(familias_selected[i]) 
+        if Conjugacion_selectadas_count > 0 :
+            loto_winner=random.randint(0,Conjugacion_selectadas_count-1)
+            print("loto winner = " + str(loto_winner))
+            Conjugacion_selectadas_list=Conjugacion_selectadas.values_list('pk',flat=True)
+            Conjugacion_winner_pk=Conjugacion_selectadas_list[loto_winner]
+            print("Conjuga selecta pk =" + str(Conjugacion_winner_pk))
+            Conjugacion_winner=Conjugacion.objects.get(pk=Conjugacion_winner_pk)
+            conjugacion=Conjugacion_winner
+
+
+    modelos=Sub_modelo.objects.all()
+    jsmodelos=jslist(modelos) 
+    context= { 
+            "titre" : titre ,
+            "texto" : texto ,
+            "fecha" : fecha, 
+            "mail" : mail ,
+            "conj" : conj ,
+            "princ" : princ,
+            "jsmodelos" : jsmodelos ,
+            "modelos" : modelos,
+            "conjugacion" : conjugacion
+            }
+
+    return render(request,"verbos/subjuntivo.html",context)
