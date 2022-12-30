@@ -426,9 +426,9 @@ def subjuntivo(request,id1,id2):
     fecha = "01/07/2021"
     # traitement d'un retour apres saisie d une selection / proposition de reponse
     if request.method =="GET":
-        princ=Sub_princ.objects.first()
-        conjugacion=Conjugacion.objects.first()
-        conj=Sub_conj.objects.first()
+        princ="Estas listo ?"
+        conjugacion=" prueba !"
+        conj=" cual es la conjugacion ? "
     if request.method =="POST":
         modelos_selected=request.POST.getlist('modelo')
         respuesta=request.POST.getlist('resel 10puesta')
