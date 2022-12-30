@@ -1,0 +1,66 @@
+{% extends 'verbos/layout.html' %}
+
+{% block jsscript %}
+	<script  >
+	// init des variables locales des checkbox
+	console.log(" dans subju html s: script avant inivar");
+	initlocal({{ jsmodelos | safe }} );
+
+
+	document.addEventListener('DOMContentLoaded',function() { 
+		// load des status checkbox 
+		console.log("subj : apres chargement page");
+		console.log("subj : jsmodelos"+{{jsmodelos| safe}});
+		checklocal( {{ jsmodelos  | safe }}) ;
+		
+		// ajout d'un event sur click checkbox 
+		document.querySelectorAll('[data-storage]').forEach(function(checkbox) { 
+		checkbox.onchange = function() { 
+			console.log("subj-checkbox cliquée" + checkbox.id );
+			localStorage.setItem(checkbox.id,checkbox.checked);
+		};
+		});
+		});
+
+	</script>
+ 
+
+
+
+
+
+
+{% endblock %}
+
+
+{% block body1 %} 
+
+
+	<form action= "{% url 'subjuntivo' id1='10' id2='20' %}"  method ="post"> 
+	{% csrf_token  %}
+	<div id="container" > 
+		<div> 
+			<input type="checkbox" data-type="modelo" id="modelo" name="checktodos" > 
+			<label for="modelo"> Selectar todos modelos  </label> 
+			<br> 
+			{% for modelo in modelos %}
+			<input type="checkbox" id="Sub_modelo-{{modelo.id}}"  name="modelo"  data-storage="true" value="{{modelo.id}}"  > 
+			<label for="Sub_modelo-{{modelo.id}}"> {{modelo}}   </label> 
+			<br> 
+			{% endfor %} 
+		</div>
+		<div> 
+			{{princ.sub_modelo}}
+			<br>  {{princ}} {{ conj}} {{ conjugacion.pronombre }}    {{ conjugacion.verbo }} <br> 
+			<input autofocus id="myrespuesta" type="text" name="respuesta" autocapitalize=off> 
+	<input type="submit" value="Submit"> </input> 
+			{{ conjugacion }}  .... 
+		</div> 
+
+	</div> 
+
+
+	</form> 
+
+{% endblock %}
+
