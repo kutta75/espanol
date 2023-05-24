@@ -76,7 +76,7 @@
 
 
 <body>
-	<div class="nav"> 
+	<div class="nav" id="navId"> 
 			<div>		 <a href= "{% url 'index' %}">Home</a>  </div>
 			<div>		 <a href= "{% url 'verbos' %}">Verbos</a>  </div>
 			<div>		 <a href= "{% url 'verbos_exo'%}0/1">Verbos exo</a>  </div>
@@ -91,6 +91,6 @@
 	{% endblock %}
 <div id="wcb" class="carbonbadge"> </div> 
 <script src="https://unpkg.com/website-carbon-badges@1.1.3/b.min.js" defer></script>
-<h6> {{cputemp }}</h6> 
+<h6 id="tempId" > {{cputemp }}</h6> 
 </body> 
 </html> 

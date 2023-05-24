@@ -1,40 +1,221 @@
 {% extends 'verbos/layout.html' %}
 //cette page affiche toutes les criteres de selection d un palabra   
 {% block jsscript %}
+	<style> 
+#autoplaytimerid {
+	width: 	5em;
+}
+	</style> 
+
 	<script>
 		function ShowHide(id) { 
 			var e = document.getElementById(id);
 			if (e.style.display=='block')
-				e.style.display='none'
+				e.style.display='none';
 			else
-				e.style.display='block'
-		}
+				e.style.display='block';
+		};
+		function setCheck(localvarStatus,checkId) { 
+			// fonction qui aligne le statut check nocheck d'une case a cocher avec la valeur null 0 1 d'une variable locale 
+			localvarStatusValue=localStorage.getItem(localvarStatus) ;
+			console.log("-> setCheck start : var ",localvarStatus,"  = ",localvarStatusValue) ;
+			switch (localvarStatusValue) {
+				case null :
+					localStorage.setItem(localvarStatus,"0");
+					document.getElementById(checkId).checked=false; 
+					console.log("-> Autoplay : localstorage autoplaystatus initialité à 0") ;
+					break; 
+				case "0":
+					localStorage.setItem(localvarStatus,"0");
+					document.getElementById(checkId).checked=false; 
+					break;
+				case "1":
+					localStorage.setItem(localvarStatus,"1");
+					document.getElementById(checkId).checked=true; 
+					break;
 
-		// fonction qui bascule un objet de visible a invisible et reciproquement 
-		function togglefunction(anId1,anId2) {
-			node1=document.getElementById(anId1);
-			node2=document.getElementById(anId2);
-			if (anId1=="radioL1")
-			{
-					localStorage.setItem("radiobuttonstatus","0");
-					}
-			else
-			{
-					localStorage.setItem("radiobuttonstatus","1");
+			}; 
+		};
+
+		function AutoPlay(formid) {
+			// fonction pour  relancer automatiquement le formulaire sans presser enter 
+			var formulaire = document.getElementById(formid);
+			autoplaystatus=localStorage.getItem("autoplaystatus") ;
+			console.log("-> Autoplaystatus start : var autoplay = ",autoplaystatus) ;
+			switch (autoplaystatus) {
+				case null :
+					localStorage.setItem("autoplaystatus","0");
+					document.getElementById("autoplayId").checked=false; 
+					console.log("-> Autoplay : localstorage autoplaystatus initialité à 0") ;
+					break; 
+				case "1":
+					localStorage.setItem("autoplaystatus","0");
+					document.getElementById("autoplayId").checked=false; 
+					break;
+				case "0":
+					localStorage.setItem("autoplaystatus","1");
+					document.getElementById("autoplayId").checked=true; 
+					console.log("-> dans AutoPlay : idi formulaire=",formid); 
+					timer=localStorage.getItem("autoplaytimer");
+					setTimeout(()=>{formulaire.submit();},timer); 
+					break;
+
+			}; 
+	//		document.getElementById("autoplayId").checked=localStorage.getItem("autoplaystatus"); 
+			console.log("-> Autoplay : localstorage autoplaystatus initialiisé à ",localStorage.getItem("autoplaystatus")) ;
+		};
+		function AutoPlayTimerSet(timerlocal,timerid) { 
+			// fonction  d initialisation du timer afficher en fonction du contenu de la variable local autoplaytimer
+			autoplaytimerlocal=localStorage.getItem(timerlocal); 
+			console.log("-> AutoPlayTimerSet start  = ",autoplaytimerlocal) ;
+		
+			switch (autoplaytimerlocal) {
+				case null :
+					// ici timerlocal est vide : on l'initialise a 5000 
+					localStorage.setItem(timerlocal,"5000");
+					document.getElementById(timerid).value="5000"; 
+					break; 
+				case "0" :
+					// ici timerlocal est vide : on l'initialise a 5000 
+					localStorage.setItem(timerlocal,"5000");
+					document.getElementById(timerid).value="5000"; 
+					break; 
+				default:
+					// ici timerlocal est vide : on l'initialise a 5000 
+					document.getElementById(timerid).value=autoplaytimerlocal; 
+					break;
+
+			}; 
+		};
+		function HablaPlay() {
+			// appellé lors click surle bouton Habla 
+			hablaplaystatus=localStorage.getItem('hablaplaystatus'); 
+			console.log("-> HablaPlay start : var hablaplaystatus = ",hablaplaystatus) ;
+			switch (hablaplaystatus) {
+				case null :
+					localStorage.setItem("hablaplaystatus","0");
+					document.getElementById("hablaplayId").checked=false; 
+					console.log("-> HablaPlay : localstorage hablaplaystatus initialité à 0") ;
+					break; 
+				case "1":
+					localStorage.setItem("hablaplaystatus","0");
+					document.getElementById("hablaplayId").checked=false; 
+					break;
+				case "0":
+					localStorage.setItem("hablaplaystatus","1");
+					document.getElementById("hablaplayId").checked=true; 
+					break;
+
+			};
+		};
+		function Hablar(palabra,idioma) { 
+			if ('speechSynthesis' in window ) { 
+				var texto = new SpeechSynthesisUtterance(); 
+				texto.lang=idioma; 
+				texto.text = palabra ; 
+				speechSynthesis.speak(texto) ; 
 			}
+			else {
+				console.log("=> Hablar : erreur pas de speechSynthesis dispo dans ce navigateur" );
+			};
+		};
 
-			if (node1.style.visibility=="hidden") 
-				{ 
-					node1.style.visibility="visible" ; 
-					node2.style.visibility="hidden" ; 
-				}
-				else 
-				{
-					node1.style.visibility="hidden";
-					node2.style.visibility="visible";
+
+		function AutoPlayTimerStoreValue() { 
+			// simple stockage en local de la valeur du timer changée 
+			localStorage.setItem("autoplaytimer",document.getElementById("autoplaytimerid").value); 
+		}; 
+
+		function lanswitch(lanId) { 
+			// stockage en variable local lanswitchstatus du cas 0 ( SP-> FR ) ou 1 ( FR->SP ) 
+			lanswitchvalue=document.getElementById(lanId).value;
+			console.log("-> lanswitch value=",lanswitchvalue);
+			localStorage.setItem("lanswitchstatus",lanswitchvalue);
+			// status checked de la checkbox (?) 
+			document.getElementById(lanId).checked=true;
+			switch (lanswitchvalue) {
+				case "0" :
+					document.getElementById("radioL1").style.visibility="hidden" ; 
+					document.getElementById("radioL2").style.visibility="visible" ; 
+					break;
+				case "1" :
+					document.getElementById("radioL2").style.visibility="hidden" ; 
+					document.getElementById("radioL1").style.visibility="visible" ; 
+					break;
+				};
+
+
+		};
+		function probar() { 
+			// fonction declenclenchée lors du lancement du bouton Probar pour lancer un nouveau formulaire manuellement 
+			console.log("-> probar  debut");
+
+			var formulaire = document.getElementById("form_vocabulaire");
+
+			switch ( localStorage.getItem("hablaplaystatus")) { 
+				case "1" :
+					// cas ou la voix est utilisée : il faut lire le texte solution 
+					var texto = new SpeechSynthesisUtterance(); 
+					switch (localStorage.getItem("lanswitchstatus")) {
+						case "0" :
+						// sens espagnol vers francais : comme on sort de la boucle on lit le texte en francais  
+						texto.text=document.getElementById("radioL1").innerHTML;
+						texto.lang="fr-FR";
+						break;
+						case "1" : 
+						// sens francais vers espagnols : comme on sort de la boucle on lit le texte en espagnol  
+						texto.text=document.getElementById("radioL2").innerHTML;
+						texto.lang="es-ES";
+						break;
+					};
 					
-				}
-		}
+
+					texto.onstart = () => console.log("onstart") ; 
+					texto.onend = () => formulaire.submit() ; 
+					speechSynthesis.speak(texto) ;
+					break;
+				case "0" : 
+					// ici pas de lecture  on soumet le formulaire 
+					formulaire.submit() ; 
+					break;
+			};
+						
+			console.log("-> probar  fin" );
+		};
+		function pantallaswitch() { 
+			// reduit les objets affichés et libere l'ecrans des elements de saisis 
+			console.log("-> pantallaswitch debut pantallastatus =",localStorage.getItem("pantallastatus")); 
+			switch(localStorage.getItem("pantallastatus")) { 
+				case "0" : 
+					// ici  passe en grand écran 
+					console.log("-> pantallaswitch case 0");
+					localStorage.setItem("pantallastatus","1");
+			//		document.getElementById("container").style.display="";
+			//		document.getElementById("navId").style.display="";
+			//		document.getElementById("wcb").style.display="";
+					document.getElementById("pantallaId").checked=true;
+					pantalladisplay("");
+					break;
+				case "1" :
+					// ici  passe en grand écran 
+					console.log("-> pantallaswitch case 1");
+					localStorage.setItem("pantallastatus","0");
+			//		document.getElementById("container").style.display="none";
+			//		document.getElementById("navId").style.display="none";
+			//		document.getElementById("wcb").style.display="none";
+					pantalladisplay("none");
+					document.getElementById("pantallaId").checked=false;
+					break;
+			};
+		};
+
+		function pantalladisplay(displayorder) {
+			// on met ici tous les objets dont on modifie le style.display 
+			document.getElementById("container").style.display=displayorder;
+			document.getElementById("navId").style.display=displayorder;
+			document.getElementById("wcb").style.display=displayorder;
+			document.getElementById("tempId").style.display=displayorder;
+			};
 
 	
 		// creation & initialisation des variables locales basées sur la liste jsfamilias dans le cas ou les variable n'existent pas 
@@ -42,8 +223,12 @@
 		initlocal({{ jstipos | safe }} ); 
 		initlocal({{ jsnivels | safe }} ); 
 		initlocal({{ jsfechas | safe }} ); 
-		initvarlocal('radiobuttonstatus'); 
-
+		initvarlocal('lanswitchstatus'); 
+		initvarlocal('autoplaystatus');
+		initvarlocal('hablaplaystatus');
+		initvarlocal('autoplaytimer');
+		initvarlocal('autoplaytimer');
+		initvarlocal('pantallastatus');
 		var compteurexo = 0 ; 
 
 
@@ -53,7 +238,18 @@
 			checklocal( {{jstipos | safe }} ) ; 
 			checklocal( {{jsnivels | safe }} ) ; 
 			checklocal( {{jsfechas | safe }} ) ;  
-			// ici on checke si le compteurexo existe en soclage local / si non on le crée   / si oui on le recupere 
+			// mise a jour du status de la checkbox "pantalla" 
+			setCheck('pantallastatus','pantallaId');
+			// alignement des affichage sur le contenu de la variable pantallastatus
+			switch ( localStorage.getItem("pantallastatus") ) {
+				case "0" : 
+					pantalladisplay("none");
+					break;
+				case "1" :
+					pantalladisplay("");
+					break;
+			};
+			// ici on checke si le compteurexo existe en stockage local / si non on le crée   / si oui on le recupere 
 			if (localStorage.getItem("compteurexo")== null )
 			{       localStorage.setItem("compteurexo","0");
 				compteurexo=0; 
@@ -86,21 +282,29 @@
 			} else {
 				elt.style.opacity=1 ;
 				console.log("compteur exo = ",compteurexo); 
-				}
+				};
 
-			if (localStorage.getItem("radiobuttonstatus")=="0")
-			{ togglefunction("radioL1","radioL2");
-				document.getElementById("FRES").checked=true;
+			// mise à jour du status checked des boutons lanFRSPId
+			lanswitchstatusvalue=localStorage.getItem("lanswitchstatus");
+			switch(lanswitchstatusvalue) {
+				case "0" :
+					document.getElementById("lanSPFRId").checked=true;
+					document.getElementById("radioL2").style.visibility="visible" ; 
+					break;
+				case "1" : 
+					document.getElementById("lanFRSPId").checked=true;
+					document.getElementById("radioL1").style.visibility="visible" ; 
+					break;
+			};
 
-				console.log("dans exploit radio button cas1 ");
-			}
-			else
-			{
-				togglefunction("radioL2","radioL1");
-				document.getElementById("ESFR").checked=true;
-				console.log("dans exploit radio button cas2 ");
-			}
 
+			// mise a jour du status de la checkbox "autoplay" 
+			setCheck('autoplaystatus','autoplayId');
+
+			// mise a jour de la valeur du timer dans l'ecran avec la valeur en local 
+			AutoPlayTimerSet("autoplaytimer","autoplaytimerid");
+			// mise a jour du status de la checkbox "autoplay" 
+			setCheck('hablaplaystatus','hablaplayId');
 
 			// mise en evidence en rouge de quelque chose 
 			document.querySelectorAll('span').forEach(function(span) {
@@ -130,6 +334,61 @@
 					localStorage.setItem(checkbox.id,checkbox.checked) ; 
 				}
 			});
+			// cas ou le mode hablaplay est en service : on lit le texte à traduire /  en fonction du sens de la langue 
+			if(localStorage.getItem("hablaplaystatus")=="1") {
+				// ici on lit le  texte à traduire
+				switch (localStorage.getItem("lanswitchstatus")) {
+					case "0" :
+						palabra="{{ Palabra_winner.palabra }}" ;
+						palabra= document.getElementById("radioL2").innerHTML ;
+						lan="es-ES";
+						break;
+					case "1" : 
+						palabra="{{Palabra_winner.traduccion}}" ;
+						palabra= document.getElementById("radioL1").innerHTML ;
+						lan="fr-FR";
+						break;
+						};
+				console.log(" -> decir :",palabra ,lan);
+					
+				Hablar(palabra,lan); 
+				};
+
+
+
+			// cas ou le programme est en auto play  le formulaire est renvoyé regulièrement 
+			if(localStorage.getItem("autoplaystatus")=="1") { 
+				timer=localStorage.getItem("autoplaytimer");
+				var formulaire = document.getElementById("form_vocabulaire");
+				switch(localStorage.getItem("hablaplaystatus")) { 
+					case "1" :
+						// cas ou la voix est utilisée : il faut lire le texte source  
+						var texto = new SpeechSynthesisUtterance(); 
+						switch (localStorage.getItem("lanswitchstatus")) {
+							case "0" :
+								// sens es-> fr  : comme on sort de la boucle on lit le texte en fr en radioL1  
+								texto.text=document.getElementById("radioL1").innerHTML;
+								texto.lang="fr-FR";
+								break;
+							case "1" : 
+								// sens fr-> es  : comme on sort de la boucle on lit le texte en es en radioL2 
+								texto.text=document.getElementById("radioL2").innerHTML;
+								texto.lang="es-ES";
+								break;
+							};
+						texto.onstart = () => console.log("onstart") ; 
+						// event sur fin de lecture afin que les sequences se passent sans se parler dessus 
+						texto.onend = () => formulaire.submit() ; 
+						// on declenche speechsynthesis apres un timer....  
+						// puis sur l event oneend de speechsynthesis on relance le formulaire 
+						setTimeout(()=>{speechSynthesis.speak(texto);},timer);
+						break;
+					case "0"  :
+						// ici  on relance apres un timer seulement 
+						setTimeout(()=>{formulaire.submit();},timer);
+						break;
+						};
+				};
 
 		});
 			// lors du clique sur le radio button mode  on appelle la fonction qui inverses les champs 	
@@ -141,14 +400,25 @@
 {% endblock %}
 
 {% block body1 %}
+<form id="form_vocabulaire" action= "{% url 'vocabulario_run'  1 Palabra_winner.id %}" method="post" >
+<input type="radio" value="0" name="lanselection" id="lanSPFRId" onchange="lanswitch('lanSPFRId')" > 
+<label for ="lanSPFRId"> SP->FR ?</label> 
 
-<form action= "{% url 'vocabulario_run'  1 Palabra_winner.id %}" method="post">
+<input type="radio" value="1" name="lanselection" id="lanFRSPId" onchange="lanswitch('lanFRSPId')" > 
+<label for ="lanFRSPId"> FR->SP ?</label> 
 
-<input type="radio" name="mode" id="FRES" value="FRES" onchange="togglefunction('radioL1','radioL2')"  >
-<label for ="FRES"> SP-> FR ?</label> 
 
-<input type="radio" name="mode" id="ESFR" value="ESSP" onchange="togglefunction('radioL2','radioL1')" >
-<label for ="ESFR"> FR->SP ?</label> 
+<input type="radio" value="1" name="pantalla" id="pantallaId" onclick="pantallaswitch('')" > 
+<label for ="pantallId"> pantalla min/max</label> 
+<br>
+
+<input type="radio" name="autoplay" id="autoplayId" value="autoplay" onclick="AutoPlay('form_vocabulaire')"  /> 
+<label  for="autolayId"> Auto Play </label> 
+<input type="number" id="autoplaytimerid" min="100" max="10000" onchange="AutoPlayTimerStoreValue()" /> 
+<label for="autoplaytimerid"> timer (ms) </label> 
+<input type="radio" name="hablaplay" id="hablaplayId" value="hablaplay" onclick="HablaPlay()"  /> 
+<label  for="hablaplayId"> Leer  </label> 
+<br> 
 <table id="worktable" > 
 	<tr> 
 		<td> 
@@ -161,12 +431,12 @@
 	</tr> 
 	<tr>
 		<td> 		
-			<span id="radioL1" > {{ Palabra_winner.traduccion }} </span> 
+			<span style="visibility:hidden" id="radioL1" > {{ Palabra_winner.traduccion }} </span> 
 		</td> 
 		<td>
 		</td> 
 		<td> 
-			<span id="radioL2" > {{ Palabra_winner.palabra }} </span> 
+			<span style="visibility:hidden"  id="radioL2" > {{ Palabra_winner.palabra }} </span> 
 		</td> 
 		<td> 
 			<span> ( {{ Palabra_winner.palabrafamilia }} )  </span> 
@@ -203,7 +473,7 @@
 </table> 
 
 			{% csrf_token %}
-		<input type="submit" value = " PROBAR " style="font-weight:bold">  </input>
+		<input type="button" value = " PROBAR " style="font-weight:bold" onclick="probar()">  </input>
 	
 
 			<span  id="mostrar_vocabulario" onclick="ShowHide('palabras_selectadas')" style="font-style:italic;background-color:lightgrey;border-radius:3px;padding:5px" >   
