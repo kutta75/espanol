@@ -184,27 +184,27 @@
 		};
 		function pantallaswitch() { 
 			// reduit les objets affichés et libere l'ecrans des elements de saisis 
-			console.log("-> pantallaswitch debut pantallastatus =",localStorage.getItem("pantallastatus")); 
-			switch(localStorage.getItem("pantallastatus")) { 
-				case "0" : 
+			console.log("-> pantallaswitch debut pantallastatus =",localStorage.getItem("pantallaministatus")); 
+			switch(localStorage.getItem("pantallaministatus")) { 
+				case "1" : 
 					// ici  passe en grand écran 
-					console.log("-> pantallaswitch case 0");
-					localStorage.setItem("pantallastatus","1");
+					console.log("-> pantallaswitch case 1");
+					localStorage.setItem("pantallaministatus","0");
 			//		document.getElementById("container").style.display="";
 			//		document.getElementById("navId").style.display="";
 			//		document.getElementById("wcb").style.display="";
-					document.getElementById("pantallaId").checked=true;
+					document.getElementById("pantallaId").checked=false;
 					pantalladisplay("");
 					break;
-				case "1" :
-					// ici  passe en grand écran 
-					console.log("-> pantallaswitch case 1");
-					localStorage.setItem("pantallastatus","0");
+				case "0" :
+					// ici  passe en petit écran 
+					console.log("-> pantallaswitch case 0");
+					localStorage.setItem("pantallaministatus","1");
 			//		document.getElementById("container").style.display="none";
 			//		document.getElementById("navId").style.display="none";
 			//		document.getElementById("wcb").style.display="none";
 					pantalladisplay("none");
-					document.getElementById("pantallaId").checked=false;
+					document.getElementById("pantallaId").checked=true;
 					break;
 			};
 		};
@@ -228,7 +228,7 @@
 		initvarlocal('hablaplaystatus');
 		initvarlocal('autoplaytimer');
 		initvarlocal('autoplaytimer');
-		initvarlocal('pantallastatus');
+		initvarlocal('pantallaministatus');
 		var compteurexo = 0 ; 
 
 
@@ -239,14 +239,14 @@
 			checklocal( {{jsnivels | safe }} ) ; 
 			checklocal( {{jsfechas | safe }} ) ;  
 			// mise a jour du status de la checkbox "pantalla" 
-			setCheck('pantallastatus','pantallaId');
+			setCheck('pantallaministatus','pantallaId');
 			// alignement des affichage sur le contenu de la variable pantallastatus
-			switch ( localStorage.getItem("pantallastatus") ) {
+			switch ( localStorage.getItem("pantallaministatus") ) {
 				case "0" : 
-					pantalladisplay("none");
+					pantalladisplay("");
 					break;
 				case "1" :
-					pantalladisplay("");
+					pantalladisplay("none");
 					break;
 			};
 			// ici on checke si le compteurexo existe en stockage local / si non on le crée   / si oui on le recupere 
@@ -409,7 +409,7 @@
 
 
 <input type="radio" value="1" name="pantalla" id="pantallaId" onclick="pantallaswitch('')" > 
-<label for ="pantallId"> pantalla min/max</label> 
+<label for ="pantallId"> pantalla mini </label> 
 <br>
 
 <input type="radio" name="autoplay" id="autoplayId" value="autoplay" onclick="AutoPlay('form_vocabulaire')"  /> 
