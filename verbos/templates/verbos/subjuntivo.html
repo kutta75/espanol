@@ -3,7 +3,7 @@
 {% block jsscript %}
 	<script  >
 	// init des variables locales des checkbox
-	console.log(" dans subju html s: script avant inivar");
+		console.log("--> dans subju html : script avant inivar");
 	initlocal({{ jsmodelos | safe }} );
 
 
@@ -12,7 +12,23 @@
 		console.log("subj : apres chargement page");
 		console.log("subj : jsmodelos"+{{jsmodelos| safe}});
 		checklocal( {{ jsmodelos  | safe }}) ;
+	
+		// event sur click de la boite checktodos cad select all 
+		document.querySelectorAll('input[name="checktodos"]').forEach (function(checkheader) { 
+			checkheader.onchange = function() { 
+				type=checkheader.dataset["type"];
+				bloc=document.querySelectorAll('input[name=' + type + ']');
+				for (var i=0 ; i < bloc.length ; i++ ) { 
+					if ( bloc[i].type = "checkbox" ) { 
+						bloc[i].checked= checkheader.checked ;
+						localStorage.setItem(bloc[i].id,checkheader.checked ) ;
+						}
+					}
+				}
+			});
+
 		
+
 		// ajout d'un event sur click checkbox 
 		document.querySelectorAll('[data-storage]').forEach(function(checkbox) { 
 		checkbox.onchange = function() { 

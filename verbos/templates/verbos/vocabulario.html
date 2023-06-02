@@ -316,7 +316,7 @@
 			document.querySelectorAll('input[name="checktodos"]').forEach(function(checkheader) {
 				checkheader.onchange = function()  { 
 					// recuperation data type de l'item select all cliqué 
-					type=checkheader.dataset["type"]
+					type=checkheader.dataset["type"];
 					// identificiation des checkbox on le name est la valeur de type 
 					bloc=document.querySelectorAll('input[name=' + type + ']');
 					for ( var i=0 ; i < bloc.length ; i++ ) {
@@ -339,19 +339,20 @@
 				// ici on lit le  texte à traduire
 				switch (localStorage.getItem("lanswitchstatus")) {
 					case "0" :
-						palabra="{{ Palabra_winner.palabra }}" ;
 						palabra= document.getElementById("radioL2").innerHTML ;
 						lan="es-ES";
 						break;
 					case "1" : 
-						palabra="{{Palabra_winner.traduccion}}" ;
 						palabra= document.getElementById("radioL1").innerHTML ;
 						lan="fr-FR";
 						break;
 						};
 				console.log(" -> decir :",palabra ,lan);
 					
-				Hablar(palabra,lan); 
+				if (localStorage.getItem("autoplaystatus") == "0" ) {
+					// on ne lit que si on n'est pas  en autoplay ( voir en dessous dans ce cas ) 
+					Hablar(palabra,lan); 
+					};
 				};
 
 
@@ -363,25 +364,40 @@
 				switch(localStorage.getItem("hablaplaystatus")) { 
 					case "1" :
 						// cas ou la voix est utilisée : il faut lire le texte source  
-						var texto = new SpeechSynthesisUtterance(); 
+						var textdeb = new SpeechSynthesisUtterance(); 
+						var textfin = new SpeechSynthesisUtterance(); 
 						switch (localStorage.getItem("lanswitchstatus")) {
 							case "0" :
 								// sens es-> fr  : comme on sort de la boucle on lit le texte en fr en radioL1  
-								texto.text=document.getElementById("radioL1").innerHTML;
-								texto.lang="fr-FR";
+								textdeb.text=document.getElementById("radioL2").innerHTML;
+								textdeb.lang="es-SP";
+								textfin.text=document.getElementById("radioL1").innerHTML;
+								textfin.lang="fr-FR";
+								// on affiche le texte à deviner pendant sa lecture
+								radioLfin="radioL1";
+								radioLdeb="radioL2";
 								break;
 							case "1" : 
 								// sens fr-> es  : comme on sort de la boucle on lit le texte en es en radioL2 
-								texto.text=document.getElementById("radioL2").innerHTML;
-								texto.lang="es-ES";
+								textdeb.text=document.getElementById("radioL1").innerHTML;
+								textdeb.lang="fr-FR";
+								textfin.text=document.getElementById("radioL2").innerHTML;
+								textfin.lang="es-ES";
+								// on affiche le texte à deviner pendant sa lecture
+								radioLfin="radioL2";
+								radioLdeb="radioL1";
 								break;
 							};
-						texto.onstart = () => console.log("onstart") ; 
-						// event sur fin de lecture afin que les sequences se passent sans se parler dessus 
-						texto.onend = () => formulaire.submit() ; 
-						// on declenche speechsynthesis apres un timer....  
+						textfin.onstart = () => console.log("onstart") ; 
+						// on lit le texte source / on attend le timer / on lit le texte cible / on renvoie le formulaire r....  
 						// puis sur l event oneend de speechsynthesis on relance le formulaire 
-						setTimeout(()=>{speechSynthesis.speak(texto);},timer);
+						// event sur fin de lecture afin que les sequences se passent sans se parler dessus 
+						textfin.onend = () => formulaire.submit() ; 
+						textdeb.onend = ()=> { setTimeout( () => {
+							document.getElementById(radioLfin).style.visibility="visible";
+							speechSynthesis.speak(textfin);},timer); } ;
+						
+						speechSynthesis.speak(textdeb) ; 
 						break;
 					case "0"  :
 						// ici  on relance apres un timer seulement 
@@ -393,7 +409,7 @@
 		});
 			// lors du clique sur le radio button mode  on appelle la fonction qui inverses les champs 	
 	</script>
-
+<F7>
 
 
 
