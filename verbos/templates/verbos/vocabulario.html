@@ -226,7 +226,7 @@
 		initvarlocal('lanswitchstatus'); 
 		initvarlocal('autoplaystatus');
 		initvarlocal('hablaplaystatus');
-		initvarlocal('autoplaytimer');
+		initvarlocal('autoplaystatus');
 		initvarlocal('autoplaytimer');
 		initvarlocal('pantallaministatus');
 		var compteurexo = 0 ; 
@@ -249,6 +249,9 @@
 					pantalladisplay("none");
 					break;
 			};
+
+
+			
 			// ici on checke si le compteurexo existe en stockage local / si non on le crée   / si oui on le recupere 
 			if (localStorage.getItem("compteurexo")== null )
 			{       localStorage.setItem("compteurexo","0");
@@ -267,6 +270,9 @@
 			{% if  mode  == "start" %}  
 				elt.style.opacity=0;
 			        compteurexo=0 ; 
+				console.log("=> mise en off des options autoplay et hablar lors du premier appel de la page ( pour eviter le declenchement auto ");
+				localStorage.setItem("hablaplaystatus","0"); 
+				localStorage.setItem("autoplaystatus","0"); 
 			{% endif %}
 			{% if  mode  == "run" %}
 				elt.style.opacity=1;

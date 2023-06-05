@@ -401,6 +401,7 @@ def vocabulario(request,mode_id,palabra_id):
             "Palabra_winner_prev" : Palabra_winner_prev,
             "Palabra_selectada_count" : Palabra_selectada_count , 
             "Palabra_selectadas" : Palabra_selectadas , 
+            "mode_id" : mode_id , 
         }
 
     return render(request,"verbos/vocabulario.html",context)
