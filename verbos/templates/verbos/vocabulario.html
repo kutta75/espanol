@@ -223,6 +223,7 @@
 		initlocal({{ jstipos | safe }} ); 
 		initlocal({{ jsnivels | safe }} ); 
 		initlocal({{ jsfechas | safe }} ); 
+		initlocal({{ jsgeneros | safe }} ); 
 		initvarlocal('lanswitchstatus'); 
 		initvarlocal('autoplaystatus');
 		initvarlocal('hablaplaystatus');
@@ -238,6 +239,7 @@
 			checklocal( {{jstipos | safe }} ) ; 
 			checklocal( {{jsnivels | safe }} ) ; 
 			checklocal( {{jsfechas | safe }} ) ;  
+			checklocal( {{jsgeneros | safe }} ) ;  
 			// mise a jour du status de la checkbox "pantalla" 
 			setCheck('pantallaministatus','pantallaId');
 			// alignement des affichage sur le contenu de la variable pantallastatus
@@ -540,7 +542,17 @@
 		 <br>
 		{% endfor %} 
 	</div>
-		<div>	
+	<div>
+		<input type="checkbox" id="checkbox_genero" name="checktodos" data-type="genero"> 
+		<label for="checkbox_genero" > Select all </label>
+		<br>
+		{% for genero  in generos %} 
+		<input type="checkbox" id="Palabragenero-{{genero.id}}" name="genero" value="{{genero.id}}"  data-storage="true"  > 
+		 <label  for="Palabragenero-{{genero.id}}" > {{genero}} </label>  
+		 <br>
+		{% endfor %} 
+	</div>
+	<div>	
 		<input type="checkbox" id="checkbox_fecha" name="checktodos" data-type="fecha"> 
 		<label for="checkbox_fecha" > Select all </label>
 		</br>

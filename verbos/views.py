@@ -360,8 +360,9 @@ def vocabulario(request,mode_id,palabra_id):
         tipos_selected = request.POST.getlist('tipo')
         fechas_selected = request.POST.getlist('fecha')
         nivels_selected = request.POST.getlist('nivel')
+        generos_selected = request.POST.getlist('genero')
         # construction du queryset basé sur la selections des checkbox 
-        Palabra_selectadas =Palabra.objects.filter(palabrafamilia__in=familias_selected).filter(palabratipo__in=tipos_selected).filter(palabrafecha__in=fechas_selected).filter(palabranivel__in=nivels_selected)
+        Palabra_selectadas =Palabra.objects.filter(palabrafamilia__in=familias_selected).filter(palabratipo__in=tipos_selected).filter(palabrafecha__in=fechas_selected).filter(palabranivel__in=nivels_selected).filter(palabragenero__in=generos_selected)
         # contage du nombre d'element du queryset  
         Palabra_selectada_count =Palabra_selectadas.count()
         #    familias_txt = familias_txt + str(familias_selected[i]) 
