@@ -1,5 +1,5 @@
 from django.shortcuts import render
-import random,json,subprocess,datetime   
+import random,json,subprocess,datetime,re   
 from django.forms.models import model_to_dict 
 from verbos.models import Verbo,Tiempo,Conjugacion,Pronombre,Verbotipo,Level,Palabra,Palabratipo,Palabragenero,Palabranivel,Palabrafamilia,Palabrafecha,Sub_modelo,Sub_princ,Sub_conj
 
@@ -338,7 +338,8 @@ def vocabulario(request,mode_id,palabra_id):
     generos =   Palabragenero.objects.all()
     nivels =    Palabranivel.objects.all() 
     fechas =    Palabrafecha.objects.all().order_by('palabrafecha') 
-    
+    lose_excluded=[]
+
     # cas de l'arrivée initiale dans l'ecran 
     if mode_id ==0 : 
         mode = "start"
@@ -361,9 +362,21 @@ def vocabulario(request,mode_id,palabra_id):
         fechas_selected = request.POST.getlist('fecha')
         nivels_selected = request.POST.getlist('nivel')
         generos_selected = request.POST.getlist('genero')
+        # instanciation de  la liste des noms à exclure
+        # la liste se presente comme une chaine de car dans le premier element de la liste lose_list
+        # ( qui vient d'un bouton invisible html)
+        # on doit donc d'abord recuperer cette chaine / la splitter dans une liste 
+        lose_excluded_str = re.split(',',request.POST.getlist('lose_list')[0] )
+        # et pour chaque element de la liste on doit el convertir  en entier 
+        lose_excluded=list(map(lambda x: int(x),lose_excluded_str))
+        #print("-> lose_excluded="+str(lose_excluded),type(lose_excluded),str(len(lose_excluded)))
+        #print("-> lose_excluded="+str(lose_excluded),type(lose_excluded),str(len(lose_excluded)))
         # construction du queryset basé sur la selections des checkbox 
-        Palabra_selectadas =Palabra.objects.filter(palabrafamilia__in=familias_selected).filter(palabratipo__in=tipos_selected).filter(palabrafecha__in=fechas_selected).filter(palabranivel__in=nivels_selected).filter(palabragenero__in=generos_selected)
-        # contage du nombre d'element du queryset  
+        #print("-> lose_excluded="+str(lose_excluded),type(lose_excluded),str(len(lose_excluded)))
+#        Palabra_selectadas_all =Palabra.objects.filter(palabrafamilia__in=familias_selected).filter(palabratipo__in=tipos_selected).filter(palabrafecha__in=fechas_selected).filter(palabranivel__in=nivels_selected).filter(palabragenero__in=generos_selected)
+#        Palabra_selectadas =Palabra_selectadas_all.exclude(id__in=lose_excluded)
+        Palabra_selectadas =Palabra.objects.filter(palabrafamilia__in=familias_selected).filter(palabratipo__in=tipos_selected).filter(palabrafecha__in=fechas_selected).filter(palabranivel__in=nivels_selected).filter(palabragenero__in=generos_selected).exclude(id__in=lose_excluded)
+        # comptage du nombre d'element du queryset  
         Palabra_selectada_count =Palabra_selectadas.count()
         #    familias_txt = familias_txt + str(familias_selected[i]) 
         if Palabra_selectada_count > 0 :
@@ -402,6 +415,7 @@ def vocabulario(request,mode_id,palabra_id):
             "Palabra_winner_prev" : Palabra_winner_prev,
             "Palabra_selectada_count" : Palabra_selectada_count , 
             "Palabra_selectadas" : Palabra_selectadas , 
+            "lose_excluded" : lose_excluded ,
             "mode_id" : mode_id , 
         }
 

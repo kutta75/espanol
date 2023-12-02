@@ -146,10 +146,29 @@
 
 
 		};
-		function probar() { 
+		function probar(lose_status) { 
 			// fonction declenclenchée lors du lancement du bouton Probar pour lancer un nouveau formulaire manuellement 
-			console.log("-> probar  debut");
+			console.log("-> probar  debut : lose_status=",lose_status);
+			// lose_status : cet argument sert à gerer le fait d'eliminer le mot qui vient d'être proposé des sélections ulutérieurese  
+			// ce service est appelé lorsqu'on appuie sur le bonton "lo sé" qui appelle la fonction "probar" avec l'argument "1"  
+			// le service à rendre est de ne plus proposer le mot à trouver car l'utilisateur le connait et ne souhaite plus etre testé avec 
+			// pour cela on met l'idi du mot dans une liste qui servira de liste d'exclusion dans la recherche ultérieure 
+			// 
+			switch ( lose_status) {
+				case "0" : 
+					console.log("-> probar  switch lose statut case ",lose_status);
+					break;
+				case "1" :
+					// mise à jour de la liste lose_liste avec l'idi du mot à deviner
+					console.log("-> probar  switch lostatus case" ,lose_status);
+					localStorage.setItem('lose_list', localStorage.getItem('lose_list')+","+"{{Palabra_winner.id }}");
+					// on crée une variable local dans le script afin de pouvoir la remonter vers le serveur via la commande GET
+					lose_list=localStorage.getItem('lose_list');
+					break;
+			};
 
+
+			
 			var formulaire = document.getElementById("form_vocabulaire");
 
 			switch ( localStorage.getItem("hablaplaystatus")) { 
@@ -216,7 +235,6 @@
 			document.getElementById("wcb").style.display=displayorder;
 			document.getElementById("tempId").style.display=displayorder;
 			};
-
 	
 		// creation & initialisation des variables locales basées sur la liste jsfamilias dans le cas ou les variable n'existent pas 
 		initlocal({{ jsfamilias | safe }} ); 
@@ -229,6 +247,8 @@
 		initvarlocal('hablaplaystatus');
 		initvarlocal('autoplaystatus');
 		initvarlocal('autoplaytimer');
+		// lose_list : liste des idi des mots dont on a indiqué qu'on les connaissait / donc à ne plus proposer = liste d'exclusion pour les requetes à venir 
+		initvarlocal('lose_list');
 		initvarlocal('pantallaministatus');
 		var compteurexo = 0 ; 
 
@@ -252,8 +272,15 @@
 					break;
 			};
 
+			{% if mode_id == 0 %}
+				// contexte du premiere appel de la page ( url 0/1 ) on efface lose_list en storage 
+				localStorage.setItem("lose_list","0");
+			{% endif %}
+			//ici on charge la valeur du champ en input loe_input par la liste des id des noms qu'on ne veut plus retester 
+			// => la liste sera remonte via le champs name dans le programme en views
+			document.getElementById("lose_input").value=localStorage.getItem("lose_list")
+			//console.log("==> lose_list chargé avec =",lose_list)
 
-			
 			// ici on checke si le compteurexo existe en stockage local / si non on le crée   / si oui on le recupere 
 			if (localStorage.getItem("compteurexo")== null )
 			{       localStorage.setItem("compteurexo","0");
@@ -280,6 +307,9 @@
 				elt.style.opacity=1;
 				compteurexo++ ; 
 			{%endif %}
+			// on crée une variable local dans le script afin de pouvoir la remonter vers le serveur via la commande GET
+			lose_list=localStorage.getItem("lose_list");
+
 			localStorage.setItem("compteurexo",compteurexo);
 
 			// ici affichage de la derniere ligne du tableau  
@@ -442,7 +472,7 @@
 <label for="autoplaytimerid"> timer (ms) </label> 
 <input type="radio" name="hablaplay" id="hablaplayId" value="hablaplay" onclick="HablaPlay()"  /> 
 <label  for="hablaplayId"> Leer  </label> 
-<br> 
+<br>  
 <table id="worktable" > 
 	<tr> 
 		<td> 
@@ -497,8 +527,11 @@
 </table> 
 
 			{% csrf_token %}
-		<input type="button" value = " PROBAR " style="font-weight:bold" onclick="probar()">  </input>
+		<input type="button" value = " PROBAR " style="font-weight:bold" onclick="probar('0')">  </input>
 	
+		<input type="button" value = "Lo sé!"   style="font-weight:bold" onclick="probar('1')">  </input>
+		<input type="hidden" id="lose_input" name="lose_list" value="0">  
+
 
 			<span  id="mostrar_vocabulario" onclick="ShowHide('palabras_selectadas')" style="font-style:italic;background-color:lightgrey;border-radius:3px;padding:5px" >   
 			 {{ Palabra_selectada_count }} 
