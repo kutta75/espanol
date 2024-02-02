@@ -26,7 +26,14 @@ table, th,td,tr {
 	color:green;
 	font-style:italic ;
 	}
-
+.exemple_rouge { 
+	color:red;
+	font-style:italic ;
+	}
+.exemple_cyan  { 
+	color:cyan;
+	font-style:italic ;
+	}
 {% endblock %} 
 
 {% block jsscript %} 
@@ -812,9 +819,9 @@ Attention aux mots se terminant par és  , íon qui , au pluriel , prennent une 
 </thead>
 	<tr> 
 		<td> Présent </td>
-		<td> <span style="background-color:ffe694">  Présent ou <br> futur </td>
-		<td> présent ou <br> futur  </td>  
-		<td> présent ou <br> futur </td> 
+		<td> <span style="background-color:ffe694;">  Présent ou <br> futur </td>
+		<td><span class="exemple_rouge"> présent ou <br> futur  </td>  
+		<td> <span class="exemple_rouge"> présent ou <br> futur </td> 
 		<td> <span class="exemple_vert"> PRESENT   </td>  
 		<td> <span class="exemple" > es necesario que trabajes <br> será necesario que vayas </td>
 			
@@ -823,7 +830,7 @@ Attention aux mots se terminant par és  , íon qui , au pluriel , prennent une 
 		<td> Passé </td> 
 		<td> Présent ou <br> futur </td> 
 		<td> Présent ou <br> futur </td>  
-		<td> Passé </td>
+		<td> <span class="exemple_cyan"> Passé </td>
 		<td> <span class="exemple_vert"> Preterito Perfecto </td>  
 		<td> <span class="exemple" > es necesario que haya trabajado <br> </td>
 	</tr>
