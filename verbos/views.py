@@ -337,7 +337,7 @@ def vocabulario(request,mode_id,palabra_id):
     tipos  =    Palabratipo.objects.all()
     generos =   Palabragenero.objects.all()
     nivels =    Palabranivel.objects.all() 
-    fechas =    Palabrafecha.objects.all().order_by('palabrafecha') 
+    fechas =    Palabrafecha.objects.all().order_by('-palabrafecha') 
     lose_excluded=[]
 
     # cas de l'arrivée initiale dans l'ecran 
