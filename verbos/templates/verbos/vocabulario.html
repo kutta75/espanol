@@ -235,7 +235,41 @@
 			document.getElementById("wcb").style.display=displayorder;
 			document.getElementById("tempId").style.display=displayorder;
 			};
-	
+		// fonctions de reconnaissance vocale !!! 
+
+		function oir() { 
+			console.log("funcion oir ! listo para escuchar y escribir") 
+		};
+		function OirPlay() { 
+			console.log("funcion Oirplay click  ! listo para escuchar y escribir") 
+			// appellé lors click surle bouton oir  
+			oirplaystatus=localStorage.getItem('oirplaystatus'); 
+			console.log("-> oirPlay start : var oirplaystatus = ",oirplaystatus) ;
+			switch (oirplaystatus) {
+				case null :
+					localStorage.setItem("oirplaystatus","0");
+					document.getElementById("oirplayId").checked=false; 
+					console.log("-> oirPlay : localstorage oirplaystatus initialité à 0") ;
+					break; 
+				case "1":
+					localStorage.setItem("oirplaystatus","0");
+					document.getElementById("oirplayId").checked=false; 
+					break;
+				case "0":
+					localStorage.setItem("oirplaystatus","1");
+					document.getElementById("oirplayId").checked=true; 
+					break;
+
+			};
+		};
+		};
+
+		
+
+
+
+
+		
 		// creation & initialisation des variables locales basées sur la liste jsfamilias dans le cas ou les variable n'existent pas 
 		initlocal({{ jsfamilias | safe }} ); 
 		initlocal({{ jstipos | safe }} ); 
@@ -245,6 +279,7 @@
 		initvarlocal('lanswitchstatus'); 
 		initvarlocal('autoplaystatus');
 		initvarlocal('hablaplaystatus');
+		initvarlocal('oirplaystatus');
 		initvarlocal('autoplaystatus');
 		initvarlocal('autoplaytimer');
 		// lose_list : liste des idi des mots dont on a indiqué qu'on les connaissait / donc à ne plus proposer = liste d'exclusion pour les requetes à venir 
@@ -472,6 +507,8 @@
 <label for="autoplaytimerid"> timer (ms) </label> 
 <input type="radio" name="hablaplay" id="hablaplayId" value="hablaplay" onclick="HablaPlay()"  /> 
 <label  for="hablaplayId"> Leer  </label> 
+<input type="radio" name="oirplay" id="oirplayId" value="oirplay" onclick="OirPlay()"  /> 
+<label  for="oirplayId"> Oir </label> 
 <br>  
 <table id="worktable" > 
 	<tr> 
