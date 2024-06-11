@@ -159,11 +159,20 @@
 					console.log("-> probar  switch lose statut case ",lose_status);
 					break;
 				case "1" :
-					// mise à jour de la liste lose_liste avec l'idi du mot à deviner
-					console.log("-> probar  switch lostatus case" ,lose_status);
-					localStorage.setItem('lose_list', localStorage.getItem('lose_list')+","+"{{Palabra_winner.id }}");
-					// on crée une variable local dans le script afin de pouvoir la remonter vers le serveur via la commande GET
-					lose_list=localStorage.getItem('lose_list');
+					// modif 11/6/24 : insertion du la fonction oir  ici 
+					// si l'utilisateur utilise oir alors on insere une etape d'ecoute  
+					oirplaystatus=localStorage.getItem('oirplaystatus');
+					switch ( oirplaystatus ) { 
+						case "0" :
+							// mise à jour de la liste lose_liste avec l'idi du mot à deviner réputé deviné su / donc plus proposé 
+							console.log("-> probar  switch lostatus case" ,lose_status);
+							localStorage.setItem('lose_list', localStorage.getItem('lose_list')+","+"{{Palabra_winner.id }}");
+							// on crée une variable local dans le script afin de pouvoir la remonter vers le serveur via la commande GET
+							lose_list=localStorage.getItem('lose_list');
+						case "1" :
+							console.log("escucho aqui");
+						break;
+					};
 					break;
 			};
 
