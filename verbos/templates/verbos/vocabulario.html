@@ -154,11 +154,110 @@
 			// le service à rendre est de ne plus proposer le mot à trouver car l'utilisateur le connait et ne souhaite plus etre testé avec 
 			// pour cela on met l'idi du mot dans une liste qui servira de liste d'exclusion dans la recherche ultérieure 
 			// 
+			// modif 13/6/24
+			var key = localStorage.getItem("hablaplaystatus") + localStorage.getItem("oirplaystatus") + lose_status; 
+				
+			var formulaire = document.getElementById("form_vocabulaire");
+			console.log("probar key=",key ) ; 
+			switch (key) {
+				case "000" : 
+					console.log("probar key = 000");
+					// ici pas de lecture  on soumet le formulaire 
+					formulaire.submit() ; 
+					break;
+				case "001" :
+					// mise à jour de la liste lose_liste avec l'idi du mot à deviner réputé deviné su / donc plus proposé 
+					console.log("-> probar key=001 switch lostatus case" ,lose_status);
+					localStorage.setItem('lose_list', localStorage.getItem('lose_list')+","+"{{Palabra_winner.id }}");
+					// on crée une variable local dans le script afin de pouvoir la remonter vers le serveur via la commande GET
+					lose_list=localStorage.getItem('lose_list');
+					formulaire.submit() ; 
+				case "100" :
+					// ici on lit la solution sans mettre à jour la liste 
+					var texto = new SpeechSynthesisUtterance(); 
+					switch (localStorage.getItem("lanswitchstatus")) {
+						case "0" :
+						// sens espagnol vers francais : comme on sort de la boucle on lit le texte en francais  
+						texto.text=document.getElementById("radioL1").innerHTML;
+						texto.lang="fr-FR";
+						break;
+						case "1" : 
+						// sens francais vers espagnols : comme on sort de la boucle on lit le texte en espagnol  
+						texto.text=document.getElementById("radioL2").innerHTML;
+						texto.lang="es-ES";
+						break;
+					};
+					texto.onstart = () => console.log("onstart") ; 
+					texto.onend = () => formulaire.submit() ; 
+					speechSynthesis.speak(texto) ;
+					break;
+				case "101" : 
+					// ici on lit la solution et on  met à jour la liste 
+					// mise à jour de la liste lose_liste avec l'idi du mot à deviner réputé deviné su / donc plus proposé 
+					console.log("-> probar key=101 switch lostatus case" ,lose_status);
+					localStorage.setItem('lose_list', localStorage.getItem('lose_list')+","+"{{Palabra_winner.id }}");
+					// on crée une variable local dans le script afin de pouvoir la remonter vers le serveur via la commande GET
+					lose_list=localStorage.getItem('lose_list');
+					var texto = new SpeechSynthesisUtterance(); 
+					switch (localStorage.getItem("lanswitchstatus")) {
+						case "0" :
+						// sens espagnol vers francais : comme on sort de la boucle on lit le texte en francais  
+						texto.text=document.getElementById("radioL1").innerHTML;
+						texto.lang="fr-FR";
+						break;
+						case "1" : 
+						// sens francais vers espagnols : comme on sort de la boucle on lit le texte en espagnol  
+						texto.text=document.getElementById("radioL2").innerHTML;
+						texto.lang="es-ES";
+						break;
+					};
+					texto.onstart = () => console.log("onstart") ; 
+					texto.onend = () => formulaire.submit() ; 
+					speechSynthesis.speak(texto) ;
+					break;
+				case "010" : // ici on ecoute juste ce que dit l'utilisateur et on le transcrit 
+					const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+					if (!SpeechRecognition) { 
+						alert("votre navigateur ne supporte pas l'api web Speech");
+						break;
+						};
+					console.log("hablar coase 010"); 
+					const recognition = new SpeechRecognition(); 
+					recognition.lang="es-SP";
+					recognition.interimResults=false;
+					recognition.maxAlternatives=1; 
+					recognition.addEventListener('result', (event) => {
+						const transcript = event.results[0][0].transcript ;
+						toto=transcript ;
+						console.log("hablar : texte entendu",toto );
+						localStorage.setItem("speechresult",toto); 
+						});
+					localtimer= 1000 ; 
+					recognition.addEventListener('error', (event) => { 
+						console.error('hablar error reconnaissance vocale : ${event.error}');
+						});
+					recognition.addEventListener('end',() => {
+						document.getElementById("recordingid").innerHTML="";
+						setTimeout(formulaire.submit(),localtimer) ;
+						} ) ;
+
+					document.getElementById("recordingid").innerHTML="RECCORDING";
+					recognition.start();
+
+					break;
+
+
+
+				};
+
+
+
+			// old run  
 			switch ( lose_status) {
-				case "0" : 
+				case "00" : 
 					console.log("-> probar  switch lose statut case ",lose_status);
 					break;
-				case "1" :
+				case "10" :
 					// modif 11/6/24 : insertion du la fonction oir  ici 
 					// si l'utilisateur utilise oir alors on insere une etape d'ecoute  
 					oirplaystatus=localStorage.getItem('oirplaystatus');
@@ -176,12 +275,10 @@
 					break;
 			};
 
-
 			
-			var formulaire = document.getElementById("form_vocabulaire");
 
 			switch ( localStorage.getItem("hablaplaystatus")) { 
-				case "1" :
+				case "10" :
 					// cas ou la voix est utilisée : il faut lire le texte solution 
 					var texto = new SpeechSynthesisUtterance(); 
 					switch (localStorage.getItem("lanswitchstatus")) {
@@ -202,7 +299,7 @@
 					texto.onend = () => formulaire.submit() ; 
 					speechSynthesis.speak(texto) ;
 					break;
-				case "0" : 
+				case "00" : 
 					// ici pas de lecture  on soumet le formulaire 
 					formulaire.submit() ; 
 					break;
@@ -251,7 +348,9 @@
 		};
 		function OirPlay() { 
 			console.log("funcion Oirplay click  ! listo para escuchar y escribir") 
-			// appellé lors click surle bouton oir  
+			// appellé lors click surle bouton oir  : met à jour la variable locale oirplaystatus ( en l'inversant ) qui indique le status 
+			//  0  : le systeme n'ecoute pas sur le micro la prononciation du mot 
+			//  1  : le systeme ecoute le mot / le convertit en texte et teste si le texte lu est celui du test en cours dans l'exercice
 			oirplaystatus=localStorage.getItem('oirplaystatus'); 
 			console.log("-> oirPlay start : var oirplaystatus = ",oirplaystatus) ;
 			switch (oirplaystatus) {
@@ -315,6 +414,25 @@
 			{% if mode_id == 0 %}
 				// contexte du premiere appel de la page ( url 0/1 ) on efface lose_list en storage 
 				localStorage.setItem("lose_list","0");
+				localStorage.setItem("speechresult","----"); 
+			{% endif %}
+			{% if mode_id == 1 %}
+				// contexte d'un appel n  du formulaire apres des appels précédents  
+				// affichage du champs speechresult capture dans le formulaore précedent et effacement de la valeur stockée en locale 
+				speechresult=localStorage.getItem("speechresult"); 
+				document.getElementById("speechresultid").innerHTML=speechresult; 
+				localStorage.setItem("speechresult",".........."); 
+				palabra_prev=document.getElementById("palabra_winner_prev_id").innerHTML;
+				console.log("speechresult=>",speechresult,"<=");
+				console.log("palabra_prev=>",palabra_prev,"<=");
+
+				// test si le champs prononcé matche avec 
+				if (speechresult.replaceAll(' ','').toLowerCase() == palabra_prev.replaceAll(' ','').toLowerCase()) 
+					{ document.getElementById("speechresultid").style.color="green";
+					document.getElementById("speechresultid").style.backgroundColor="yellow";
+					console.log("matching words") ;
+					};
+
 			{% endif %}
 			//ici on charge la valeur du champ en input loe_input par la liste des id des noms qu'on ne veut plus retester 
 			// => la liste sera remonte via le champs name dans le programme en views
@@ -383,6 +501,8 @@
 			AutoPlayTimerSet("autoplaytimer","autoplaytimerid");
 			// mise a jour du status de la checkbox "autoplay" 
 			setCheck('hablaplaystatus','hablaplayId');
+			// mise a jour du status de la checkbox "oir" 
+			setCheck('oirplaystatus','oirplayId');
 
 			// mise en evidence en rouge de quelque chose 
 			document.querySelectorAll('span').forEach(function(span) {
@@ -547,7 +667,7 @@
 	</tr>
 	<tr id="tableau_r3">
 		<td>
-			<span> {{ Palabra_winner_prev.traduccion }} </span> 
+			<span id="palabra_winner_prev_traduccion_id"> {{ Palabra_winner_prev.traduccion }} </span> 
 		</td>
 		<td>
 		</td> 
@@ -555,7 +675,7 @@
 			<span> {{ Palabra_winner_prev.palabragenero }} </span> 
 		</td> 
 		<td> 
-			<span> {{ Palabra_winner_prev.palabra }} </span> 
+			<span id="palabra_winner_prev_id"> {{ Palabra_winner_prev.palabra }} </span> 
 		</td> 
 		<td>
 		</td> 
@@ -564,7 +684,13 @@
 		</td> 
 		<td> 
 			<span> {{ Palabra_winner_prev.palabranivel }} </span> 
-		</td> 
+		</td>
+	</tr> 
+	<tr> 
+		<td colspan="3">  <span id="recordingid"> </span>   </td> 
+		<td> <span id="speechresultid">  </span> </td> 
+	</tr> 
+
 
 </table> 
 
