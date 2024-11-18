@@ -175,7 +175,8 @@
 				case "100" :
 					// ici on lit la solution sans mettre à jour la liste 
 					var texto = new SpeechSynthesisUtterance(); 
-					switch (localStorage.getItem("lanswitchstatus")) {
+					switch (localStorage.getItem("lanswitchstatus"))
+						{
 						case "0" :
 						// sens espagnol vers francais : comme on sort de la boucle on lit le texte en francais  
 						texto.text=document.getElementById("radioL1").innerHTML;
@@ -186,7 +187,8 @@
 						texto.text=document.getElementById("radioL2").innerHTML;
 						texto.lang="es-ES";
 						break;
-					};
+						default:
+						};
 					texto.onstart = () => console.log("onstart") ; 
 					texto.onend = () => formulaire.submit() ; 
 					speechSynthesis.speak(texto) ;
@@ -199,7 +201,8 @@
 					// on crée une variable local dans le script afin de pouvoir la remonter vers le serveur via la commande GET
 					lose_list=localStorage.getItem('lose_list');
 					var texto = new SpeechSynthesisUtterance(); 
-					switch (localStorage.getItem("lanswitchstatus")) {
+					switch (localStorage.getItem("lanswitchstatus")) 
+						{
 						case "0" :
 						// sens espagnol vers francais : comme on sort de la boucle on lit le texte en francais  
 						texto.text=document.getElementById("radioL1").innerHTML;
@@ -210,18 +213,19 @@
 						texto.text=document.getElementById("radioL2").innerHTML;
 						texto.lang="es-ES";
 						break;
-					};
+						};
 					texto.onstart = () => console.log("onstart") ; 
 					texto.onend = () => formulaire.submit() ; 
 					speechSynthesis.speak(texto) ;
 					break;
-				case "010" : // ici on ecoute juste ce que dit l'utilisateur et on le transcrit 
+				case "010": case "110": case "011": case "111":   // ici on ecoute juste ce que dit l'utilisateur et on le transcrit 
 					const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-					if (!SpeechRecognition) { 
+					if (!SpeechRecognition) 
+						{ 
 						alert("votre navigateur ne supporte pas l'api web Speech");
 						break;
 						};
-					console.log("hablar coase 010"); 
+					console.log("hablar case 010 110"); 
 					const recognition = new SpeechRecognition(); 
 					recognition.lang="es-SP";
 					recognition.interimResults=false;
@@ -230,7 +234,7 @@
 						const transcript = event.results[0][0].transcript ;
 						toto=transcript ;
 						console.log("hablar : texte entendu",toto );
-						localStorage.setItem("speechresult",toto); 
+						localStorage.setItem("speechresult",toto);
 						});
 					localtimer= 1000 ; 
 					recognition.addEventListener('error', (event) => { 
@@ -238,15 +242,56 @@
 						});
 					recognition.addEventListener('end',() => {
 						document.getElementById("recordingid").innerHTML="";
-						setTimeout(formulaire.submit(),localtimer) ;
-						} ) ;
+						// si le mot prononcé et reconnu est le mot cherché, on le retire de la liste
+						toto=localStorage.getItem("speechresult")
+						console.log("PROBAR CASE 010:",toto,"{{Palabra_winner.palabra}}") 
+						Palabra_prev_var="{{Palabra_winner.palabra}}"
+				//		alert("comparaison de "+toto+" avec "+Palabra_prev_var)
+						// test si egalité du mot prononcé avec le mot proposé  : si ok on ajoute ce mot à la liste des mots a ne plus tester 
+						if ((lose_status == "1") || (toto.replaceAll(' ','').toLowerCase() == Palabra_prev_var.replaceAll(' ','').toLowerCase()))  
+							{
+							console.log("PROBAR CASE 010 : => supression du reccord :",toto);
+							localStorage.setItem('lose_list', localStorage.getItem('lose_list')+","+"{{Palabra_winner.id }}");
+							};
+						switch (key) 
+							{
+							case "010": case "011":
+								// pas besoin de lire le texte solution
+								setTimeout(formulaire.submit(),localtimer) ;
+								break;
+							case "110": case "111":
+								// ici on lit la reponse avant de renvoyer le formulaire 
+				//				alert("PROBAR lecture solution key="+key);
+								var texto = new SpeechSynthesisUtterance(); 
+				//				switch (localStorage.getItem("lanswitchstatus")) {
+				//					case "0" :
+				//						// sens espagnol vers francais : comme on sort de la boucle on lit le texte en francais  
+				//						texto.text=document.getElementById("radioL1").innerHTML;
+				//						texto.lang="fr-FR";
+				//						break;
+				//					case "1" : 
+				//						// sens francais vers espagnols : comme on sort de la boucle on lit le texte en espagnol  
+				//						texto.text=document.getElementById("radioL2").innerHTML;
+				//						texto.lang="es-ES";
+				//						break;
+				//					default:
+				//						console.log("hablar : fin test sens ES SP"); 
+				//					};
+								texto.onstart = () => console.log("onstart") ; 
+								texto.text=document.getElementById("radioL2").innerHTML;
+								texto.lang="es-ES";
+								texto.onend = () => formulaire.submit() ; 
+								speechSynthesis.speak(texto) ;
+								break;
+							default:
+								console.log("PROBAR fin case lecture");
+							};
+						});
 
 					document.getElementById("recordingid").innerHTML="RECCORDING";
 					recognition.start();
 
 					break;
-
-
 
 				};
 
