@@ -248,7 +248,7 @@
 						Palabra_prev_var="{{Palabra_winner.palabra}}"
 				//		alert("comparaison de "+toto+" avec "+Palabra_prev_var)
 						// test si egalité du mot prononcé avec le mot proposé  : si ok on ajoute ce mot à la liste des mots a ne plus tester 
-						if ((lose_status == "1") || (toto.replaceAll(' ','').toLowerCase() == Palabra_prev_var.replaceAll(' ','').toLowerCase()))  
+						if ((lose_status == "1") || (toto.replaceAll(' ','').replaceAll(",","").toLowerCase() == Palabra_prev_var.replaceAll(' ','').replaceAll(",","").toLowerCase()))  
 							{
 							console.log("PROBAR CASE 010 : => supression du reccord :",toto);
 							localStorage.setItem('lose_list', localStorage.getItem('lose_list')+","+"{{Palabra_winner.id }}");
@@ -472,7 +472,7 @@
 				console.log("palabra_prev=>",palabra_prev,"<=");
 
 				// test si le champs prononcé matche avec 
-				if (speechresult.replaceAll(' ','').toLowerCase() == palabra_prev.replaceAll(' ','').toLowerCase()) 
+				if (speechresult.replaceAll(' ','').replaceAll(",","").toLowerCase() == palabra_prev.replaceAll(' ','').replaceAll(",","").toLowerCase()) 
 					{ document.getElementById("speechresultid").style.color="green";
 					document.getElementById("speechresultid").style.backgroundColor="yellow";
 					console.log("matching words") ;
