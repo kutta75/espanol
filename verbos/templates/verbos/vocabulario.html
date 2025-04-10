@@ -365,6 +365,7 @@
 			//		document.getElementById("wcb").style.display="";
 					document.getElementById("pantallaId").checked=false;
 					pantalladisplay("");
+					pantallafontsize("normal");
 					break;
 				case "0" :
 					// ici  passe en petit écran 
@@ -375,6 +376,7 @@
 			//		document.getElementById("wcb").style.display="none";
 					pantalladisplay("none");
 					document.getElementById("pantallaId").checked=true;
+					pantallafontsize("x-large");
 					break;
 			};
 		};
@@ -385,6 +387,13 @@
 			document.getElementById("navId").style.display=displayorder;
 			document.getElementById("wcb").style.display=displayorder;
 			document.getElementById("tempId").style.display=displayorder;
+			};
+		function pantallafontsize(fontsize) { 
+			// modification de la taille de la police de caractere lorsque l ecran est réduit 
+			document.getElementById("radioL1").style.fontSize=fontsize;
+			document.getElementById("radioL2").style.fontSize=fontsize;
+			document.getElementById("palabra_winner_prev_id").style.fontSize=fontsize;
+			document.getElementById("palabra_winner_prev_traduccion_id").style.fontSize=fontsize;
 			};
 		// fonctions de reconnaissance vocale !!! 
 
@@ -450,9 +459,11 @@
 			switch ( localStorage.getItem("pantallaministatus") ) {
 				case "0" : 
 					pantalladisplay("");
+					pantallafontsize("normal");
 					break;
 				case "1" :
 					pantalladisplay("none");
+					pantallafontsize("x-large");
 					break;
 			};
 
