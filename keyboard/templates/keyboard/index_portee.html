@@ -71,7 +71,7 @@
 {% block myscript %}  
 	<script> 
 function playnote(myid) {
-	console.log("playnote 1 myid" + myid ); 
+	console.log("==> playnote 1 myid" + myid ); 
 	note = document.getElementById(myid);
 	ny=parseInt(note.getAttribute("cy"));
 	ny=(ny+5) % 240;
@@ -145,7 +145,7 @@ function musicnotechange() {
 
 function drawnote(myid,mynote) {
 	// fonction d'affichage des notes ( img norirhd ) et de la touche associée sur le clacvier ( key) 
-	console.log("playnote 1 myid" + myid + " mynote" + mynote ); 
+	console.log("==> drawnote:  myid" + myid + " mynote" + mynote ); 
 	note = document.getElementById(myid);
 	ny=parseInt(note.getAttribute("y"));
 	if (keylaunch == "1" ) { 
@@ -195,6 +195,14 @@ function drawnote(myid,mynote) {
 	notenom=(mynote+4)%7 ; 
 	document.getElementById("randomkey").innerHTML= iterationcount  ; 
 	document.getElementById("keytext").innerHTML= portee[notenom]  ; 
+	const 	audioconst01=document.getElementById("audioplayer01"); 
+	const 	audioconst02=document.getElementById("audioplayer02");
+	noteidi=104+key
+	notefile="/static/keyboard/notes/k"+noteidi.toString()+".mp3" 
+	audioconst01.setAttribute("src",notefile);
+	audioconst01.play(); 
+	// audioconst02.play(); 
+	console.log("=> drawnote : key:" + key + " file :"+notefile); 
 
 	console.log("drawnote note nom  " + notenom + " nom " + portee[notenom] ); 	
 	document.getElementById(key_id).setAttribute('fill',"yellow") ;
@@ -254,9 +262,9 @@ document.addEventListener('DOMContentLoaded', () => {
 			} ; 
 		const note = document.getElementById("noirehd");
 		note.addEventListener('animationiteration',noteiterationlistener);
-//		note.addEventListener('animationriteration',()=> { 
+//		note.addEventListener('animationiteration',()=> { 
 //			iterationcount++ ; 
-//			console.log("animation count" + iterationcounnt ); 
+	//		console.log("===>animation count" + iterationcounnt ); 
 //		}); 
 		playmode="stopped"; 
 //              cadencems=localStorage.getItem("cadencems");
@@ -329,6 +337,13 @@ document.addEventListener('DOMContentLoaded', () => {
 	<input type="checkbox" id="keyshow" name="keyshow" value="show note" onclick="keyshow();" checked>  
 	<label for="keyshow"> show key  </label>  
 	<span id="randomkey"> </span> 
+	<br>
+	<audio id="audioplayer01" nocontrols autoplay> 
+		<source src="{% static 'keyboard/notes/k115.mp3' %}" type ="audio/mp3" > 
+	</audio> 
+	<audio id="audioplayer02" nocontrols autoplay> 
+		<source src="{% static 'keyboard/notes/k114.mp3' %}" type ="audio/mp3" > 
+	</audio> 
 </div> 
 <div  class="item2">
 	<svg  viewBox="0 0 600 180" xmlns="http://www.w3.org/2000/svg" version="1.1">
