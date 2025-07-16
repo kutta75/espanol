@@ -87,23 +87,38 @@
 
 			}; 
 		};
-		function HablaPlay() {
-			// appellé lors click surle bouton Habla 
-			hablaplaystatus=localStorage.getItem('hablaplaystatus'); 
+		function HablaPlay(idioma) {
+			// appellé lors click surle bouton Habla on met a jour les variables locales hablaplaystatus 
+			console.log("-> HablaPlay start : var idioma  = ",idioma) ;
+			// on met a jour les 2 variables qui servent à identifier la variable locale et la checkbox a mettre à jour 
+			switch(idioma) {
+				case "ES": 
+					// variable local pour l'espagnol  
+					localstorage="hablaplaystatus"
+					checkbox="hablaplayId"
+					break;
+				case "FR" : 
+					// variable local pour l'espagnol francais 
+					localstorage="hablaplaystatusFR"
+					checkbox="hablaplayFRId"
+					break;
+			}
+
+			hablaplaystatus=localStorage.getItem(localstorage); 
 			console.log("-> HablaPlay start : var hablaplaystatus = ",hablaplaystatus) ;
 			switch (hablaplaystatus) {
 				case null :
-					localStorage.setItem("hablaplaystatus","0");
-					document.getElementById("hablaplayId").checked=false; 
+					localStorage.setItem(localstorage,"0");
+					document.getElementById(checkbox).checked=false; 
 					console.log("-> HablaPlay : localstorage hablaplaystatus initialité à 0") ;
 					break; 
 				case "1":
-					localStorage.setItem("hablaplaystatus","0");
-					document.getElementById("hablaplayId").checked=false; 
+					localStorage.setItem(localstorage,"0");
+					document.getElementById(checkbox).checked=false; 
 					break;
 				case "0":
-					localStorage.setItem("hablaplaystatus","1");
-					document.getElementById("hablaplayId").checked=true; 
+					localStorage.setItem(localstorage,"1");
+					document.getElementById(checkbox).checked=true; 
 					break;
 
 			};
@@ -155,7 +170,15 @@
 			// pour cela on met l'idi du mot dans une liste qui servira de liste d'exclusion dans la recherche ultérieure 
 			// 
 			// modif 13/6/24
-			var key = localStorage.getItem("hablaplaystatus") + localStorage.getItem("oirplaystatus") + lose_status; 
+			// on synthétise dans hablastus   si on doit lire dans une langue et / ou l'autre  
+			if ((localStorage.getItem("hablaplaystatus")=="1") || (localStorage.getItem("hablaplaystatusFR")=="1")) { 
+				hablastatus="1"; } 
+			else {
+				hablastatus="0"; } 
+			// si hablastatus vaut 1 alors il faut lire 
+
+			console.log("-> probar hablastatus=",hablastatus) 
+			var key = hablastatus.toString() + localStorage.getItem("oirplaystatus") + lose_status; 
 				
 			var formulaire = document.getElementById("form_vocabulaire");
 			console.log("probar key=",key ) ; 
@@ -179,14 +202,24 @@
 						{
 						case "0" :
 						// sens espagnol vers francais : comme on sort de la boucle on lit le texte en francais  
-						texto.text=document.getElementById("radioL1").innerHTML;
-						texto.lang="fr-FR";
-						break;
+							if (localStorage.getItem("hablaplaystatusFR")=="1") {
+								texto.text=document.getElementById("radioL1").innerHTML;
+					//			texto.text="espagnol francais reponse";
+							}
+							else 
+								{ texto.text=" "; }
+							texto.lang="fr-FR";
+							break;
 						case "1" : 
 						// sens francais vers espagnols : comme on sort de la boucle on lit le texte en espagnol  
-						texto.text=document.getElementById("radioL2").innerHTML;
-						texto.lang="es-ES";
-						break;
+							if (localStorage.getItem("hablaplaystatus")=="1") {
+								texto.text=document.getElementById("radioL2").innerHTML;
+					//			texto.text="francais espagnol reponse";
+							}
+							else 
+								{ texto.text=" "; }
+							texto.lang="es-ES";
+							break;
 						default:
 						};
 					texto.onstart = () => console.log("onstart") ; 
@@ -214,7 +247,7 @@
 						texto.lang="es-ES";
 						break;
 						};
-					texto.onstart = () => console.log("onstart") ; 
+					texto.onstart = () => console.log("PROBAR case 101 onstart") ; 
 					texto.onend = () => formulaire.submit() ; 
 					speechSynthesis.speak(texto) ;
 					break;
@@ -330,11 +363,21 @@
 						case "0" :
 						// sens espagnol vers francais : comme on sort de la boucle on lit le texte en francais  
 						texto.text=document.getElementById("radioL1").innerHTML;
+						if (localStorage.getItem("hablaplaystatusFR")=="1") {
+							texto.text=document.getElementById("radioL1").innerHTML;
+							texto.text="espagnol francais question ";}
+						else 
+							{ texto=" "; }
 						texto.lang="fr-FR";
 						break;
 						case "1" : 
 						// sens francais vers espagnols : comme on sort de la boucle on lit le texte en espagnol  
 						texto.text=document.getElementById("radioL2").innerHTML;
+						if (localStorage.getItem("hablaplaystatus")=="1") {
+							texto.text=document.getElementById("radioL2").innerHTML;
+							texto.text="francais espagnol question";}
+						else 
+							{ texto=" "; }
 						texto.lang="es-ES";
 						break;
 					};
@@ -352,6 +395,9 @@
 						
 			console.log("-> probar  fin" );
 		};
+
+
+
 		function pantallaswitch() { 
 			// reduit les objets affichés et libere l'ecrans des elements de saisis 
 			console.log("-> pantallaswitch debut pantallastatus =",localStorage.getItem("pantallaministatus")); 
@@ -437,6 +483,7 @@
 		initvarlocal('lanswitchstatus'); 
 		initvarlocal('autoplaystatus');
 		initvarlocal('hablaplaystatus');
+		initvarlocal('hablaplaystatusFR');
 		initvarlocal('oirplaystatus');
 		initvarlocal('autoplaystatus');
 		initvarlocal('autoplaytimer');
@@ -515,6 +562,7 @@
 			        compteurexo=0 ; 
 				console.log("=> mise en off des options autoplay et hablar lors du premier appel de la page ( pour eviter le declenchement auto ");
 				localStorage.setItem("hablaplaystatus","0"); 
+				localStorage.setItem("hablaplaystatusFR","0"); 
 				localStorage.setItem("autoplaystatus","0"); 
 			{% endif %}
 			{% if  mode  == "run" %}
@@ -555,8 +603,9 @@
 
 			// mise a jour de la valeur du timer dans l'ecran avec la valeur en local 
 			AutoPlayTimerSet("autoplaytimer","autoplaytimerid");
-			// mise a jour du status de la checkbox "autoplay" 
+			// mise a jour des status des checkbox "autoplay" pour l'espagnol  et le francais 
 			setCheck('hablaplaystatus','hablaplayId');
+			setCheck('hablaplaystatusFR','hablaplayFRId');
 			// mise a jour du status de la checkbox "oir" 
 			setCheck('oirplaystatus','oirplayId');
 
@@ -589,15 +638,27 @@
 				}
 			});
 			// cas ou le mode hablaplay est en service : on lit le texte à traduire /  en fonction du sens de la langue 
-			if(localStorage.getItem("hablaplaystatus")=="1") {
-				// ici on lit le  texte à traduire
+			if((localStorage.getItem("hablaplaystatus")=="1")  || (localStorage.getItem("hablaplaystatusFR")=="1")) {
+				// ici on lit le  texte à traduire 
 				switch (localStorage.getItem("lanswitchstatus")) {
 					case "0" :
 						palabra= document.getElementById("radioL2").innerHTML ;
+					// sens francais vers espagnols : comme on sort de la boucle on lit le texte en espagnol  
+						if (localStorage.getItem("hablaplaystatus")=="1") {
+							palabra=document.getElementById("radioL2").innerHTML;
+				//			palabra="francais espagnol question";
+							}
+						else {palabra=" " }  ; 
 						lan="es-ES";
 						break;
 					case "1" : 
 						palabra= document.getElementById("radioL1").innerHTML ;
+					// sens espagnolvers francais vers espagnols : comme on sort de la boucle on lit le texte en espagnol  
+						if (localStorage.getItem("hablaplaystatusFR")=="1") {
+							palabra=document.getElementById("radioL1").innerHTML;
+				//			palabra="francais espagnol question";
+							}
+						else { palabra=" "; }
 						lan="fr-FR";
 						break;
 						};
@@ -686,8 +747,10 @@
 <label  for="autolayId"> Auto Play </label> 
 <input type="number" id="autoplaytimerid" min="100" max="10000" onchange="AutoPlayTimerStoreValue()" /> 
 <label for="autoplaytimerid"> timer (ms) </label> 
-<input type="radio" name="hablaplay" id="hablaplayId" value="hablaplay" onclick="HablaPlay()"  /> 
+<input type="radio" name="hablaplay" id="hablaplayId" value="hablaplay" onclick="HablaPlay('ES')"  /> 
 <label  for="hablaplayId"> Leer  </label> 
+<input type="radio" name="hablaplayFR" id="hablaplayFRId" value="hablaplayFR" onclick="HablaPlay('FR')"  /> 
+<label  for="hablaplayFRId"> Leer FR </label> 
 <input type="radio" name="oirplay" id="oirplayId" value="oirplay" onclick="OirPlay()"  /> 
 <label  for="oirplayId"> Oir </label> 
 <br>  
